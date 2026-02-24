@@ -2,7 +2,7 @@ local addonName, ns = ...
 
 function ns.InitMainPanel()
     local panel = CreateFrame("Frame", "VS_MainPanel")
-    local cat, layout = Settings.RegisterCanvasLayoutCategory(panel, "|cff9d4dffVeil|rState")
+    local cat, layout = Settings.RegisterCanvasLayoutCategory(panel, "Night|cffA361E2veil|r")
 
     if layout and layout.AddAnchorPoint then
         layout:AddAnchorPoint("TOPLEFT", 0, 0)
@@ -20,7 +20,7 @@ function ns.InitMainPanel()
 
     local title = content:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
     title:SetPoint("TOPLEFT", 16, -16)
-    title:SetText("|cff9d4dffVeil|rState")
+    title:SetText("Night|cffA361E2veil|r")
 
     local desc = content:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
     desc:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
@@ -30,10 +30,28 @@ function ns.InitMainPanel()
     resetBtn:SetSize(140, 24)
     resetBtn:SetPoint("TOPRIGHT", content, "TOPRIGHT", -16, -20)
     resetBtn:SetText(ns.L.Reset)
-    resetBtn:SetScript("OnClick", function()
-        wipe(VeilStateDB)
-        ns.CopyDefaults(ns.Defaults, VeilStateDB)
+    local function DoReset()
+        NightveilDB = NightveilDB or {}
+        wipe(NightveilDB)
+        ns.CopyDefaults(ns.Defaults, NightveilDB)
         ReloadUI()
+    end
+    resetBtn:SetScript("OnClick", function()
+        if StaticPopup_Show and StaticPopupDialogs then
+            StaticPopupDialogs.NIGHTVEIL_RESET_CONFIRM = StaticPopupDialogs.NIGHTVEIL_RESET_CONFIRM or {
+                text = ns.L.ResetConfirm or "Reset settings to defaults?",
+                button1 = YES,
+                button2 = NO,
+                OnAccept = DoReset,
+                timeout = 0,
+                whileDead = true,
+                hideOnEscape = true,
+                preferredIndex = 3,
+            }
+            StaticPopup_Show("NIGHTVEIL_RESET_CONFIRM")
+        else
+            DoReset()
+        end
     end)
 
     ui:Space(60)

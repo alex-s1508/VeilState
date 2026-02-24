@@ -1,11 +1,12 @@
 ## Interface: 120001
-## Title: |cff9d4dffVeil|rState
-## Version: 1.0.0d
+## Title: Night|cffA361E2veil|r
+## Version: 1.0.1
 ## Author: iLoviP4g
-## X-Website: https://www.curseforge.com/wow/addons/veilstate
+## X-Website: https://www.curseforge.com/wow/addons/nightveil
 ## X-Category: Combat, Rogue, HUDs
 ## X-Localizations: enUS, ptBR, esES, frFR, deDE, itIT, koKR, ruRU, zhCN
-## Notes: A simple Stealth indicator.
+## Notes: Rogue utilities addon.
+## AddonCompartmentFunc: Nightveil_OnAddonCompartmentClick
 ## Category: Combat
 ## Category-deDE: Kampf
 ## Category-esES: Combate
@@ -17,9 +18,9 @@
 ## Category-ruRU: Бой
 ## Category-zhCN: 战斗
 ## Category-zhTW: 戰鬥
-## SavedVariables: VeilStateDB
-## SavedVariablesPerCharacter: VeilStateSavedState
-## IconTexture: Interface\AddOns\VeilState\Images\Icon.png
+## SavedVariables: NightveilDB
+## SavedVariablesPerCharacter: NightveilSavedState
+## IconTexture: Interface\AddOns\Nightveil\Images\Icon.png
 
 Locales\enUS.lua
 Locales\ptBR.lua
@@ -33,14 +34,14 @@ Locales\zhCN.lua
 
 Core\Constants.lua
 Core\Changelog.lua
-Core\Debug.lua
 Core\Commands.lua
 
 UI\Frames.lua
-
-VeilState.lua
 
 Options\Config.lua
 Options\Stealth.lua
 Options\ShadowDance.lua
 Options\Shroud.lua
+Options\PoisonTracker.lua
+
+Nightveil.lua
