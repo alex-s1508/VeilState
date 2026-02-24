@@ -1,8 +1,14 @@
 local addonName, ns = ...
 
-SLASH_VEILSTATE1 = "/veil"
+SLASH_NIGHTVEIL1 = "/veil"
 
-SlashCmdList["VEILSTATE"] = function()
+function Nightveil_OnAddonCompartmentClick()
+    if ns.MainCategory then
+        Settings.OpenToCategory(ns.MainCategory:GetID())
+    end
+end
+
+SlashCmdList["NIGHTVEIL"] = function()
     if ns.MainCategory then
         Settings.OpenToCategory(ns.MainCategory:GetID())
     end

@@ -1,18 +1,32 @@
 local addonName, ns = ...
 
 ns.L = {
-    Description  = "Stealth Indicator",
+    Description  = "Rogue utilities",
     ReleaseNotes = "Release Notes",
     Reset        = "Reset to Defaults",
 
     Stealth     = "Stealth",
     ShadowDance = "Shadow Dance",
+    PoisonTracker = "Poison Tracker",
+    LethalPoisons = "Lethal Poison",
+    NonLethalPoisons = "Non-Lethal Poison",
 
     Settings = "Settings",
     Messages = "Messages",
+    Sound = "Sound",
+    TestSound = "Test Sound",
+    SelectIcon = "Select Icon",
+    SelectSound = "Select Sound",
+    SoundKitId = "Sound Kit ID",
 
     EnableOnStealth     = "Enable on Stealth",
     EnableOnShadowDance = "Enable on Shadow Dance",
+    EnablePoisonTracker = "Enable Poison Tracker",
+    OnlyInCombat        = "Only in combat",
+    OnlyInInstances     = "Only in instances",
+    ResetConfirm        = "Reset settings to defaults?",
+    LethalShort         = "Lethal",
+    NonLethalShort      = "Non-Lethal",
 
     FloatingText   = "Floating Text",
     IndicatorIcon  = "Indicator Icon",
@@ -32,8 +46,34 @@ ns.L = {
     Style      = "Style",
     Layer      = "Layer",
 
+    AnchorToText = "Anchor to Text",
+    AnchorPoint  = "Anchor Point",
+    TopLeft      = "Top Left",
+    Top          = "Top",
+    TopRight     = "Top Right",
+    Left         = "Left",
+    Center       = "Center",
+    Right        = "Right",
+    BottomLeft   = "Bottom Left",
+    Bottom       = "Bottom",
+    BottomRight  = "Bottom Right",
+
+    Animation      = "Animation",
+    AnimationSpeed = "Speed",
+    AnimationNone  = "None",
+    AnimationBlink = "Blink",
+    AnimationPulse = "Pulse",
+    AnimationFade  = "Fade",
+    AnimationShake = "Shake",
+    AnimationFloat = "Float",
+    AnimationBounce = "Bounce",
+    AnimationGlow = "Glow",
+    AnimationGlowPulse = "Glow + Pulse",
+
     DefaultMessage     = "STEALTHED",
     ShadowDanceMessage = "SHADOW DANCE",
+    LethalPoisonMissing = "LETHAL POISON MISSING",
+    NonLethalPoisonMissing = "NON-LETHAL POISON MISSING",
 
     ShroudOfConcealment = "Shroud of Concealment",
     Countdown           = "Countdown in Chat",

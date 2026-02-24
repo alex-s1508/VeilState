@@ -10,6 +10,7 @@ local shroudActive = false
 local lastShroudTime = 0
 
 ns.IsInShadowDance = false
+ns.IsRogue = false
 
 local function HasAura(ids)
     if C_UnitAuras then
@@ -30,31 +31,20 @@ local function HasAura(ids)
     return false
 end
 
-local function GetAuraExpiration(ids)
-    if not C_UnitAuras then return nil end
-    for _, id in ipairs(ids) do
-        local aura = C_UnitAuras.GetPlayerAuraBySpellID(id)
-        if aura and aura.expirationTime then
-            return aura.expirationTime
-        end
-    end
-    return nil
-end
-
 local function BackupState()
     if not hasCaptured then return end
-    VeilStateSavedState = {originalCVars = captured, isCaptured = true}
+    NightveilSavedState = {originalCVars = captured, isCaptured = true}
 end
 
 local function RecoverState()
-    if VeilStateSavedState and VeilStateSavedState.isCaptured then
-        captured = VeilStateSavedState.originalCVars
+    if NightveilSavedState and NightveilSavedState.isCaptured then
+        captured = NightveilSavedState.originalCVars
         hasCaptured = true
     end
 end
 
 local function ClearBackup()
-    VeilStateSavedState = nil
+    NightveilSavedState = nil
 end
 
 function ns.CaptureOriginal()
@@ -125,8 +115,6 @@ function ns.StartShroudCountdown()
 
     local channel      = db.shroudChannel or "PARTY"
     local useInterval  = db.shroudInterval
-    local intervalSec  = db.shroudIntervalSeconds or 5
-    local isFirstTick  = true
 
     local function Send(msg)
         if msg and msg:gsub("%s+", "") ~= "" then
@@ -180,6 +168,14 @@ local function CheckShroud()
         if shroudActive then ns.StopShroudCountdown() end
         return
     end
+    if db.shroudOnlyInstances and IsInInstance then
+        local inInstance, instanceType = IsInInstance()
+        local ok = inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario")
+        if not ok then
+            if shroudActive then ns.StopShroudCountdown() end
+            return
+        end
+    end
     if HasAura(SHROUD_IDS) and not shroudActive then
         if GetTime() - lastShroudTime > 14 then
             lastShroudTime = GetTime()
@@ -192,8 +188,25 @@ end
 
 function ns.UpdateState()
     ns.IsInShadowDance = HasAura(SHADOW_DANCE_IDS)
-    local sd     = ns.IsInShadowDance and ns.db.sdEnabled
-    local active = sd or (IsStealthed() and ns.db.stealthEnabled)
+    local db = ns.db
+    local function InAllowedInstance()
+        if not IsInInstance then return false end
+        local inInstance, instanceType = IsInInstance()
+        return inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario")
+    end
+    local function IsAllowed(onlyCombatKey, onlyInstancesKey)
+        if db[onlyCombatKey] and UnitAffectingCombat and not UnitAffectingCombat("player") then
+            return false
+        end
+        if db[onlyInstancesKey] and not InAllowedInstance() then
+            return false
+        end
+        return true
+    end
+
+    local sd = ns.IsInShadowDance and db.sdEnabled and IsAllowed("sdOnlyCombat", "sdOnlyInstances")
+    local stealthActive = IsStealthed() and db.stealthEnabled and IsAllowed(nil, "stealthOnlyInstances")
+    local active = sd or stealthActive
     if active then
         ns.CaptureOriginal()
     else
@@ -206,25 +219,58 @@ local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("ADDON_LOADED")
 eventFrame:RegisterEvent("UPDATE_STEALTH")
 eventFrame:RegisterEvent("UNIT_AURA")
+eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
+eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
+eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+eventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
 eventFrame:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == addonName then
-        VeilStateDB = VeilStateDB or {}
-        ns.CopyDefaults(ns.Defaults, VeilStateDB)
-        ns.db = VeilStateDB
+        if not NightveilDB and VeilStateDB then
+            NightveilDB = VeilStateDB
+            VeilStateDB = nil
+        end
+        NightveilDB = NightveilDB or {}
+        ns.CopyDefaults(ns.Defaults, NightveilDB)
+        ns.db = NightveilDB
+
+        local _, _, classId = UnitClass("player")
+        ns.IsRogue = (classId == 4)
         
+        if not NightveilSavedState and VeilStateSavedState then
+            NightveilSavedState = VeilStateSavedState
+            VeilStateSavedState = nil
+        end
         RecoverState()
+        -- Settings order
         local category = ns.InitMainPanel()
         ns.InitStealthPanel(category)
         ns.InitShadowDancePanel(category)
+        if ns.IsRogue and ns.InitPoisonTrackerPanel then
+            ns.InitPoisonTrackerPanel(category)
+        end
         ns.InitShroudPanel(category)
         ns.RefreshVisuals()
+        if ns.IsRogue and ns.RefreshPoisonVisuals then
+            C_Timer.After(2, function()
+                ns.RefreshPoisonVisuals()
+            end)
+        end
         if IsStealthed() then ns.UpdateState() end
     elseif event == "UNIT_AURA" and arg1 == "player" then
         local wasSD = ns.IsInShadowDance
         ns.IsInShadowDance = HasAura(SHADOW_DANCE_IDS)
         if ns.IsInShadowDance ~= wasSD then ns.UpdateState() end
         CheckShroud()
+        if ns.RefreshPoisonVisuals then
+            ns.RefreshPoisonVisuals()
+        end
+    elseif event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" then
+        ns.UpdateState()
+        CheckShroud()
+        if ns.RefreshPoisonVisuals then
+            ns.RefreshPoisonVisuals()
+        end
     else
         ns.UpdateState()
     end
