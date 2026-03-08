@@ -1,6 +1,6 @@
 ## Interface: 120001
 ## Title: Night|cffA361E2veil|r
-## Version: 1.0.1a
+## Version: 1.0.2
 ## Author: iLoviP4g
 ## X-Website: https://www.curseforge.com/wow/addons/nightveil
 ## X-Category: Combat, Rogue, HUDs
@@ -20,7 +20,10 @@
 ## Category-zhTW: 戰鬥
 ## SavedVariables: NightveilDB
 ## SavedVariablesPerCharacter: NightveilSavedState
-## IconTexture: Interface\AddOns\Nightveil\Images\Icon.png
+## IconTexture: Interface\AddOns\Nightveil\Interface\Icon.png
+
+Libs\LibEQOL\libs\LibStub\LibStub.lua
+Libs\LibEQOL\LibEQOL.xml
 
 Locales\enUS.lua
 Locales\ptBR.lua
@@ -32,16 +35,10 @@ Locales\koKR.lua
 Locales\ruRU.lua
 Locales\zhCN.lua
 
-Core\Constants.lua
-Core\Changelog.lua
-Core\Commands.lua
+Interface\Constants.lua
+CHANGELOG.lua
 
-UI\Frames.lua
-
-Options\Config.lua
-Options\Stealth.lua
-Options\ShadowDance.lua
-Options\Shroud.lua
-Options\PoisonTracker.lua
+Interface\Frames.lua
+Interface\Settings.lua
 
 Nightveil.lua

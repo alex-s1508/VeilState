@@ -52,9 +52,9 @@ Nightveil includes a dedicated messaging system for **Shroud of Concealment** to
 You can easily configure:
 
 * Chat alerts for when Shroud starts and ends
-* Custom countdown messages using the **`%t`** variable for remaining time
+* Custom countdown messages using the **`%time`** variable for remaining time
 
-> **Example:** Setting the text to `Shroud: %t remaining!` will automatically post:
+> **Example:** Setting the text to `Shroud: %time remaining!` will automatically post:
 
 <img src=".resources/images/screenshots/shroudCountdown.gif" width="1920" alt="ShroudScreenshot">
 

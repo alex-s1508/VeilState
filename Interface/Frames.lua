@@ -1,5 +1,26 @@
 local addonName, ns = ...
 
+local function CreateTrackerFrame(name, label)
+    local f = CreateFrame("Frame", name, UIParent)
+    f:SetSize(200, 50) -- Default size
+    f:Hide()
+    f.editModeName = label
+    
+    local text = f:CreateFontString(nil, "OVERLAY", "GameFontHighlightHuge")
+    text:SetShadowOffset(2, -2)
+    text:SetShadowColor(0, 0, 0, 0.8)
+    text:SetPoint("CENTER", f, "CENTER")
+    f.Text = text
+    
+    local icon = f:CreateTexture(nil, "OVERLAY")
+    icon:SetSize(36, 36)
+    f.Icon = icon
+    
+    return f
+end
+
+local stealthFrame = CreateTrackerFrame("NV_StealthFrame", ns.L.StealthMonitor)
+
 local screenFrame = CreateFrame("Frame", "VS_ScreenFrame", UIParent)
 screenFrame:SetAllPoints(UIParent)
 screenFrame:Hide()
@@ -7,20 +28,6 @@ screenFrame:Hide()
 local screenOverlay = screenFrame:CreateTexture(nil, "BACKGROUND")
 screenOverlay:SetAllPoints(UIParent)
 screenOverlay:SetTexture("Interface\\Buttons\\WHITE8X8")
-
-local textFrame = CreateFrame("Frame", "VS_TextFrame", UIParent)
-textFrame:SetAllPoints(UIParent)
-textFrame:Hide()
-
-local floatingText = textFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightHuge")
-floatingText:SetShadowOffset(2, -2)
-floatingText:SetShadowColor(0, 0, 0, 0.8)
-
-local iconFrame = CreateFrame("Frame", "VS_IconFrame", UIParent)
-iconFrame:SetAllPoints(UIParent)
-iconFrame:Hide()
-
-local indicatorIcon = iconFrame:CreateTexture(nil, "OVERLAY")
 
 local vignetteFrame = CreateFrame("Frame", "VS_VignetteFrame", screenFrame)
 vignetteFrame:SetAllPoints(UIParent)
@@ -74,93 +81,75 @@ function ns.RefreshVisuals()
     local db = ns.db
     if not db then return end
 
-    local function InAllowedInstance()
-        local inInstance, instanceType = IsInInstance and IsInInstance()
-        return inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario")
-    end
-    local function IsAllowed(onlyCombatKey, onlyInstancesKey)
-        if db[onlyCombatKey] then
-            local inCombat = UnitAffectingCombat and UnitAffectingCombat("player")
-            if not inCombat then return false end
-        end
-        if db[onlyInstancesKey] then
-            if not InAllowedInstance() then return false end
-        end
-        return true
-    end
-
-    local sd = ns.IsInShadowDance and db.sdEnabled and IsAllowed("sdOnlyCombat", "sdOnlyInstances")
     local stealthed = IsStealthed()
-    local stealthActive = stealthed and not sd and db.stealthEnabled and IsAllowed(nil, "stealthOnlyInstances")
+    local stealthActive = stealthed and not sd and db.stealthEnabled
+    if stealthActive and db.stealthOnlyInstances and not ns.IsInInstance() then
+        stealthActive = false
+    end
     local active = sd or stealthActive
 
-    local function v(sdKey, sKey) 
-        if sd then return db[sdKey] else return db[sKey] end 
+    -- 1. Stealth Monitor
+    local showStealth = stealthActive and db.stealthEnabled
+    if showStealth then
+        stealthFrame:ClearAllPoints()
+        stealthFrame:SetPoint("CENTER", UIParent, "CENTER", db.stealthTextX or 0, db.stealthTextY or 185)
+
+        local text = db.stealthCustomText or ns.L.DefaultMessage
+        stealthFrame.Text:SetText(text)
+        stealthFrame.Text:SetFont(STANDARD_TEXT_FONT, db.stealthTextSize or 28, "OUTLINE")
+        local tc = db.stealthTextColor or {r=1, g=1, b=1}
+        stealthFrame.Text:SetTextColor(tc.r, tc.g, tc.b, db.stealthTextAlpha or 1)
+        stealthFrame.Text._nvBaseAlpha = db.stealthTextAlpha or 1
+        
+        if db.stealthEnableIcon then
+            local sz = db.stealthIconSize or 36
+            stealthFrame.Icon:SetSize(sz, sz)
+            stealthFrame.Icon:SetAlpha(db.stealthIconAlpha or 1)
+            stealthFrame.Icon:SetTexture("Interface\\Icons\\Ability_Stealth")
+            if db.stealthIconAnchorToText then
+                stealthFrame.Icon:ClearAllPoints()
+                AnchorIconToText(stealthFrame.Icon, stealthFrame.Text, db.stealthIconAnchorPoint or "LEFT", db.stealthIconX or 0, db.stealthIconY or 0)
+                ns.ApplyTextAnimation(stealthFrame.Icon, db.stealthTextAnim, db.stealthTextAnimSpeed)
+            else
+                stealthFrame.Icon:ClearAllPoints()
+                stealthFrame.Icon:SetPoint("CENTER", stealthFrame, "CENTER", db.stealthIconX or 0, db.stealthIconY or 0)
+                ns.ApplyTextAnimation(stealthFrame.Icon, "NONE", 1)
+            end
+            stealthFrame.Icon:Show()
+        else
+            stealthFrame.Icon:Hide()
+        end
+        
+        ns.ApplyTextAnimation(stealthFrame.Text, db.stealthTextAnim, db.stealthTextAnimSpeed)
+        stealthFrame:Show()
+    else
+        ns.ApplyTextAnimation(stealthFrame.Text, "NONE", 1)
+        stealthFrame:Hide()
     end
 
-    local customText = v("sdCustomText", "customText") or ""
-    local defaultMsg = sd and ns.L.ShadowDanceMessage or ns.L.DefaultMessage
-    local displayText = customText:gsub("%s", "") ~= "" and customText or defaultMsg
+    -- 3. Screen Effects (shared logic)
+    local anyActive = showStealth
+    
+    screenFrame:SetFrameStrata(db.sdScreenStrata or db.stealthScreenStrata or "BACKGROUND")
+    vignetteFrame:SetFrameStrata(db.sdVignetteStrata or db.stealthVignetteStrata or "BACKGROUND")
 
-    screenFrame:SetFrameStrata(v("sdScreenStrata", "screenStrata") or "BACKGROUND")
-    vignetteFrame:SetFrameStrata(v("sdVignetteStrata", "vignetteStrata") or "BACKGROUND")
-
-    if active and v("sdEnableScreenColor", "enableScreenColor") then
-        local c = v("sdScreenColor", "screenColor")
-        screenOverlay:SetVertexColor(c.r, c.g, c.b, v("sdScreenAlpha", "screenAlpha"))
+    local enableScreen = (showSD and db.sdEnableScreenColor) or (showStealth and db.stealthEnableScreenColor)
+    if anyActive and enableScreen then
+        local c = (showSD and db.sdScreenColor) or (showStealth and db.stealthScreenColor)
+        local a = (showSD and db.sdScreenAlpha) or (showStealth and db.stealthScreenAlpha)
+        if c then screenOverlay:SetVertexColor(c.r, c.g, c.b, a or 0.3) end
         screenOverlay:Show()
     else
         screenOverlay:Hide()
     end
 
-    if active and v("sdEnableText", "enableText") then
-        floatingText:SetText(displayText)
-        floatingText:SetFont(STANDARD_TEXT_FONT, v("sdTextSize", "textSize"), "OUTLINE")
-        local c = v("sdTextColor", "textColor")
-        floatingText:SetTextColor(c.r, c.g, c.b, v("sdTextAlpha", "textAlpha"))
-        floatingText._nvBaseAlpha = v("sdTextAlpha", "textAlpha")
-        floatingText:ClearAllPoints()
-        floatingText:SetPoint("CENTER", UIParent, "CENTER", v("sdTextX", "textX"), v("sdTextY", "textY"))
-        ns.ApplyTextAnimation(floatingText, v("sdTextAnim", "textAnim"), v("sdTextAnimSpeed", "textAnimSpeed"))
-        floatingText:Show()
-    else
-        ns.ApplyTextAnimation(floatingText, "NONE", 1)
-        floatingText:Hide()
-    end
-
-    if active and v("sdEnableIcon", "enableIcon") then
-        local sz = v("sdIconSize", "iconSize")
-        indicatorIcon:SetSize(sz, sz)
-        indicatorIcon:SetAlpha(v("sdIconAlpha", "iconAlpha"))
-        indicatorIcon:ClearAllPoints()
-        local point = v("sdIconAnchorPoint", "iconAnchorPoint") or "LEFT"
-        local anchorToText = v("sdIconAnchorToText", "iconAnchorToText")
-        if anchorToText and active and v("sdEnableText", "enableText") then
-            AnchorIconToText(indicatorIcon, floatingText, point, v("sdIconX", "iconX"), v("sdIconY", "iconY"))
-        else
-            indicatorIcon:SetPoint("CENTER", UIParent, "CENTER", v("sdIconX", "iconX"), v("sdIconY", "iconY"))
-        end
-        if sd then
-            indicatorIcon:SetTexture("Interface\\Icons\\Ability_Rogue_ShadowDance")
-        else
-            indicatorIcon:SetTexture("Interface\\Icons\\Ability_Stealth")
-        end
-        if anchorToText and active and v("sdEnableText", "enableText") then
-            ns.ApplyTextAnimation(indicatorIcon, v("sdTextAnim", "textAnim"), v("sdTextAnimSpeed", "textAnimSpeed"))
-        else
-            ns.ApplyTextAnimation(indicatorIcon, "NONE", 1)
-        end
-        indicatorIcon:Show()
-    else
-        ns.ApplyTextAnimation(indicatorIcon, "NONE", 1)
-        indicatorIcon:Hide()
-    end
-
-    if active and v("sdEnableVignette", "enableVignette") then
+    local enableVignette = (showSD and db.sdEnableVignette) or (showStealth and db.stealthEnableVignette)
+    if anyActive and enableVignette then
         BuildVignettes()
-        local solid = CreateColor(0, 0, 0, v("sdVignetteAlpha", "vignetteAlpha"))
+        local alpha = (showSD and db.sdVignetteAlpha) or (showStealth and db.stealthVignetteAlpha) or 0.5
+        local thick = (showSD and db.sdVignetteSize) or (showStealth and db.stealthVignetteSize) or 150
+        local solid = CreateColor(0, 0, 0, alpha)
         local clear = CreateColor(0, 0, 0, 0)
-        local thick = v("sdVignetteSize", "vignetteSize")
         vignetteEdges.top:SetHeight(thick);         vignetteEdges.top:SetGradient("VERTICAL", clear, solid)
         vignetteEdges.bottom:SetHeight(thick);      vignetteEdges.bottom:SetGradient("VERTICAL", solid, clear)
         vignetteEdges.left:SetWidth(thick + 100);   vignetteEdges.left:SetGradient("HORIZONTAL", solid, clear)
@@ -170,10 +159,8 @@ function ns.RefreshVisuals()
         for _, edge in pairs(vignetteEdges) do if edge then edge:Hide() end end
     end
 
-    if active then ns.ApplyHighlight() end
-    screenFrame:SetShown(active)
-    textFrame:SetShown(active)
-    iconFrame:SetShown(active)
+    if anyActive then ns.ApplyHighlight() end
+    screenFrame:SetShown(anyActive)
 
     if ns.IsRogue and ns.RefreshPoisonVisuals then
         ns.RefreshPoisonVisuals()
@@ -228,29 +215,19 @@ local function GetPoisonFrames()
         nonLethal = {},
     }
 
-    local function Build(kind, namePrefix)
-        local textFrame = CreateFrame("Frame", namePrefix .. "_TextFrame", UIParent)
-        textFrame:SetAllPoints(UIParent)
-        textFrame:Hide()
-
-        local text = textFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightHuge")
-        text:SetShadowOffset(2, -2)
-        text:SetShadowColor(0, 0, 0, 0.8)
-
-        local iconFrame = CreateFrame("Frame", namePrefix .. "_IconFrame", UIParent)
-        iconFrame:SetAllPoints(UIParent)
-        iconFrame:Hide()
-
-        local icon = iconFrame:CreateTexture(nil, "OVERLAY")
-
-        poisonUI[kind].textFrame = textFrame
-        poisonUI[kind].text = text
-        poisonUI[kind].iconFrame = iconFrame
-        poisonUI[kind].icon = icon
+    local function Build(kind, namePrefix, label)
+        local frame = CreateTrackerFrame(namePrefix, label)
+        poisonUI[kind] = {
+            frame = frame,
+            textFrame = frame, -- for backward compatibility in the rest of the file
+            text = frame.Text,
+            iconFrame = frame, -- for backward compatibility
+            icon = frame.Icon,
+        }
     end
 
-    Build("lethal", "NV_PoisonLethal")
-    Build("nonLethal", "NV_PoisonNonLethal")
+    Build("lethal", "NV_PoisonLethal", ns.L.PoisonLethalMonitor)
+    Build("nonLethal", "NV_PoisonNonLethal", ns.L.PoisonNonLethalMonitor)
 
     return poisonUI
 end
@@ -392,10 +369,9 @@ function ns.RefreshPoisonVisuals()
     if not ns.IsRogue then return end
 
     local db = ns.db
-    local trackerEnabled = db and db.poisonTrackerEnabled
     local lethalEnabled = db and db.poisonLethalEnabled
     local nonLethalEnabled = db and db.poisonNonLethalEnabled
-    if not db or not trackerEnabled or (not lethalEnabled and not nonLethalEnabled) then
+    if not db or (not lethalEnabled and not nonLethalEnabled) then
         if poisonUI then
             poisonUI.lethal.textFrame:Hide()
             poisonUI.lethal.iconFrame:Hide()
@@ -405,22 +381,6 @@ function ns.RefreshPoisonVisuals()
         ns._poisonState.lethalMissing = false
         ns._poisonState.nonLethalMissing = false
         return
-    end
-
-    if db.poisonOnlyInstances then
-        local inInstance, instanceType = IsInInstance and IsInInstance()
-        local ok = inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario")
-        if not ok then
-            if poisonUI then
-                poisonUI.lethal.textFrame:Hide()
-                poisonUI.lethal.iconFrame:Hide()
-                poisonUI.nonLethal.textFrame:Hide()
-                poisonUI.nonLethal.iconFrame:Hide()
-            end
-            ns._poisonState.lethalMissing = false
-            ns._poisonState.nonLethalMissing = false
-            return
-        end
     end
 
     if db.poisonOnlyCombat then
@@ -436,6 +396,18 @@ function ns.RefreshPoisonVisuals()
             ns._poisonState.nonLethalMissing = false
             return
         end
+    end
+
+    if db.poisonOnlyInstances and not ns.IsInInstance() then
+        if poisonUI then
+            poisonUI.lethal.textFrame:Hide()
+            poisonUI.lethal.iconFrame:Hide()
+            poisonUI.nonLethal.textFrame:Hide()
+            poisonUI.nonLethal.iconFrame:Hide()
+        end
+        ns._poisonState.lethalMissing = false
+        ns._poisonState.nonLethalMissing = false
+        return
     end
 
     if InCombatLockdown and InCombatLockdown() then
@@ -559,217 +531,4 @@ function ns.RefreshPoisonVisuals()
 
     ns._poisonState.lethalMissing = showLethal
     ns._poisonState.nonLethalMissing = showNonLethal
-end
-
-function ns.CreateScrollPanel(panel)
-    local scroll = CreateFrame("ScrollFrame", panel:GetName() .. "Scroll", panel, "UIPanelScrollFrameTemplate")
-    scroll:SetPoint("TOPLEFT", 8, -8)
-    scroll:SetPoint("BOTTOMRIGHT", -28, 8)
-    local content = CreateFrame("Frame", nil, scroll)
-    content:SetSize(600, 1600)
-    scroll:SetScrollChild(content)
-    return content
-end
-
-function ns.CreateUI(content)
-    local ui = {}
-    local y = -16
-    local pad = 16
-
-    function ui:Header(text)
-        local h = content:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-        h:SetPoint("TOPLEFT", pad, y)
-        h:SetText(text)
-        h:SetTextColor(0.64, 0.38, 0.89)
-        local line = content:CreateTexture(nil, "OVERLAY")
-        line:SetSize(580, 1)
-        line:SetPoint("TOPLEFT", h, "BOTTOMLEFT", 0, -4)
-        line:SetColorTexture(0.5, 0.5, 0.5, 0.3)
-        y = y - 40
-    end
-
-    function ui:Title(text, subtext)
-        local t = content:CreateFontString(nil, "ARTWORK", "GameFontNormalHuge")
-        t:SetPoint("TOPLEFT", pad, y)
-        t:SetText(text)
-        y = y - 30
-        if subtext then
-            local s = content:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            s:SetPoint("TOPLEFT", t, "BOTTOMLEFT", 0, -4)
-            s:SetText(subtext)
-            y = y - 20
-        end
-        y = y - 10
-    end
-
-    function ui:Check(dbKey, label, xOff)
-        local x = pad + (xOff or 0)
-        local cb = CreateFrame("CheckButton", "VS_Check_" .. dbKey, content, "InterfaceOptionsCheckButtonTemplate")
-        cb:SetPoint("TOPLEFT", x, y)
-        _G[cb:GetName() .. "Text"]:SetText(label or ns.L.Enable)
-        cb:SetChecked(ns.db[dbKey])
-        cb:SetScript("OnClick", function(self)
-            ns.db[dbKey] = self:GetChecked()
-            ns.UpdateState()
-        end)
-        if not xOff then y = y - 32 end
-        return cb
-    end
-
-    function ui:Slider(dbKey, label, min, max, step, xOff, hold)
-        local x = pad + (xOff or 0)
-        local sl = CreateFrame("Slider", "VS_Slider_" .. dbKey, content, "OptionsSliderTemplate")
-        sl:SetPoint("TOPLEFT", x + 4, y - 10)
-        sl:SetMinMaxValues(min, max)
-        sl:SetValueStep(step)
-        sl:SetValue(ns.db[dbKey] or min)
-        sl:SetWidth(180)
-        sl:SetObeyStepOnDrag(true)
-        _G[sl:GetName() .. "Text"]:SetText(label)
-        _G[sl:GetName() .. "Low"]:SetText(tostring(min))
-        _G[sl:GetName() .. "High"]:SetText(tostring(max))
-        local vt = content:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-        vt:SetPoint("TOP", sl, "BOTTOM", 0, -2)
-        local function Format(v2)
-            if step and step < 1 then
-                if step >= 0.1 then
-                    return string.format("%.1f", v2)
-                elseif step >= 0.01 then
-                    return string.format("%.2f", v2)
-                else
-                    return string.format("%.3f", v2)
-                end
-            end
-            return string.format("%.0f", v2)
-        end
-        vt:SetText(Format(ns.db[dbKey] or min))
-        sl:SetScript("OnValueChanged", function(self, v2)
-            local r = math.floor(v2 / step + 0.5) * step
-            ns.db[dbKey] = r
-            vt:SetText(Format(r))
-            ns.UpdateState()
-        end)
-        if not hold then y = y - 50 end
-        return sl
-    end
-
-    function ui:Color(dbKey, label, xOff, hold)
-        local x = pad + (xOff or 0)
-        local btn = CreateFrame("Button", nil, content, "UIPanelButtonTemplate")
-        btn:SetSize(24, 24)
-        btn:SetPoint("TOPLEFT", x + 4, y)
-        local swatch = btn:CreateTexture(nil, "OVERLAY")
-        swatch:SetSize(18, 18)
-        swatch:SetPoint("CENTER")
-        swatch:SetTexture("Interface\\Buttons\\WHITE8X8")
-        local function UpdateSwatch()
-            local c = ns.db[dbKey] or {r=1, g=1, b=1}
-            swatch:SetVertexColor(c.r, c.g, c.b)
-        end
-        UpdateSwatch()
-        local lbl = content:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        lbl:SetPoint("LEFT", btn, "RIGHT", 8, 0)
-        lbl:SetText(label or ns.L.Color)
-        btn:SetScript("OnClick", function()
-            local c = ns.db[dbKey] or {r=1, g=1, b=1}
-            ColorPickerFrame:SetupColorPickerAndShow({
-                r = c.r, g = c.g, b = c.b,
-                swatchFunc = function()
-                    local r, g, b = ColorPickerFrame:GetColorRGB()
-                    ns.db[dbKey] = {r=r, g=g, b=b}
-                    UpdateSwatch(); ns.UpdateState()
-                end,
-                cancelFunc = function()
-                    ns.db[dbKey] = c; UpdateSwatch(); ns.UpdateState()
-                end
-            })
-        end)
-        if not hold then y = y - 32 end
-        return btn
-    end
-
-    function ui:Edit(label, dbKey, xOff, hold, fallback, transform)
-        local x = pad + (xOff or 0)
-        local lbl = content:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        lbl:SetPoint("TOPLEFT", x, y)
-        lbl:SetText(label)
-        local eb = CreateFrame("EditBox", nil, content, "InputBoxTemplate")
-        eb:SetSize(180, 32)
-        eb:SetPoint("TOPLEFT", x + 4, y - 15)
-        eb:SetAutoFocus(false)
-        local val = ns.db[dbKey]
-        if fallback then
-            if val == nil then
-                val = fallback
-            elseif type(val) == "string" and val:gsub("%s", "") == "" then
-                val = fallback
-            end
-        end
-        eb:SetText(val ~= nil and tostring(val) or "")
-        local function Save()
-            local text = eb:GetText()
-            local v2 = transform and transform(text) or text
-            if v2 == nil then v2 = text end
-            ns.db[dbKey] = v2
-            ns.UpdateState()
-        end
-        eb:SetScript("OnEnterPressed", function(self)
-            Save()
-            self:ClearFocus()
-        end)
-        eb:SetScript("OnEditFocusLost", function(self)
-            Save()
-        end)
-        if not hold then y = y - 60 end
-        return eb
-    end
-
-    function ui:Dropdown(label, dbKey, options, xOff, hold)
-        local x = pad + (xOff or 0)
-        local dd = CreateFrame("Frame", "VS_DD_" .. dbKey, content, "UIDropDownMenuTemplate")
-        dd:SetPoint("TOPLEFT", x - 16, y - 15)
-        local lbl = content:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        lbl:SetPoint("BOTTOMLEFT", dd, "TOPLEFT", 20, 0)
-        lbl:SetText(label)
-        UIDropDownMenu_SetWidth(dd, 150)
-        local function OnSelect(self)
-            ns.db[dbKey] = self.value
-            UIDropDownMenu_SetText(dd, self:GetText())
-            ns.UpdateState()
-            CloseDropDownMenus()
-        end
-        UIDropDownMenu_Initialize(dd, function()
-            local info = UIDropDownMenu_CreateInfo()
-            for _, opt in ipairs(options or {}) do
-                info.text = opt.text; info.value = opt.value; info.func = OnSelect
-                info.icon = opt.icon
-                info.iconWidth = opt.icon and 16 or nil
-                info.iconHeight = opt.icon and 16 or nil
-                info.checked = (ns.db[dbKey] == opt.value)
-                UIDropDownMenu_AddButton(info)
-            end
-        end)
-        for _, opt in ipairs(options or {}) do
-            if opt.value == ns.db[dbKey] then UIDropDownMenu_SetText(dd, opt.text) end
-        end
-        if not hold then y = y - 60 end
-        return dd
-    end
-
-    function ui:Button(text, onClick, xOff, hold, width)
-        local x = pad + (xOff or 0)
-        local btn = CreateFrame("Button", nil, content, "UIPanelButtonTemplate")
-        btn:SetSize(width or 140, 24)
-        btn:SetPoint("TOPLEFT", x, y)
-        btn:SetText(text)
-        btn:SetScript("OnClick", onClick)
-        if not hold then y = y - 32 end
-        return btn
-    end
-
-    function ui:Space(h) y = y - (h or 20) end
-    function ui:GetY() return y end
-    function ui:SetY(v2) y = v2 end
-
-    return ui
 end
