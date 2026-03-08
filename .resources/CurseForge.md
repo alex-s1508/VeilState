@@ -4,7 +4,7 @@
 
 <h2 style="font-size: 20px;">What it does:</h2>
 
-* **Floating Text & Icons:** Visual indicators with full control over size, color, opacity, position, and animations.
+* **Floating Text & Icons:** Visual trackers with full control over size, color, opacity, position, and animations.
 * **Instance & Combat Filters:** Show elements only when it makes sense (combat and/or instances).
 * **Highly Customizable:** Every system is modular — enable only what you want.
 * **Native Localization:** Includes automatic translations for all official WoW game languages.
@@ -13,12 +13,12 @@
 ***
 
 <h2 style="font-size: 20px;">
-  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_stealth.jpg" width="29" style="vertical-align: middle;"> Stealth Indicator
+  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_stealth.jpg" width="29" style="vertical-align: middle;"> Stealth Tracker
 </h2>
 
 The original core of Nightveil — a clean and highly configurable stealth tracking system.
 
-* Floating text and icon indicators for your current stance
+* Floating text and icon trackers for your current stance
 * Optional native character highlight while stealthed
 * Fully adjustable visuals and positioning
 * Non-intrusive and preserves your existing highlight settings
@@ -36,7 +36,7 @@ Nightveil includes a dedicated poison monitoring system for both **Lethal** and 
 You can independently configure:
 
 * Floating warning text (with custom message, color, size, opacity, offsets, and animations)
-* Indicator icons (with anchor options and positioning controls)
+* Tracker icons (with anchor options and positioning controls)
 * Optional sound alerts
 * Combat-only and instance-only visibility
 

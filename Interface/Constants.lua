@@ -1,7 +1,7 @@
 local addonName, ns = ...
 
 ns.Defaults = {
-    version = "1.0.2",
+    version = "2.0.1",
 
     stealthEnabled = true,
     stealthOnlyInstances = false,
@@ -84,7 +84,7 @@ ns.Defaults = {
     poisonNonLethalIconAlpha = 1,
     poisonNonLethalIconAnchorToText = true,
     poisonNonLethalIconAnchorPoint = "LEFT",
-    poisonNonLethalIconX = 5,
+    poisonNonLethalIconX = -5,
     poisonNonLethalIconY = 0,
     poisonNonLethalEnableSound = true,
     poisonNonLethalSoundKit = (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959,

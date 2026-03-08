@@ -128,3 +128,7 @@ L.ImportProfilePrompt = "프로필 내보내기 문자열을 아래에 붙여넣
 L.ImportProfileNamePrompt = "가져올 프로필 이름을 입력하세요:"
 L.Next = "다음"
 L.Import = "가져오기"
+
+-- 버전
+L.WelcomeMessage = "|cffA361E2Nightveil|r |cffffffffv%s 로드됨. |r|cffffd100/veil|r |cffffffff을 입력하여 설정 창을 여세요.|r"
+L.UpdateMessage = "|cffA361E2Nightveil|r |cffffffff이 |r|cff00ff00v%s|r|cffffffff 버전으로 업데이트되었습니다! 설정에서 릴리스 노트를 확인하세요.|r"

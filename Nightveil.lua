@@ -14,9 +14,12 @@ ns.IsRogue = false
 StaticPopupDialogs["NIGHTVEIL_HARD_RESET"] = {
     text = "Night|cffA361E2veil|r\n\n" .. (ns.L and ns.L.HardResetWarning or "|cffff2020Old or incompatible version detected.|r\n\nSettings will be |cffffd100reset|r to ensure stability."),
     button1 = "OK",
+    OnAccept = function()
+        ReloadUI()
+    end,
     timeout = 0,
     whileDead = true,
-    hideOnEscape = true,
+    hideOnEscape = false,
     preferredIndex = 3,
 }
 
@@ -77,30 +80,56 @@ local function SendChatOrPrint(msg)
 end
 
 function ns.CheckDatabaseVersion()
-    local currentVer = ns.Defaults and ns.Defaults.version or "1.0.2"
-    local savedVer = NightveilDB and NightveilDB.version or "0.0.0"
-    local minSupportedVer = "1.0.2"
+    local currentVer = ns.Defaults and ns.Defaults.version or "2.0.1"
+    local savedVer = NightveilDB and NightveilDB.version
+    local minSupportedVer = "2.0.0"
 
     local function GetVerScore(v)
+        if not v or v == "" then return -1 end
         local score = tostring(v):gsub("%.", "")
         return tonumber(score) or 0
     end
 
-    if GetVerScore(savedVer) < GetVerScore(minSupportedVer) then
-        StaticPopup_Show("NIGHTVEIL_HARD_RESET")
-
-        wipe(NightveilDB)
-
+    -- 1. Special case for reload after reset (highest priority)
+    if savedVer == "PENDING_RELOAD" then
         NightveilDB.version = currentVer
-        NightveilDB.profiles = {}
-        NightveilDB.profileKeys = {}
-        NightveilDB.global = {}
-        
-        return true
+        return "UPDATED"
     end
 
-    NightveilDB.version = currentVer
-    return false
+    -- 2. If NightveilDB is an empty table, it's a fresh install
+    if next(NightveilDB) == nil then
+        NightveilDB.version = currentVer
+        return "FRESH"
+    end
+
+    -- 3. If NightveilDB exists and is not empty, but savedVer is missing or empty, it's an incompatible old version
+    if not savedVer or savedVer == "" then
+        wipe(NightveilDB)
+        NightveilDB.version = "PENDING_RELOAD"
+        StaticPopup_Show("NIGHTVEIL_HARD_RESET")
+        return "WAITING"
+    end
+
+    local currentScore = GetVerScore(currentVer)
+    local savedScore = GetVerScore(savedVer)
+    local minScore = GetVerScore(minSupportedVer)
+
+    -- 4. If the saved version is too old and incompatible
+    if savedScore < minScore then
+        wipe(NightveilDB)
+        NightveilDB.version = "PENDING_RELOAD"
+        StaticPopup_Show("NIGHTVEIL_HARD_RESET")
+        return "WAITING"
+    end
+
+    -- 5. If the current version is greater than the saved (Update)
+    if currentScore > savedScore then
+        NightveilDB.version = currentVer
+        return "UPDATED"
+    end
+
+    -- 6. Already on the correct version
+    return "OK"
 end
 
 local function GetCharacterKey()
@@ -680,7 +709,8 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
         end
         
         NightveilDB = NightveilDB or {}
-        ns.CheckDatabaseVersion()
+        local verResult = ns.CheckDatabaseVersion()
+        if verResult == "WAITING" then return end
 
         NightveilDB.profiles = NightveilDB.profiles or {}
         NightveilDB.profileKeys = NightveilDB.profileKeys or {}
@@ -730,6 +760,11 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
         
         if IsStealthed() then ns.UpdateState() end
 
+        if verResult == "FRESH" then
+            print(string.format(ns.L.WelcomeMessage, ns.Defaults.version))
+        elseif verResult == "UPDATED" then
+            print(string.format(ns.L.UpdateMessage, ns.Defaults.version))
+        end
     elseif event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" then
         ns.UpdateState()
         CheckShroud()

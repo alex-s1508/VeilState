@@ -127,4 +127,8 @@ ns.L = {
     ImportProfileNamePrompt = "Enter a name for the imported profile:",
     Next = "Next",
     Import = "Import",
+
+    -- Versioning
+    WelcomeMessage = "|cffA361E2Nightveil|r |cffffffffv%s loaded. Type |r|cffffd100/veil|r |cffffffffto open the settings window.|r",
+    UpdateMessage = "|cffA361E2Nightveil|r |cffffffffupdated to |r|cff00ff00v%s|r|cffffffff! Check the release notes in the settings.|r",
 }

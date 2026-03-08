@@ -2,7 +2,13 @@ local addonName, ns = ...
 
 ns.ReleaseNotes = {
     notes = {
-        ["v1.0.2"] = {
+        ["v2.0.1"] = {
+            "|cff00d1ff[New]|r Added login Welcome and Update notification messages.",
+            "|cff00d1ff[New]|r Automatic |cffffd100/reload|r prompt when handling incompatible configurations.",
+            "|cff00ff00[Improved]|r Enhanced addon versioning and compatibility check system.",
+            "|cff00ff00[Fixed]|r Adjusted Non-Lethal Poison icon anchoring relative to default text.",
+        },
+        ["v2.0.0"] = {
             "|cff00d1ff[New]|r Redesigned configuration interface using |cffffd100LibEQOL|r |cff808080(by R41Z0R)|r.",
             "|cff00d1ff[New]|r Integrated Profile System with Import/Export functionality.",
             "|cff00d1ff[New]|r Added a 'Test Message' button to preview Shroud alerts.",

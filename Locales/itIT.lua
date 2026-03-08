@@ -128,3 +128,7 @@ L.ImportProfilePrompt = "Incolla qui sotto la stringa di esportazione del profil
 L.ImportProfileNamePrompt = "Inserisci un nome per il profilo importato:"
 L.Next = "Avanti"
 L.Import = "Importa"
+
+-- Versione
+L.WelcomeMessage = "|cffA361E2Nightveil|r |cffffffffv%s caricato. Digita |r|cffffd100/veil|r |cffffffffper aprire la finestra delle impostazioni.|r"
+L.UpdateMessage = "|cffA361E2Nightveil|r |cffffffffaggiornato a |r|cff00ff00v%s|r|cffffffff! Controlla le note di rilascio nelle impostazioni.|r"

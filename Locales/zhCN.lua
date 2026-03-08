@@ -130,3 +130,7 @@ L.ImportProfilePrompt = cn and "请在下方粘贴配置导出字符串：" or "
 L.ImportProfileNamePrompt = cn and "请输入导入后配置名称：" or "請輸入匯入後設定名稱："
 L.Next = cn and "下一步" or "下一步"
 L.Import = cn and "导入" or "匯入"
+
+-- 版本
+L.WelcomeMessage = "|cffA361E2Nightveil|r |cffffffffv%s 已加载. 输入 |r|cffffd100/veil|r |cffffffff打开设置窗口.|r"
+L.UpdateMessage = "|cffA361E2Nightveil|r |cffffffff已更新至 |r|cff00ff00v%s|r|cffffffff! 请在设置中查看更新日志.|r"
