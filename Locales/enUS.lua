@@ -1,41 +1,37 @@
 local addonName, ns = ...
 
 ns.L = {
+    -- General
     Description  = "Rogue utilities",
     ReleaseNotes = "Release Notes",
-    Reset        = "Reset to Defaults",
+    Management = "Management",
+    HardResetWarning = "|cffff2020Old or incompatible version detected.|r\n\nSettings will be |cffffd100reset|r to ensure stability.",
 
+    -- Features & Spells
     Stealth     = "Stealth",
     ShadowDance = "Shadow Dance",
     PoisonTracker = "Poison Tracker",
     LethalPoisons = "Lethal Poison",
     NonLethalPoisons = "Non-Lethal Poison",
+    ShroudOfConcealment = "Shroud of Concealment",
 
-    Settings = "Settings",
-    Messages = "Messages",
-    Sound = "Sound",
-    TestSound = "Test Sound",
-    SelectIcon = "Select Icon",
-    SelectSound = "Select Sound",
-    SoundKitId = "Sound Kit ID",
-
+    -- Global Conditions
+    Enable = "Enable",
     EnableOnStealth     = "Enable on Stealth",
     EnableOnShadowDance = "Enable on Shadow Dance",
-    EnablePoisonTracker = "Enable Poison Tracker",
     OnlyInCombat        = "Only in combat",
     OnlyInInstances     = "Only in instances",
-    ResetConfirm        = "Reset settings to defaults?",
-    LethalShort         = "Lethal",
-    NonLethalShort      = "Non-Lethal",
 
-    FloatingText   = "Floating Text",
-    IndicatorIcon  = "Indicator Icon",
-    ScreenColor    = "Screen Color",
+    -- Visuals & UI Elements
+    FloatingText  = "Floating Text",
+    IndicatorIcon = "Indicator Icon",
+    ScreenColor   = "Screen Color",
     Vignette       = "Vignette",
-    Highlight      = "Highlight",
-    Appearance     = "Appearance",
+    Highlight     = "Highlight",
+    Messages = "Messages",
+    Sound = "Sound",
 
-    Enable     = "Enable",
+    -- Styling Options
     Color      = "Color",
     Size       = "Size",
     Opacity    = "Opacity",
@@ -44,44 +40,91 @@ ns.L = {
     Thickness  = "Thickness",
     CustomText = "Custom Text",
     Style      = "Style",
-    Layer      = "Layer",
+    
+    -- Layers
+    Layer           = "Layer",
+    LayerBackground = "Background",
+    LayerLow        = "Low",
+    LayerMedium     = "Medium",
+    LayerHigh       = "High",
+    LayerDialog     = "Dialog",
+    LayerFullscreen = "Fullscreen",
 
-    AnchorToText = "Anchor to Text",
-    AnchorPoint  = "Anchor Point",
-    TopLeft      = "Top Left",
-    Top          = "Top",
-    TopRight     = "Top Right",
-    Left         = "Left",
-    Center       = "Center",
-    Right        = "Right",
-    BottomLeft   = "Bottom Left",
-    Bottom       = "Bottom",
-    BottomRight  = "Bottom Right",
-
+    -- Animations
     Animation      = "Animation",
     AnimationSpeed = "Speed",
-    AnimationNone  = "None",
-    AnimationBlink = "Blink",
-    AnimationPulse = "Pulse",
-    AnimationFade  = "Fade",
-    AnimationShake = "Shake",
-    AnimationFloat = "Float",
-    AnimationBounce = "Bounce",
-    AnimationGlow = "Glow",
-    AnimationGlowPulse = "Glow + Pulse",
+    AnimNone  = "None",
+    AnimBlink = "Blink",
+    AnimFade  = "Fade",
+    AnimShake = "Shake",
 
+    -- Anchors
+    AnchorToText = "Anchor to Text",
+    AnchorPoint  = "Anchor Point",
+    AnchorTopLeft     = "Top Left",
+    AnchorTop         = "Top",
+    AnchorTopRight    = "Top Right",
+    AnchorLeft        = "Left",
+    AnchorCenter      = "Center",
+    AnchorRight       = "Right",
+    AnchorBottomLeft  = "Bottom Left",
+    AnchorBottom      = "Bottom",
+    AnchorBottomRight = "Bottom Right",
+
+    -- Icons & Sounds Options
+    TestSound = "Test Sound",
+    SelectIcon = "Select Icon",
+    IconTexture = "Icon Texture",
+    SoundKitId = "Sound Kit ID",
+
+    -- Highlight Options
+    HighlightCircle           = "Circle",
+    HighlightOutline          = "Outline",
+    HighlightIcon             = "Icon",
+    HighlightCircleOutline    = "Circle + Outline",
+    HighlightCircleIcon       = "Circle + Icon",
+    HighlightOutlineIcon      = "Outline + Icon",
+    HighlightCircleOutlineIcon = "Circle + Outline + Icon",
+
+    -- Default Messages
     DefaultMessage     = "STEALTHED",
     ShadowDanceMessage = "SHADOW DANCE",
     LethalPoisonMissing = "LETHAL POISON MISSING",
     NonLethalPoisonMissing = "NON-LETHAL POISON MISSING",
 
-    ShroudOfConcealment = "Shroud of Concealment",
-    Countdown           = "Countdown in Chat",
+    -- Shroud Specifics
+    EnableShroudCountdown = "Enable chat countdown",
     ChatChannel         = "Chat Channel",
     ShroudMessage       = "Countdown Message",
-    ShroudInterval      = "Interval Mode",
-    ShroudIntervalDesc  = "Start, middle, and last 5s",
     ShroudOnStart       = "Start Message",
     ShroudOnEnd         = "End Message",
-    TimeRemainingHint   = "%t = time remaining",
+    ShroudInterval      = "Interval Mode",
+    ShroudIntervalDesc  = "Start, midpoint, and last 5s",
+    TimeRemainingHint   = "%time = time remaining",
+    TestShroud          = "Test Message",
+
+    -- Chat Channels
+    ChannelSay      = "Say",
+    ChannelParty    = "Party",
+    ChannelRaid     = "Raid",
+    ChannelInstance = "Instance",
+    ChannelYell     = "Yell",
+
+    -- Profiles
+    Profiles = "Profiles",
+    ActiveProfile = "Active Profile",
+    ProfileSharing = "Import / Export",
+    CreateProfile = "Create Profile",
+    DuplicateProfile = "Duplicate Profile",
+    DeleteProfile = "Delete Profile",
+    ExportProfile = "Export Profile",
+    ImportProfile = "Import Profile",
+    CreateProfilePrompt = "Enter a name for the new profile:",
+    DuplicateProfilePrompt = "Enter a name for the duplicated profile:",
+    DeleteProfileConfirm = "Delete profile:\n\n|cffff0000%s|r\n\nThis cannot be undone.",
+    ExportProfilePrompt = "Copy this export string (Ctrl+C):\n\nProfile: |cff00ff00%s|r",
+    ImportProfilePrompt = "Paste the profile export string below:",
+    ImportProfileNamePrompt = "Enter a name for the imported profile:",
+    Next = "Next",
+    Import = "Import",
 }
