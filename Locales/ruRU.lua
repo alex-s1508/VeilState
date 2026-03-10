@@ -1,134 +1,166 @@
 local addonName, ns = ...
 if GetLocale() ~= "ruRU" then return end
-local L = ns.L
 
--- General (Общее)
-L.Description  = "Утилиты разбойника"
-L.ReleaseNotes = "Примечания к обновлению"
-L.Management   = "Управление"
-L.HardResetWarning = "|cffff2020Обнаружена старая или несовместимая версия.|r\n\nНастройки будут |cffffd100сброшены|r для обеспечения стабильности."
+ns.L = {
+    -- UI Elements
+    Description = "Утилиты разбойника",
+    Management = "Управление",
+    Stealth = "Незаметность",
+    ShadowDance = "Танец теней",
+    PoisonTracker = "Отслеживание ядов",
+    LethalPoisons = "Смертоносный яд",
+    NonLethalPoisons = "Несмертоносный яд",
+    ShroudOfConcealment = "Пелена сокрытия",
+    Enable = "Включить",
+    EnableOnStealth = "Включать в незаметности",
+    EnableOnShadowDance = "Включать в Танце теней",
+    OnlyInCombat = "Только в бою",
+    OnlyInInstances = "Только в подземельях",
+    FloatingText = "Плавающий текст",
+    IndicatorIcon = "Значок индикатора",
+    ScreenColor = "Цвет экрана",
+    Vignette = "Виньетка",
+    Highlight = "Подсветка",
+    Messages = "Сообщения",
+    Sound = "Звук",
+    Color = "Цвет",
+    Size = "Размер",
+    Opacity = "Прозрачность",
+    OffsetX = "Смещение X",
+    OffsetY = "Смещение Y",
+    Thickness = "Толщина",
+    CustomText = "Пользовательский текст",
+    Style = "Стиль",
+    Layer = "Слой",
+    LayerBackground = "Фон",
+    LayerLow = "Низкий",
+    LayerMedium = "Средний",
+    LayerHigh = "Высокий",
+    LayerDialog = "Диалог",
+    LayerFullscreen = "Весь экран",
+    Animation = "Анимация",
+    AnimationSpeed = "Скорость",
+    AnimNone = "Нет",
+    AnimBlink = "Мигание",
+    AnimFade = "Затухание",
+    AnimShake = "Тряска",
+    AnchorToText = "Привязать к тексту",
+    AnchorPoint = "Точка привязки",
+    AnchorTopLeft = "Сверху слева",
+    AnchorTop = "Сверху",
+    AnchorTopRight = "Сверху справа",
+    AnchorLeft = "Слева",
+    AnchorCenter = "Центр",
+    AnchorRight = "Справа",
+    AnchorBottomLeft = "Снизу слева",
+    AnchorBottom = "Снизу",
+    AnchorBottomRight = "Снизу справа",
+    TestSound = "Проверить звук",
+    SelectIcon = "Выбрать значок",
+    IconTexture = "Текстура значка",
+    SoundKitId = "ID SoundKit",
+    HighlightCircle = "Круг",
+    HighlightOutline = "Контур",
+    HighlightIcon = "Значок",
+    HighlightCircleOutline = "Круг + Контур",
+    HighlightCircleIcon = "Круг + Значок",
+    HighlightOutlineIcon = "Контур + Значок",
+    HighlightCircleOutlineIcon = "Круг, контур и значок",
 
--- Features & Spells (Функции и заклинания)
-L.Stealth     = "Незаметность"
-L.ShadowDance = "Танец теней"
-L.PoisonTracker = "Отслеживание ядов"
-L.LethalPoisons = "Смертоносный яд"
-L.NonLethalPoisons = "Несмертоносный яд"
-L.ShroudOfConcealment = "Пелена сокрытия"
+    EnableDesc = "Включает или выключает эту функцию.",
+    EnableIconDesc = "Показывает индикатор-иконку.",
+    EnableOnStealthDesc = "Показывает эффекты Nightveil во время Незаметности.",
+    LethalPoisonsDesc = "Показывает предупреждения при отсутствии смертельного яда.",
+    NonLethalPoisonsDesc = "Показывает предупреждения при отсутствии несмертельного яда.",
+    OnlyInCombatDesc = "Показывает предупреждения только в бою.",
+    OnlyInInstancesDesc = "Показывает предупреждения только в подземельях/рейдах.",
+    CustomTextDesc = "Пользовательский текст для отображения.",
+    ColorDesc = "Задаёт цвет этого элемента.",
+    SizeDesc = "Изменяет размер элемента.",
+    OpacityDesc = "Изменяет прозрачность.",
+    OffsetXDesc = "Сдвигает элемент по горизонтали.",
+    OffsetYDesc = "Сдвигает элемент по вертикали.",
+    AnimationDesc = "Анимация при показе текста.",
+    AnimationSpeedDesc = "Скорость анимации.",
+    AnchorToTextDesc = "Привязывает иконку к позиции текста.",
+    AnchorPointDesc = "Сторона текста для привязки.",
+    IconTextureDesc = "Путь к пользовательской текстуре иконки.",
+    LayerDesc = "Слой отображения (выше = поверх).",
+    ScreenColorDesc = "Окрашивает экран, пока активно.",
+    VignetteDesc = "Добавляет виньетку по краям экрана.",
+    ThicknessDesc = "Толщина виньетки.",
+    HighlightDesc = "Подсвечивает вашего персонажа на экране.",
+    StyleDesc = "Выбор стиля подсветки.",
+    SoundDesc = "Проигрывает звук при срабатывании.",
+    SoundKitIdDesc = "ID SoundKit (число).",
+    TestSoundDesc = "Проигрывает выбранный звук сейчас.",
+    EnableShroudCountdownDesc = "Отправляет сообщения отсчёта Пелены в чат.",
+    ShroudOnlyInstancesDesc = "Отправляет сообщения Пелены только в инстансах.\n\nПримечание: некоторые каналы блокируются вне инстансов антиспамом Blizzard.",
+    ShroudMuteErrors = "Скрыть ошибки",
+    ShroudMuteErrorsDesc = "Отключает сообщения об ошибках Пелены в чате.",
+    ChatChannelDesc = "Основной канал чата для сообщений Пелены.",
+    ChatChannelFallbackDesc = "Запасной канал, если предыдущий недоступен.",
+    ShroudMessageDesc = "Шаблон сообщения во время отсчёта.\n\n%time = оставшееся время.",
+    ShroudOnStartDesc = "Сообщение при начале Пелены.",
+    ShroudOnEndDesc = "Сообщение при окончании Пелены (0с).",
+    TestShroudDesc = "Симулирует 5с отсчёт через реальные каналы чата.",
+    ActiveProfileDesc = "Выбор активного профиля.",
+    CreateProfileDesc = "Создаёт новый профиль со значениями по умолчанию.",
+    DuplicateProfileDesc = "Копирует текущий профиль в новый.",
+    DeleteProfileDesc = "Удаляет выбранный профиль (нельзя отменить).",
+    ExportProfileDesc = "Создаёт строку для обмена профилем.",
+    ImportProfileDesc = "Импортирует профиль из экспортной строки.",
 
--- Global Conditions (Глобальные условия)
-L.Enable = "Включить"
-L.EnableOnStealth     = "Включать в незаметности"
-L.EnableOnShadowDance = "Включать в Танце теней"
-L.OnlyInCombat        = "Только в бою"
-L.OnlyInInstances     = "Только в подземельях"
+    -- Chat Messages
+    DefaultMessage = "В НЕЗАМЕТНОСТИ",
+    ShadowDanceMessage = "ТАНЕЦ ТЕНЕЙ",
+    LethalPoisonMissing = "НЕТ СМЕРТОНОСНОГО ЯДА",
+    NonLethalPoisonMissing = "НЕТ НЕСМЕРТОНОСНОГО ЯДА",
+    EnableShroudCountdown = "Включить отсчёт в чате",
+    ChatChannel = "Канал чата",
+    ShroudMessage = "Сообщение отсчёта",
+    ShroudOnStart = "Сообщение начала",
+    ShroudOnEnd = "Сообщение конца",
+    ShroudInterval = "Интервальный режим",
+    ShroudIntervalDesc = "Начало, середина и последние 5 сек.",
+    TimeRemainingHint = "%time = оставшееся время",
+    TestShroud = "Тестовое сообщение",
+    ChannelSay = "Сказать",
+    ChannelParty = "Группа",
+    ChannelRaid = "Рейд",
+    ChannelInstance = "Подземелье",
+    ChannelYell = "Крикнуть",
 
--- Visuals & UI Elements (Визуальные эффекты и интерфейс)
-L.FloatingText  = "Плавающий текст"
-L.IndicatorIcon = "Значок индикатора"
-L.ScreenColor   = "Цвет экрана"
-L.Vignette      = "Виньетка"
-L.Highlight     = "Подсветка"
-L.Messages = "Сообщения"
-L.Sound = "Звук"
+    -- Profiles
+    Profiles = "Профили",
+    ActiveProfile = "Активный профиль",
+    ProfileSharing = "Импорт / Экспорт",
+    CreateProfile = "Создать профиль",
+    DuplicateProfile = "Дублировать профиль",
+    DeleteProfile = "Удалить профиль",
+    ExportProfile = "Экспортировать профиль",
+    ImportProfile = "Импортировать профиль",
+    CreateProfilePrompt = "Введите имя для нового профиля:",
+    DuplicateProfilePrompt = "Введите имя для дубликата профиля:",
+    DeleteProfileConfirm = "Удалить профиль:\n\n|cffff0000%s|r\n\nЭто действие нельзя отменить.",
+    ExportProfilePrompt = "Скопируйте строку экспорта (Ctrl+C):\n\nПрофиль: |cff00ff00%s|r",
+    ImportProfilePrompt = "Вставьте строку экспорта профиля ниже:",
+    ImportProfileNamePrompt = "Введите имя для импортируемого профиля:",
+    Next = "Далее",
+    Import = "Импортировать",
 
--- Styling Options (Настройка стиля)
-L.Color      = "Цвет"
-L.Size       = "Размер"
-L.Opacity    = "Прозрачность"
-L.OffsetX    = "Смещение X"
-L.OffsetY    = "Смещение Y"
-L.Thickness  = "Толщина"
-L.CustomText = "Пользовательский текст"
-L.Style      = "Стиль"
+    -- Error Messages
+    HardResetWarning = "|cffff2020Обнаружена старая или несовместимая версия.|r\n\nНастройки будут |cffffd100сброшены|r для обеспечения стабильности.",
+    ErrorNoValidChannel = "Night|cffA361E2veil|r: |cffff2020Нет доступных каналов чата.|r",
+    ErrorBlizzardAntiSpam = "Night|cffA361E2veil|r: |cffff2020Антиспам-ограничения Blizzard препятствуют использованию канала |r|cffffd100%s|r|cffff2020 вне подземелий.|r",
+    ErrorNotInGroup = "Night|cffA361E2veil|r: |cffff2020Вы не в группе. Канал |r|cffffd100%s|r|cffff2020 недоступен.|r",
+    ErrorNotInRaid = "Night|cffA361E2veil|r: |cffff2020Вы не в рейде. Канал |r|cffffd100%s|r|cffff2020 недоступен.|r",
+    ErrorFollowersDungeonGroup = "Night|cffA361E2veil|r: |cffff2020Вы один(одна) или группа недействительна. Канал |r|cffffd100%s|r|cffff2020 недоступен.|r",
+    ErrorShroudInstanceOnly = "Night|cffA361E2veil|r: |cffff2020Вы не находитесь в инстансе. Канал |r|cffffd100%s|r|cffff2020 недоступен.|r",
+    WarningOutdatedConfig = "|cffA361E2Обнаружена более новая конфигурация!|r\n\nПрофиль, который вы используете, был создан в более новой версии Night|cffA361E2veil|r.\n\nРекомендуется обновить аддон или сбросить профиль, чтобы избежать ошибок.",
 
--- Layers (Слои)
-L.Layer           = "Слой"
-L.LayerBackground = "Фон"
-L.LayerLow        = "Низкий"
-L.LayerMedium     = "Средний"
-L.LayerHigh       = "Высокий"
-L.LayerDialog     = "Диалог"
-L.LayerFullscreen = "Весь экран"
-
--- Animations (Анимация)
-L.Animation      = "Анимация"
-L.AnimationSpeed = "Скорость"
-L.AnimNone  = "Нет"
-L.AnimBlink = "Мигание"
-L.AnimFade  = "Затухание"
-L.AnimShake = "Тряска"
-
--- Anchors (Точки привязки)
-L.AnchorToText = "Привязать к тексту"
-L.AnchorPoint  = "Точка привязки"
-L.AnchorTopLeft     = "Сверху слева"
-L.AnchorTop         = "Сверху"
-L.AnchorTopRight    = "Сверху справа"
-L.AnchorLeft        = "Слева"
-L.AnchorCenter      = "Центр"
-L.AnchorRight       = "Справа"
-L.AnchorBottomLeft  = "Снизу слева"
-L.AnchorBottom      = "Снизу"
-L.AnchorBottomRight = "Снизу справа"
-
--- Icons & Sounds Options (Иконки и звуки)
-L.TestSound = "Проверить звук"
-L.SelectIcon = "Выбрать значок"
-L.IconTexture = "Текстура значка"
-L.SoundKitId = "ID SoundKit"
-
--- Highlight Options (Настройки подсветки)
-L.HighlightCircle           = "Круг"
-L.HighlightOutline          = "Контур"
-L.HighlightIcon             = "Значок"
-L.HighlightCircleOutline    = "Круг + Контур"
-L.HighlightCircleIcon       = "Круг + Значок"
-L.HighlightOutlineIcon      = "Контур + Значок"
-L.HighlightCircleOutlineIcon = "Круг + Контур + Значок"
-
--- Default Messages (Сообщения по умолчанию)
-L.DefaultMessage     = "В НЕЗАМЕТНОСТИ"
-L.ShadowDanceMessage = "ТАНЕЦ ТЕНЕЙ"
-L.LethalPoisonMissing = "НЕТ СМЕРТОНОСНОГО ЯДА"
-L.NonLethalPoisonMissing = "НЕТ НЕСМЕРТОНОСНОГО ЯДА"
-
--- Shroud Specifics (Специфика Пелены)
-L.EnableShroudCountdown = "Включить отсчёт в чате"
-L.ChatChannel         = "Канал чата"
-L.ShroudMessage       = "Сообщение отсчёта"
-L.ShroudOnStart       = "Сообщение начала"
-L.ShroudOnEnd         = "Сообщение конца"
-L.ShroudInterval      = "Интервальный режим"
-L.ShroudIntervalDesc  = "Начало, середина и последние 5 с"
-L.TimeRemainingHint   = "%time = оставшееся время"
-L.TestShroud          = "Тест сообщения"
-
--- Chat Channels (Каналы чата)
-L.ChannelSay      = "Сказать"
-L.ChannelParty    = "Группа"
-L.ChannelRaid     = "Рейд"
-L.ChannelInstance = "Инстанс"
-L.ChannelYell     = "Крик"
-
--- Profiles (Профили)
-L.Profiles = "Профили"
-L.ActiveProfile = "Активный профиль"
-L.ProfileSharing = "Импорт / Экспорт"
-L.CreateProfile = "Создать профиль"
-L.DuplicateProfile = "Дублировать профиль"
-L.DeleteProfile = "Удалить профиль"
-L.ExportProfile = "Экспорт профиля"
-L.ImportProfile = "Импорт профиля"
-L.CreateProfilePrompt = "Введите имя для нового профиля:"
-L.DuplicateProfilePrompt = "Введите имя для дублированного профиля:"
-L.DeleteProfileConfirm = "Удалить профиль:\n\n|cffff0000%s|r\n\nЭто действие нельзя отменить."
-L.ExportProfilePrompt = "Скопируйте эту строку (Ctrl+C):\n\nПрофиль: |cff00ff00%s|r"
-L.ImportProfilePrompt = "Вставьте строку экспорта профиля ниже:"
-L.ImportProfileNamePrompt = "Введите имя для импортированного профиля:"
-L.Next = "Далее"
-L.Import = "Импорт"
-
--- Версия
-L.WelcomeMessage = "|cffA361E2Nightveil|r |cffffffffv%s загружен. Введите |r|cffffd100/veil|r |cffffffffчтобы открыть окно настроек.|r"
-L.UpdateMessage = "|cffA361E2Nightveil|r |cffffffffобновлен до |r|cff00ff00v%s|r|cffffffff! Проверьте список изменений в настройках.|r"
+    -- Changelog
+    ReleaseNotes = "Примечания к обновлению",
+    WelcomeMessage = "Night|cffA361E2veil|r |cffffffffv%s загружен. Введите |r|cffffd100/veil|r |cffffffff, чтобы открыть настройки.|r",
+    UpdateMessage = "Night|cffA361E2veil|r |cffffffffобновлен до |r|cff00ff00v%s|r|cffffffff! Список изменений доступен в настройках.|r",
+}

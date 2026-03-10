@@ -1,134 +1,166 @@
 local addonName, ns = ...
 if GetLocale() ~= "koKR" then return end
-local L = ns.L
 
--- 일반 (General)
-L.Description  = "도적 유틸리티"
-L.ReleaseNotes = "업데이트 노트"
-L.Management   = "관리"
-L.HardResetWarning = "|cffff2020이전 버전 또는 호환되지 않는 버전이 감지되었습니다.|r\n\n설정이 |cffffd100초기화|r됩니다."
+ns.L = {
+    -- UI Elements
+    Description = "도적 유틸리티",
+    Management = "관리",
+    Stealth = "은신",
+    ShadowDance = "어둠의 춤",
+    PoisonTracker = "독 추적기",
+    LethalPoisons = "치명적인 독",
+    NonLethalPoisons = "비치명적인 독",
+    ShroudOfConcealment = "은폐의 장막",
+    Enable = "활성화",
+    EnableOnStealth = "은신 시 활성화",
+    EnableOnShadowDance = "어둠의 춤 시 활성화",
+    OnlyInCombat = "전투 중에만",
+    OnlyInInstances = "인스턴스에서만",
+    FloatingText = "플로팅 텍스트",
+    IndicatorIcon = "표시 아이콘",
+    ScreenColor = "화면 색상",
+    Vignette = "비네트",
+    Highlight = "강조",
+    Messages = "메시지",
+    Sound = "소리",
+    Color = "색상",
+    Size = "크기",
+    Opacity = "투명도",
+    OffsetX = "오프셋 X",
+    OffsetY = "오프셋 Y",
+    Thickness = "두께",
+    CustomText = "사용자 지정 텍스트",
+    Style = "스타일",
+    Layer = "레이어",
+    LayerBackground = "배경",
+    LayerLow = "낮음",
+    LayerMedium = "중간",
+    LayerHigh = "높음",
+    LayerDialog = "대화 상자",
+    LayerFullscreen = "전체 화면",
+    Animation = "애니메이션",
+    AnimationSpeed = "속도",
+    AnimNone = "없음",
+    AnimBlink = "깜빡임",
+    AnimFade = "페이드",
+    AnimShake = "흔들기",
+    AnchorToText = "텍스트에 고정",
+    AnchorPoint = "고정 위치",
+    AnchorTopLeft = "왼쪽 위",
+    AnchorTop = "위",
+    AnchorTopRight = "오른쪽 위",
+    AnchorLeft = "왼쪽",
+    AnchorCenter = "중앙",
+    AnchorRight = "오른쪽",
+    AnchorBottomLeft = "왼쪽 아래",
+    AnchorBottom = "아래",
+    AnchorBottomRight = "오른쪽 아래",
+    TestSound = "소리 테스트",
+    SelectIcon = "아이콘 선택",
+    IconTexture = "아이콘 텍스처",
+    SoundKitId = "사운드 키트 ID",
+    HighlightCircle = "원",
+    HighlightOutline = "윤곽선",
+    HighlightIcon = "아이콘",
+    HighlightCircleOutline = "원 + 윤곽선",
+    HighlightCircleIcon = "원 + 아이콘",
+    HighlightOutlineIcon = "윤곽선 + 아이콘",
+    HighlightCircleOutlineIcon = "원, 윤곽선 및 아이콘",
 
--- 기능 및 주문 (Features & Spells)
-L.Stealth     = "은신"
-L.ShadowDance = "어둠의 춤"
-L.PoisonTracker = "독 추적기"
-L.LethalPoisons = "치명적인 독"
-L.NonLethalPoisons = "비치명적인 독"
-L.ShroudOfConcealment = "은폐의 장막"
+    EnableDesc = "이 기능을 켜거나 끕니다.",
+    EnableIconDesc = "아이콘 표시를 켭니다.",
+    EnableOnStealthDesc = "은신 중일 때 Nightveil 표시를 켭니다.",
+    LethalPoisonsDesc = "치명적인 독이 없을 때 경고합니다.",
+    NonLethalPoisonsDesc = "비치명적인 독이 없을 때 경고합니다.",
+    OnlyInCombatDesc = "전투 중에만 표시합니다.",
+    OnlyInInstancesDesc = "인스턴스 안에서만 표시합니다.",
+    CustomTextDesc = "표시할 사용자 지정 텍스트입니다.",
+    ColorDesc = "이 요소의 색상을 설정합니다.",
+    SizeDesc = "요소 크기를 조정합니다.",
+    OpacityDesc = "투명도를 조정합니다.",
+    OffsetXDesc = "요소를 가로로 이동합니다.",
+    OffsetYDesc = "요소를 세로로 이동합니다.",
+    AnimationDesc = "텍스트 표시 애니메이션을 선택합니다.",
+    AnimationSpeedDesc = "애니메이션 속도를 조정합니다.",
+    AnchorToTextDesc = "아이콘을 텍스트 위치에 고정합니다.",
+    AnchorPointDesc = "텍스트의 어느 쪽에 붙일지 선택합니다.",
+    IconTextureDesc = "사용자 지정 아이콘 텍스처 경로입니다.",
+    LayerDesc = "표시 레이어(높을수록 위).",
+    ScreenColorDesc = "활성 시 화면 색을 입힙니다.",
+    VignetteDesc = "화면 가장자리에 비네트 효과를 추가합니다.",
+    ThicknessDesc = "비네트 두께를 조정합니다.",
+    HighlightDesc = "화면에서 내 캐릭터를 강조합니다.",
+    StyleDesc = "강조 스타일을 선택합니다.",
+    SoundDesc = "발동 시 경고음을 재생합니다.",
+    SoundKitIdDesc = "재생할 SoundKit ID(숫자).",
+    TestSoundDesc = "선택한 소리를 지금 재생합니다.",
+    EnableShroudCountdownDesc = "연막(Shroud) 카운트다운 메시지를 채팅에 보냅니다.",
+    ShroudOnlyInstancesDesc = "연막 메시지를 인스턴스에서만 보냅니다.\n\n참고: 일부 채널은 인스턴스 밖에서 블리자드 스팸 방지로 차단됩니다.",
+    ShroudMuteErrors = "오류 메시지 끄기",
+    ShroudMuteErrorsDesc = "연막 관련 오류 메시지를 채팅에 출력하지 않습니다.",
+    ChatChannelDesc = "연막 메시지의 기본 채팅 채널입니다.",
+    ChatChannelFallbackDesc = "이전 채널이 불가할 때 사용할 대체 채널입니다.",
+    ShroudMessageDesc = "카운트다운 중 사용할 메시지 템플릿입니다.\n\n%time = 남은 시간.",
+    ShroudOnStartDesc = "연막 시작 시 보낼 메시지입니다.",
+    ShroudOnEndDesc = "연막 종료 시 보낼 메시지입니다(0초).",
+    TestShroudDesc = "실제 채팅 채널로 5초 카운트다운을 시뮬레이션합니다.",
+    ActiveProfileDesc = "활성 프로필을 선택합니다.",
+    CreateProfileDesc = "기본 설정으로 새 프로필을 만듭니다.",
+    DuplicateProfileDesc = "현재 프로필을 복사해 새 프로필을 만듭니다.",
+    DeleteProfileDesc = "선택한 프로필을 삭제합니다(복구 불가).",
+    ExportProfileDesc = "이 프로필을 공유할 문자열을 생성합니다.",
+    ImportProfileDesc = "내보낸 문자열로 프로필을 가져옵니다.",
 
--- 전역 조건 (Global Conditions)
-L.Enable = "활성화"
-L.EnableOnStealth     = "은신 시 활성화"
-L.EnableOnShadowDance = "어둠의 춤 시 활성화"
-L.OnlyInCombat        = "전투 중에만"
-L.OnlyInInstances     = "인스턴스에서만"
+    -- Chat Messages
+    DefaultMessage = "은신 중",
+    ShadowDanceMessage = "어둠의 춤",
+    LethalPoisonMissing = "치명적인 독 없음",
+    NonLethalPoisonMissing = "비치명적인 독 없음",
+    EnableShroudCountdown = "채팅 카운트다운 활성화",
+    ChatChannel = "채팅 채널",
+    ShroudMessage = "카운트다운 메시지",
+    ShroudOnStart = "시작 메시지",
+    ShroudOnEnd = "종료 메시지",
+    ShroudInterval = "간격 모드",
+    ShroudIntervalDesc = "시작, 중간 및 마지막 5초",
+    TimeRemainingHint = "%time = 남은 시간",
+    TestShroud = "테스트 메시지",
+    ChannelSay = "일반",
+    ChannelParty = "파티",
+    ChannelRaid = "공격대",
+    ChannelInstance = "인스턴스",
+    ChannelYell = "외치기",
 
--- 시각 효과 및 UI 요소 (Visuals & UI Elements)
-L.FloatingText  = "플로팅 텍스트"
-L.IndicatorIcon = "표시 아이콘"
-L.ScreenColor   = "화면 색상"
-L.Vignette      = "비네트"
-L.Highlight     = "강조"
-L.Messages = "메시지"
-L.Sound = "소리"
+    -- Profiles
+    Profiles = "프로필",
+    ActiveProfile = "활성 프로필",
+    ProfileSharing = "가져오기 / 내보내기",
+    CreateProfile = "프로필 생성",
+    DuplicateProfile = "프로필 복사",
+    DeleteProfile = "프로필 삭제",
+    ExportProfile = "프로필 내보내기",
+    ImportProfile = "프로필 가져오기",
+    CreateProfilePrompt = "새 프로필 이름을 입력하세요:",
+    DuplicateProfilePrompt = "복사할 프로필 이름을 입력하세요:",
+    DeleteProfileConfirm = "프로필 삭제:\n\n|cffff0000%s|r\n\n이 작업은 되돌릴 수 없습니다.",
+    ExportProfilePrompt = "이 내보내기 문자열을 복사하세요 (Ctrl+C):\n\n프로필: |cff00ff00%s|r",
+    ImportProfilePrompt = "아래에 프로필 내보내기 문자열을 붙여넣으세요:",
+    ImportProfileNamePrompt = "가져올 프로필 이름을 입력하세요:",
+    Next = "다음",
+    Import = "가져오기",
 
--- 스타일 옵션 (Styling Options)
-L.Color      = "색상"
-L.Size       = "크기"
-L.Opacity    = "투명도"
-L.OffsetX    = "오프셋 X"
-L.OffsetY    = "오프셋 Y"
-L.Thickness  = "두께"
-L.CustomText = "사용자 지정 텍스트"
-L.Style      = "스타일"
+    -- Error Messages
+    HardResetWarning = "|cffff2020이전 버전 또는 호환되지 않는 버전이 감지되었습니다.|r\n\n설정이 |cffffd100초기화|r됩니다.",
+    ErrorNoValidChannel = "Night|cffA361E2veil|r: |cffff2020현재 상태에서 사용할 수 있는 유효한 채팅 채널이 없습니다.|r",
+    ErrorBlizzardAntiSpam = "Night|cffA361E2veil|r: |cffff2020Blizzard의 스팸 방지 제한으로 인해 인스턴스 외부에서는 |r|cffffd100%s|r|cffff2020 채널을 사용할 수 없습니다.|r",
+    ErrorNotInGroup = "Night|cffA361E2veil|r: |cffff2020파티에 속해 있지 않습니다. |r|cffffd100%s|r|cffff2020 채널을 사용할 수 없습니다.|r",
+    ErrorNotInRaid = "Night|cffA361E2veil|r: |cffff2020공격대에 속해 있지 않습니다. |r|cffffd100%s|r|cffff2020 채널을 사용할 수 없습니다.|r",
+    ErrorFollowersDungeonGroup = "Night|cffA361E2veil|r: |cffff2020혼자이거나 유효하지 않은 그룹입니다. |r|cffffd100%s|r|cffff2020 채널을 사용할 수 없습니다.|r",
+    ErrorShroudInstanceOnly = "Night|cffA361E2veil|r: |cffff2020인스턴스 내부에 있지 않습니다. 채널 |r|cffffd100%s|r|cffff2020 을 사용할 수 없습니다.|r",
+    WarningOutdatedConfig = "|cffA361E2최신 설정이 감지되었습니다!|r\n\n사용 중인 프로필은 최신 버전의 Night|cffA361E2veil|r에서 생성되었습니다.\n\n오류를 방지하기 위해 애드온을 업데이트하거나 프로필을 초기화하는 것을 권장합니다.",
 
--- 레이어 (Layers)
-L.Layer           = "레이어"
-L.LayerBackground = "배경"
-L.LayerLow        = "낮음"
-L.LayerMedium     = "중간"
-L.LayerHigh       = "높음"
-L.LayerDialog     = "대화 상자"
-L.LayerFullscreen = "전체 화면"
-
--- 애니메이션 (Animations)
-L.Animation      = "애니메이션"
-L.AnimationSpeed = "속도"
-L.AnimNone  = "없음"
-L.AnimBlink = "깜빡임"
-L.AnimFade  = "페이드"
-L.AnimShake = "흔들기"
-
--- 고정 위치 (Anchors)
-L.AnchorToText = "텍스트에 고정"
-L.AnchorPoint  = "고정 위치"
-L.AnchorTopLeft     = "왼쪽 위"
-L.AnchorTop         = "위"
-L.AnchorTopRight    = "오른쪽 위"
-L.AnchorLeft        = "왼쪽"
-L.AnchorCenter      = "중앙"
-L.AnchorRight       = "오른쪽"
-L.AnchorBottomLeft  = "왼쪽 아래"
-L.AnchorBottom      = "아래"
-L.AnchorBottomRight = "오른쪽 아래"
-
--- 아이콘 및 소리 옵션 (Icons & Sounds Options)
-L.TestSound = "소리 테스트"
-L.SelectIcon = "아이콘 선택"
-L.IconTexture = "아이콘 텍스처"
-L.SoundKitId = "사운드 키트 ID"
-
--- 강조 옵션 (Highlight Options)
-L.HighlightCircle           = "원"
-L.HighlightOutline          = "윤곽선"
-L.HighlightIcon             = "아이콘"
-L.HighlightCircleOutline    = "원 + 윤곽선"
-L.HighlightCircleIcon       = "원 + 아이콘"
-L.HighlightOutlineIcon      = "윤곽선 + 아이콘"
-L.HighlightCircleOutlineIcon = "원 + 윤곽선 + 아이콘"
-
--- 기본 메시지 (Default Messages)
-L.DefaultMessage     = "은신 중"
-L.ShadowDanceMessage = "어둠의 춤"
-L.LethalPoisonMissing = "치명적인 독 없음"
-L.NonLethalPoisonMissing = "비치명적인 독 없음"
-
--- 은폐의 장막 설정 (Shroud Specifics)
-L.EnableShroudCountdown = "채팅 카운트다운 활성화"
-L.ChatChannel         = "채팅 채널"
-L.ShroudMessage       = "카운트다운 메시지"
-L.ShroudOnStart       = "시작 메시지"
-L.ShroudOnEnd         = "종료 메시지"
-L.ShroudInterval      = "간격 모드"
-L.ShroudIntervalDesc  = "시작, 중간 지점, 마지막 5초"
-L.TimeRemainingHint   = "%time = 남은 시간"
-L.TestShroud          = "메시지 테스트"
-
--- 채팅 채널 (Chat Channels)
-L.ChannelSay      = "말하기"
-L.ChannelParty    = "파티"
-L.ChannelRaid     = "공격대"
-L.ChannelInstance = "인스턴스"
-L.ChannelYell     = "외치기"
-
--- 프로필 (Profiles)
-L.Profiles = "프로필"
-L.ActiveProfile = "활성 프로필"
-L.ProfileSharing = "가져오기 / 내보내기"
-L.CreateProfile = "프로필 생성"
-L.DuplicateProfile = "프로필 복제"
-L.DeleteProfile = "프로필 삭제"
-L.ExportProfile = "프로필 내보내기"
-L.ImportProfile = "프로필 가져오기"
-L.CreateProfilePrompt = "새 프로필 이름을 입력하세요:"
-L.DuplicateProfilePrompt = "복제할 프로필 이름을 입력하세요:"
-L.DeleteProfileConfirm = "프로필 삭제:\n\n|cffff0000%s|r\n\n되돌릴 수 없습니다."
-L.ExportProfilePrompt = "이 문자열을 복사하세요 (Ctrl+C):\n\n프로필: |cff00ff00%s|r"
-L.ImportProfilePrompt = "프로필 내보내기 문자열을 아래에 붙여넣으세요:"
-L.ImportProfileNamePrompt = "가져올 프로필 이름을 입력하세요:"
-L.Next = "다음"
-L.Import = "가져오기"
-
--- 버전
-L.WelcomeMessage = "|cffA361E2Nightveil|r |cffffffffv%s 로드됨. |r|cffffd100/veil|r |cffffffff을 입력하여 설정 창을 여세요.|r"
-L.UpdateMessage = "|cffA361E2Nightveil|r |cffffffff이 |r|cff00ff00v%s|r|cffffffff 버전으로 업데이트되었습니다! 설정에서 릴리스 노트를 확인하세요.|r"
+    -- Changelog
+    ReleaseNotes = "업데이트 노트",
+    WelcomeMessage = "Night|cffA361E2veil|r |cffffffffv%s 로드됨. |r|cffffd100/veil|r |cffffffff을 입력하여 설정창을 엽니다.|r",
+    UpdateMessage = "Night|cffA361E2veil|r |cffffffff가 |r|cff00ff00v%s|r|cffffffff로 업데이트되었습니다! 설정에서 업데이트 노트를 확인하세요.|r",
+}

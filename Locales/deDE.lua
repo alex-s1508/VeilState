@@ -1,134 +1,166 @@
 local addonName, ns = ...
 if GetLocale() ~= "deDE" then return end
-local L = ns.L
 
--- Allgemein (General)
-L.Description  = "Schurken-Dienstprogramme"
-L.ReleaseNotes = "Versionshinweise"
-L.Management = "Verwaltung"
-L.HardResetWarning = "|cffff2020Alte oder nicht kompatible Version erkannt.|r\n\nEinstellungen werden |cffffd100zurückgesetzt|r um Stabilität zu gewährleisten."
+ns.L = {
+    -- UI Elements
+    Description = "Schurken-Dienstprogramme",
+    Management = "Verwaltung",
+    Stealth = "Verstohlenheit",
+    ShadowDance = "Schattentanz",
+    PoisonTracker = "Giftüberwachung",
+    LethalPoisons = "Tödliches Gift",
+    NonLethalPoisons = "Nicht-tödliches Gift",
+    ShroudOfConcealment = "Schleier der Verhüllung",
+    Enable = "Aktivieren",
+    EnableOnStealth = "Bei Verstohlenheit aktivieren",
+    EnableOnShadowDance = "Bei Schattentanz aktivieren",
+    OnlyInCombat = "Nur im Kampf",
+    OnlyInInstances = "Nur in Instanzen",
+    FloatingText = "Schwebender Text",
+    IndicatorIcon = "Indikatorsymbol",
+    ScreenColor = "Bildschirmfarbe",
+    Vignette = "Vignette",
+    Highlight = "Hervorhebung",
+    Messages = "Nachrichten",
+    Sound = "Sound",
+    Color = "Farbe",
+    Size = "Größe",
+    Opacity = "Transparenz",
+    OffsetX = "Versatz X",
+    OffsetY = "Versatz Y",
+    Thickness = "Dicke",
+    CustomText = "Benutzerdefinierter Text",
+    Style = "Stil",
+    Layer = "Ebene",
+    LayerBackground = "Hintergrund",
+    LayerLow = "Niedrig",
+    LayerMedium = "Mittel",
+    LayerHigh = "Hoch",
+    LayerDialog = "Dialog",
+    LayerFullscreen = "Vollbild",
+    Animation = "Animation",
+    AnimationSpeed = "Geschwindigkeit",
+    AnimNone = "Keine",
+    AnimBlink = "Blinken",
+    AnimFade = "Verblassen",
+    AnimShake = "Schütteln",
+    AnchorToText = "An Text verankern",
+    AnchorPoint = "Ankerpunkt",
+    AnchorTopLeft = "Oben links",
+    AnchorTop = "Oben",
+    AnchorTopRight = "Oben rechts",
+    AnchorLeft = "Links",
+    AnchorCenter = "Mitte",
+    AnchorRight = "Rechts",
+    AnchorBottomLeft = "Unten links",
+    AnchorBottom = "Unten",
+    AnchorBottomRight = "Unten rechts",
+    TestSound = "Sound testen",
+    SelectIcon = "Symbol auswählen",
+    IconTexture = "Symboltextur",
+    SoundKitId = "Sound-Kit-ID",
+    HighlightCircle = "Kreis",
+    HighlightOutline = "Umriss",
+    HighlightIcon = "Symbol",
+    HighlightCircleOutline = "Kreis + Umriss",
+    HighlightCircleIcon = "Kreis + Symbol",
+    HighlightOutlineIcon = "Umriss + Symbol",
+    HighlightCircleOutlineIcon = "Kreis + Umriss + Symbol",
 
--- Fähigkeiten & Zauber (Features & Spells)
-L.Stealth     = "Verstohlenheit"
-L.ShadowDance = "Schattentanz"
-L.PoisonTracker = "Giftüberwachung"
-L.LethalPoisons = "Tödliche Gifte"
-L.NonLethalPoisons = "Nicht-tödliche Gifte"
-L.ShroudOfConcealment = "Schleier der Verhüllung"
+    EnableDesc = "Aktiviert oder deaktiviert diese Funktion.",
+    EnableIconDesc = "Zeigt ein Symbol an.",
+    EnableOnStealthDesc = "Zeigt Nightveil-Visuals während Verstohlenheit.",
+    LethalPoisonsDesc = "Zeigt Warnungen, wenn dein tödliches Gift fehlt.",
+    NonLethalPoisonsDesc = "Zeigt Warnungen, wenn dein nicht-tödliches Gift fehlt.",
+    OnlyInCombatDesc = "Zeigt Warnungen nur im Kampf.",
+    OnlyInInstancesDesc = "Zeigt Warnungen nur in Instanzen.",
+    CustomTextDesc = "Benutzerdefinierter Anzeigetext.",
+    ColorDesc = "Legt die Farbe dieses Elements fest.",
+    SizeDesc = "Ändert die Größe des Elements.",
+    OpacityDesc = "Ändert die Transparenz.",
+    OffsetXDesc = "Verschiebt das Element horizontal.",
+    OffsetYDesc = "Verschiebt das Element vertikal.",
+    AnimationDesc = "Animation beim Einblenden des Textes.",
+    AnimationSpeedDesc = "Steuert die Animationsgeschwindigkeit.",
+    AnchorToTextDesc = "Verankert das Symbol an der Textposition.",
+    AnchorPointDesc = "Seite des Textes als Anker.",
+    IconTextureDesc = "Pfad zur benutzerdefinierten Symboltextur.",
+    LayerDesc = "Zeichenebene (höher erscheint darüber).",
+    ScreenColorDesc = "Färbt den Bildschirm, wenn aktiv.",
+    VignetteDesc = "Fügt eine Vignette am Bildschirmrand hinzu.",
+    ThicknessDesc = "Steuert die Stärke der Vignette.",
+    HighlightDesc = "Hebt deinen Charakter hervor.",
+    StyleDesc = "Wählt den Hervorhebungsstil.",
+    SoundDesc = "Spielt einen Sound, wenn ausgelöst.",
+    SoundKitIdDesc = "SoundKit-ID (Zahl).",
+    TestSoundDesc = "Spielt den ausgewählten Sound ab.",
+    EnableShroudCountdownDesc = "Sendet Schattenschleier-Countdowns im Chat.",
+    ShroudOnlyInstancesDesc = "Sendet Schattenschleier-Nachrichten nur in Instanzen.\n\nHinweis: Einige Kanäle sind außerhalb von Instanzen durch Blizzard-Antispam blockiert.",
+    ShroudMuteErrors = "Fehlermeldungen stummschalten",
+    ShroudMuteErrorsDesc = "Deaktiviert Schattenschleier-Fehlermeldungen im Chat.",
+    ChatChannelDesc = "Primärer Chatkanal für Schattenschleier-Nachrichten.",
+    ChatChannelFallbackDesc = "Fallback-Kanal, wenn der vorherige nicht verfügbar ist.",
+    ShroudMessageDesc = "Vorlage für Countdown-Nachrichten.\n\n%time = verbleibende Zeit.",
+    ShroudOnStartDesc = "Nachricht beim Start von Schattenschleier.",
+    ShroudOnEndDesc = "Nachricht beim Ende von Schattenschleier (0s).",
+    TestShroudDesc = "Simuliert einen 5s-Countdown über echte Chatkanäle.",
+    ActiveProfileDesc = "Wählt das aktive Profil aus.",
+    CreateProfileDesc = "Erstellt ein neues Profil mit Standardwerten.",
+    DuplicateProfileDesc = "Kopiert das aktuelle Profil in ein neues.",
+    DeleteProfileDesc = "Löscht das ausgewählte Profil (nicht rückgängig).",
+    ExportProfileDesc = "Erstellt einen String zum Teilen dieses Profils.",
+    ImportProfileDesc = "Importiert ein Profil aus einem Export-String.",
 
--- Globale Bedingungen (Global Conditions)
-L.Enable = "Aktivieren"
-L.EnableOnStealth     = "Bei Verstohlenheit aktivieren"
-L.EnableOnShadowDance = "Bei Schattentanz aktivieren"
-L.OnlyInCombat        = "Nur im Kampf"
-L.OnlyInInstances     = "Nur in Instanzen"
+    -- Chat Messages
+    DefaultMessage = "VERSTOHLEN",
+    ShadowDanceMessage = "SCHATTENTANZ",
+    LethalPoisonMissing = "TÖDLICHES GIFT FEHLT",
+    NonLethalPoisonMissing = "NICHT-TÖDLICHES GIFT FEHLT",
+    EnableShroudCountdown = "Chat-Countdown aktivieren",
+    ChatChannel = "Chatkanal",
+    ShroudMessage = "Countdown-Nachricht",
+    ShroudOnStart = "Startnachricht",
+    ShroudOnEnd = "Endnachricht",
+    ShroudInterval = "Intervallmodus",
+    ShroudIntervalDesc = "Anfang, Mitte und letzte 5 Sek.",
+    TimeRemainingHint = "%time = verbleibende Zeit",
+    TestShroud = "Testnachricht",
+    ChannelSay = "Sagen",
+    ChannelParty = "Gruppe",
+    ChannelRaid = "Schlachtzug",
+    ChannelInstance = "Instanz",
+    ChannelYell = "Schreien",
 
--- Visuelle Elemente & UI (Visuals & UI Elements)
-L.FloatingText  = "Schwebender Text"
-L.IndicatorIcon = "Indikatorsymbol"
-L.ScreenColor   = "Bildschirmfarbe"
-L.Vignette      = "Vignette"
-L.Highlight     = "Hervorhebung"
-L.Messages = "Nachrichten"
-L.Sound = "Sound"
+    -- Profiles
+    Profiles = "Profile",
+    ActiveProfile = "Aktives Profil",
+    ProfileSharing = "Import / Export",
+    CreateProfile = "Profil erstellen",
+    DuplicateProfile = "Profil duplizieren",
+    DeleteProfile = "Profil löschen",
+    ExportProfile = "Profil exportieren",
+    ImportProfile = "Profil importieren",
+    CreateProfilePrompt = "Name für das neue Profil eingeben:",
+    DuplicateProfilePrompt = "Name für das duplizierte Profil eingeben:",
+    DeleteProfileConfirm = "Profil löschen:\n\n|cffff0000%s|r\n\nDies kann nicht rückgängig gemacht werden.",
+    ExportProfilePrompt = "Diesen Export-String kopieren (Strg+C):\n\nProfil: |cff00ff00%s|r",
+    ImportProfilePrompt = "Export-String des Profils unten einfügen:",
+    ImportProfileNamePrompt = "Name für das importierte Profil eingeben:",
+    Next = "Weiter",
+    Import = "Importieren",
 
--- Stiloptionen (Styling Options)
-L.Color      = "Farbe"
-L.Size       = "Größe"
-L.Opacity    = "Transparenz"
-L.OffsetX    = "Versatz X"
-L.OffsetY    = "Versatz Y"
-L.Thickness  = "Dicke"
-L.CustomText = "Benutzerdefinierter Text"
-L.Style      = "Stil"
+    -- Error Messages
+    HardResetWarning = "|cffff2020Alte oder inkompatible Version erkannt.|r\n\nEinstellungen werden |cffffd100zurückgesetzt|r um Stabilität zu gewährleisten.",
+    ErrorNoValidChannel = "Night|cffA361E2veil|r: |cffff2020Kein gültiger Chatkanal verfügbar.|r",
+    ErrorBlizzardAntiSpam = "Night|cffA361E2veil|r: |cffff2020Die Anti-Spam-Beschränkungen von Blizzard verhindern die Nutzung des Kanals |r|cffffd100%s|r|cffff2020 außerhalb von Instanzen.|r",
+    ErrorNotInGroup = "Night|cffA361E2veil|r: |cffff2020Du bist nicht in einer Gruppe. Kanal |r|cffffd100%s|r|cffff2020 ist nicht verfügbar.|r",
+    ErrorNotInRaid = "Night|cffA361E2veil|r: |cffff2020Du bist nicht in einem Schlachtzug. Kanal |r|cffffd100%s|r|cffff2020 ist nicht verfügbar.|r",
+    ErrorFollowersDungeonGroup = "Night|cffA361E2veil|r: |cffff2020Du bist allein oder in einer ungültigen Gruppe. Kanal |r|cffffd100%s|r|cffff2020 ist nicht verfügbar.|r",
+    ErrorShroudInstanceOnly = "Night|cffA361E2veil|r: |cffff2020Du befindest dich nicht in einer Instanz. Der Kanal |r|cffffd100%s|r|cffff2020 ist nicht verfügbar.|r",
+    WarningOutdatedConfig = "|cffA361E2Neuere Konfiguration erkannt!|r\n\nDas verwendete Profil wurde in einer neueren Version von Night|cffA361E2veil|r erstellt.\n\nEs wird empfohlen, das Addon zu aktualisieren oder das Profil zurückzusetzen, um Fehler zu vermeiden.",
 
--- Ebenen (Layers)
-L.Layer           = "Ebene"
-L.LayerBackground = "Hintergrund"
-L.LayerLow        = "Niedrig"
-L.LayerMedium     = "Mittel"
-L.LayerHigh       = "Hoch"
-L.LayerDialog     = "Dialog"
-L.LayerFullscreen = "Vollbild"
-
--- Animationen (Animations)
-L.Animation      = "Animation"
-L.AnimationSpeed = "Geschwindigkeit"
-L.AnimNone  = "Keine"
-L.AnimBlink = "Blinken"
-L.AnimFade  = "Verblassen"
-L.AnimShake = "Schütteln"
-
--- Ankerpunkte (Anchors)
-L.AnchorToText = "An Text verankern"
-L.AnchorPoint  = "Ankerpunkt"
-L.AnchorTopLeft     = "Oben links"
-L.AnchorTop         = "Oben"
-L.AnchorTopRight    = "Oben rechts"
-L.AnchorLeft        = "Links"
-L.AnchorCenter      = "Mitte"
-L.AnchorRight       = "Rechts"
-L.AnchorBottomLeft  = "Unten links"
-L.AnchorBottom      = "Unten"
-L.AnchorBottomRight = "Unten rechts"
-
--- Optionen für Symbole & Sounds (Icons & Sounds Options)
-L.TestSound = "Sound testen"
-L.SelectIcon = "Symbol auswählen"
-L.IconTexture = "Symboltextur"
-L.SoundKitId = "Sound-Kit-ID"
-
--- Hervorhebungsoptionen (Highlight Options)
-L.HighlightCircle           = "Kreis"
-L.HighlightOutline          = "Umriss"
-L.HighlightIcon             = "Symbol"
-L.HighlightCircleOutline    = "Kreis + Umriss"
-L.HighlightCircleIcon       = "Kreis + Symbol"
-L.HighlightOutlineIcon      = "Umriss + Symbol"
-L.HighlightCircleOutlineIcon = "Kreis + Umriss + Symbol"
-
--- Standardnachrichten (Default Messages)
-L.DefaultMessage     = "VERSTOHLEN"
-L.ShadowDanceMessage = "SCHATTENTANZ"
-L.LethalPoisonMissing = "TÖDLICHES GIFT FEHLT"
-L.NonLethalPoisonMissing = "NICHT-TÖDLICHES GIFT FEHLT"
-
--- Schleier-Spezifisch (Shroud Specifics)
-L.EnableShroudCountdown = "Chat-Countdown aktivieren"
-L.ChatChannel         = "Chatkanal"
-L.ShroudMessage       = "Countdown-Nachricht"
-L.ShroudOnStart       = "Startnachricht"
-L.ShroudOnEnd         = "Endnachricht"
-L.ShroudInterval      = "Intervallmodus"
-L.ShroudIntervalDesc  = "Start, Mittelpunkt und letzte 5 Sekunden"
-L.TimeRemainingHint   = "%time = verbleibende Zeit"
-L.TestShroud          = "Nachricht testen"
-
--- Chatkanäle (Chat Channels)
-L.ChannelSay      = "Sagen"
-L.ChannelParty    = "Gruppe"
-L.ChannelRaid     = "Schlachtzug"
-L.ChannelInstance = "Instanz"
-L.ChannelYell     = "Schreien"
-
--- Profile (Profiles)
-L.Profiles = "Profile"
-L.ActiveProfile = "Aktives Profil"
-L.ProfileSharing = "Import / Export"
-L.CreateProfile = "Profil erstellen"
-L.DuplicateProfile = "Profil duplizieren"
-L.DeleteProfile = "Profil löschen"
-L.ExportProfile = "Profil exportieren"
-L.ImportProfile = "Profil importieren"
-L.CreateProfilePrompt = "Name für das neue Profil eingeben:"
-L.DuplicateProfilePrompt = "Name für das duplizierte Profil eingeben:"
-L.DeleteProfileConfirm = "Profil löschen:\n\n|cffff0000%s|r\n\nDies kann nicht rückgängig gemacht werden."
-L.ExportProfilePrompt = "Diesen Export-String kopieren (Strg+C):\n\nProfil: |cff00ff00%s|r"
-L.ImportProfilePrompt = "Den Profil-Export-String unten einfügen:"
-L.ImportProfileNamePrompt = "Name für das importierte Profil eingeben:"
-L.Next = "Weiter"
-L.Import = "Importieren"
-
--- Version
-L.WelcomeMessage = "|cffA361E2Nightveil|r |cffffffffv%s geladen. Tippe |r|cffffd100/veil|r |cfffffffffür das Einstellungsfenster.|r"
-L.UpdateMessage = "|cffA361E2Nightveil|r |cffffffffaktualisiert auf |r|cff00ff00v%s|r|cffffffff! Überprüfe die Release-Notes in den Einstellungen.|r"
+    -- Changelog
+    ReleaseNotes = "Versionshinweise",
+    WelcomeMessage = "Night|cffA361E2veil|r |cffffffffv%s geladen. Gib |r|cffffd100/veil|r |cffffffffein, um das Einstellungsfenster zu öffnen.|r",
+    UpdateMessage = "Night|cffA361E2veil|r |cffffffffaktualisiert auf |r|cff00ff00v%s|r|cffffffff! Sieh dir die Versionshinweise in den Einstellungen an.|r",
+}

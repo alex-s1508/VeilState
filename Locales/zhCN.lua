@@ -1,136 +1,166 @@
 local addonName, ns = ...
-local locale = GetLocale()
-if locale ~= "zhCN" and locale ~= "zhTW" then return end
-local L = ns.L
-local cn = locale == "zhCN"
+if GetLocale() ~= "zhCN" then return end
 
--- 常规 (General)
-L.Description  = cn and "潜行工具" or "潛行工具"
-L.ReleaseNotes = cn and "更新日志" or "更新日誌"
-L.Management   = cn and "管理" or "管理"
-L.HardResetWarning = cn and "|cffff2020检测到旧版本或不兼容版本。|r\n\n设置将被 |cffffd100重置|r 以确保稳定性。" or "|cffff2020檢測到舊版本或不兼容版本。|r\n\n設置將被 |cffffd100重置|r 以確保穩定性。"
+ns.L = {
+    -- UI Elements
+    Description = "潜行者实用工具",
+    Management = "管理",
+    Stealth = "潜行",
+    ShadowDance = "暗影之舞",
+    PoisonTracker = "毒药监控",
+    LethalPoisons = "致命毒药",
+    NonLethalPoisons = "非致命毒药",
+    ShroudOfConcealment = "潜行帷幕",
+    Enable = "启用",
+    EnableOnStealth = "潜行时启用",
+    EnableOnShadowDance = "暗影之舞时启用",
+    OnlyInCombat = "仅战斗中",
+    OnlyInInstances = "仅副本中",
+    FloatingText = "浮动文字",
+    IndicatorIcon = "指示图标",
+    ScreenColor = "屏幕颜色",
+    Vignette = "边角昏暗",
+    Highlight = "高亮",
+    Messages = "信息",
+    Sound = "声音",
+    Color = "颜色",
+    Size = "大小",
+    Opacity = "透明度",
+    OffsetX = "横向偏移",
+    OffsetY = "纵向偏移",
+    Thickness = "粗细",
+    CustomText = "自定义文字",
+    Style = "样式",
+    Layer = "层级",
+    LayerBackground = "背景",
+    LayerLow = "低",
+    LayerMedium = "中",
+    LayerHigh = "高",
+    LayerDialog = "对话框",
+    LayerFullscreen = "全屏",
+    Animation = "动画",
+    AnimationSpeed = "速度",
+    AnimNone = "无",
+    AnimBlink = "闪烁",
+    AnimFade = "渐隐",
+    AnimShake = "抖动",
+    AnchorToText = "依附于文字",
+    AnchorPoint = "锚点",
+    AnchorTopLeft = "左上",
+    AnchorTop = "上",
+    AnchorTopRight = "右上",
+    AnchorLeft = "左",
+    AnchorCenter = "中",
+    AnchorRight = "右",
+    AnchorBottomLeft = "左下",
+    AnchorBottom = "下",
+    AnchorBottomRight = "右下",
+    TestSound = "测试声音",
+    SelectIcon = "选择图标",
+    IconTexture = "图标纹理",
+    SoundKitId = "声音 ID",
+    HighlightCircle = "圆圈",
+    HighlightOutline = "轮廓",
+    HighlightIcon = "图标",
+    HighlightCircleOutline = "圆圈 + 轮廓",
+    HighlightCircleIcon = "圆圈 + 图标",
+    HighlightOutlineIcon = "轮廓 + 图标",
+    HighlightCircleOutlineIcon = "圆圈、轮廓与图标",
 
--- 功能与法术 (Features & Spells)
-L.Stealth     = cn and "潜行" or "潛行"
-L.ShadowDance = cn and "暗影之舞" or "暗影之舞"
-L.PoisonTracker = cn and "毒药追踪" or "毒藥追蹤"
-L.LethalPoisons = cn and "致命毒药" or "致命毒藥"
-L.NonLethalPoisons = cn and "非致命毒药" or "非致命毒藥"
-L.ShroudOfConcealment = cn and "潜行帷幕" or "潛行帷幕"
+    EnableDesc = "启用或禁用此功能。",
+    EnableIconDesc = "显示图标指示器。",
+    EnableOnStealthDesc = "潜行时显示 Nightveil 效果。",
+    LethalPoisonsDesc = "缺少致命毒药时显示提醒。",
+    NonLethalPoisonsDesc = "缺少非致命毒药时显示提醒。",
+    OnlyInCombatDesc = "仅在战斗中显示提醒。",
+    OnlyInInstancesDesc = "仅在副本/团队/场景中显示提醒。",
+    CustomTextDesc = "要显示的自定义文本。",
+    ColorDesc = "设置该元素的颜色。",
+    SizeDesc = "调整元素大小。",
+    OpacityDesc = "调整透明度。",
+    OffsetXDesc = "水平移动元素位置。",
+    OffsetYDesc = "垂直移动元素位置。",
+    AnimationDesc = "选择文本出现时的动画。",
+    AnimationSpeedDesc = "控制动画速度。",
+    AnchorToTextDesc = "将图标锚定到文本位置。",
+    AnchorPointDesc = "选择相对文本的锚点方向。",
+    IconTextureDesc = "自定义图标材质路径。",
+    LayerDesc = "绘制层级（越高越在上方）。",
+    ScreenColorDesc = "激活时给屏幕着色。",
+    VignetteDesc = "在屏幕边缘添加暗角效果。",
+    ThicknessDesc = "控制暗角厚度。",
+    HighlightDesc = "在屏幕上高亮你的角色。",
+    StyleDesc = "选择高亮样式。",
+    SoundDesc = "触发时播放提示音。",
+    SoundKitIdDesc = "要播放的 SoundKit ID（数字）。",
+    TestSoundDesc = "立即播放所选声音。",
+    EnableShroudCountdownDesc = "在聊天中发送隐蔽帷幕倒计时消息。",
+    ShroudMuteErrors = "隐藏错误",
+    ShroudMuteErrorsDesc = "禁用潜行帷幕相关的聊天错误信息。",
+    ShroudOnlyInstancesDesc = "仅在副本中发送隐蔽帷幕消息。\n\n注意：部分频道在副本外会被暴雪防刷屏限制。",
+    ChatChannelDesc = "隐蔽帷幕消息的主聊天频道。",
+    ChatChannelFallbackDesc = "当上一个频道不可用时使用的备用频道。",
+    ShroudMessageDesc = "倒计时期间使用的消息模板。\n\n%time = 剩余时间。",
+    ShroudOnStartDesc = "隐蔽帷幕开始时发送的消息。",
+    ShroudOnEndDesc = "隐蔽帷幕结束时发送的消息（0秒）。",
+    TestShroudDesc = "使用真实聊天频道模拟 5 秒倒计时。",
+    ActiveProfileDesc = "选择当前启用的配置文件。",
+    CreateProfileDesc = "用默认设置创建新配置文件。",
+    DuplicateProfileDesc = "将当前配置文件复制为新的。",
+    DeleteProfileDesc = "删除所选配置文件（不可撤销）。",
+    ExportProfileDesc = "生成分享此配置文件的字符串。",
+    ImportProfileDesc = "从导出字符串导入配置文件。",
 
--- 全局条件 (Global Conditions)
-L.Enable = cn and "启用" or "啟用"
-L.EnableOnStealth     = cn and "潜行时启用" or "潛行時啟用"
-L.EnableOnShadowDance = cn and "暗影之舞时启用" or "暗影之舞時啟用"
-L.OnlyInCombat        = cn and "仅在战斗中" or "僅在戰鬥中"
-L.OnlyInInstances     = cn and "仅在副本中" or "僅在副本中"
+    -- Chat Messages
+    DefaultMessage = "已潜行",
+    ShadowDanceMessage = "暗影之舞",
+    LethalPoisonMissing = "缺少致命毒药",
+    NonLethalPoisonMissing = "缺少非致命毒药",
+    EnableShroudCountdown = "开启聊天栏倒计时",
+    ChatChannel = "聊天频道",
+    ShroudMessage = "倒计时信息",
+    ShroudOnStart = "开始信息",
+    ShroudOnEnd = "结束信息",
+    ShroudInterval = "间隔模式",
+    ShroudIntervalDesc = "开始、中间及最后5秒",
+    TimeRemainingHint = "%time = 剩余时间",
+    TestShroud = "测试信息",
+    ChannelSay = "说",
+    ChannelParty = "队伍",
+    ChannelRaid = "团队",
+    ChannelInstance = "副本",
+    ChannelYell = "大喊",
 
--- 视觉与 UI 元素 (Visuals & UI Elements)
-L.FloatingText  = cn and "浮动文字" or "浮動文字"
-L.IndicatorIcon = cn and "指示图标" or "指示圖示"
-L.ScreenColor   = cn and "屏幕颜色" or "螢幕顏色"
-L.Vignette      = cn and "渐变效果" or "漸層效果"
-L.Highlight     = cn and "高亮" or "高亮"
-L.Messages = cn and "消息" or "訊息"
-L.Sound = cn and "声音" or "聲音"
+    -- Profiles
+    Profiles = "配置文件",
+    ActiveProfile = "当前配置文件",
+    ProfileSharing = "导入 / 导出",
+    CreateProfile = "创建配置文件",
+    DuplicateProfile = "复制配置文件",
+    DeleteProfile = "删除配置文件",
+    ExportProfile = "导出配置文件",
+    ImportProfile = "导入配置文件",
+    CreateProfilePrompt = "输入新配置文件的名称:",
+    DuplicateProfilePrompt = "输入复制配置文件的名称:",
+    DeleteProfileConfirm = "删除配置文件:\n\n|cffff0000%s|r\n\n此操作无法撤销。",
+    ExportProfilePrompt = "复制导出字符串 (Ctrl+C):\n\n配置文件: |cff00ff00%s|r",
+    ImportProfilePrompt = "在下方粘贴配置文件导出字符串:",
+    ImportProfileNamePrompt = "输入导入配置文件的名称:",
+    Next = "下一步",
+    Import = "导入",
 
--- 样式选项 (Styling Options)
-L.Color      = cn and "颜色" or "顏色"
-L.Size       = cn and "大小" or "大小"
-L.Opacity    = cn and "透明度" or "透明度"
-L.OffsetX    = cn and "偏移 X" or "偏移 X"
-L.OffsetY    = cn and "偏移 Y" or "偏移 Y"
-L.Thickness  = cn and "厚度" or "厚度"
-L.CustomText = cn and "自定义文字" or "自訂文字"
-L.Style      = cn and "样式" or "樣式"
+    -- Error Messages
+    HardResetWarning = "|cffff2020检测到旧版本或不兼容版本。|r\n\n设置将|cffffd100重置|r以确保稳定性。",
+    ErrorNoValidChannel = "Night|cffA361E2veil|r: 当前状态下没有可用的聊天频道。",
+    ErrorBlizzardAntiSpam = "Night|cffA361E2veil|r: 暴雪防骚扰限制，无法在副本外使用 |cffffd100%s|r 频道。",
+    ErrorNotInGroup = "Night|cffA361E2veil|r: 你不在队伍中。频道 |cffffd100%s|r 不可用。",
+    ErrorNotInRaid = "Night|cffA361E2veil|r: 你不在团队中。频道 |cffffd100%s|r 不可用。",
+    ErrorFollowersDungeonGroup = "Night|cffA361E2veil|r: 你独自一人或队伍无效。频道 |cffffd100%s|r 不可用。",
+    ErrorShroudInstanceOnly = "Night|cffA361E2veil|r: |cffff2020你不在副本中。频道 |r|cffffd100%s|r|cffff2020 不可用。|r",
+    WarningOutdatedConfig = "|cffA361E2检测到较新版本的配置！|r\n\n您正在使用的配置文件是在较新版本的 Night|cffA361E2veil|r 中创建的。\n\n建议更新插件或重置配置文件以避免错误。",
 
--- 层级 (Layers)
-L.Layer           = cn and "层级" or "層級"
-L.LayerBackground = cn and "背景" or "背景"
-L.LayerLow        = cn and "低" or "低"
-L.LayerMedium     = cn and "中" or "中"
-L.LayerHigh       = cn and "高" or "高"
-L.LayerDialog     = cn and "对话框" or "對話框"
-L.LayerFullscreen = cn and "全屏" or "全螢幕"
-
--- 动画 (Animations)
-L.Animation      = cn and "动画" or "動畫"
-L.AnimationSpeed = cn and "速度" or "速度"
-L.AnimNone  = cn and "无" or "無"
-L.AnimBlink = cn and "闪烁" or "閃爍"
-L.AnimFade  = cn and "渐隐" or "漸隱"
-L.AnimShake = cn and "抖动" or "抖動"
-
--- 锚点 (Anchors)
-L.AnchorToText = cn and "锚定到文字" or "錨定到文字"
-L.AnchorPoint  = cn and "锚点位置" or "錨點位置"
-L.AnchorTopLeft     = cn and "左上" or "左上"
-L.AnchorTop         = cn and "上方" or "上方"
-L.AnchorTopRight    = cn and "右上" or "右上"
-L.AnchorLeft        = cn and "左侧" or "左側"
-L.AnchorCenter      = cn and "居中" or "置中"
-L.AnchorRight       = cn and "右侧" or "右側"
-L.AnchorBottomLeft  = cn and "左下" or "左下"
-L.AnchorBottom      = cn and "下方" or "下方"
-L.AnchorBottomRight = cn and "右下" or "右下"
-
--- 图标与声音选项 (Icons & Sounds Options)
-L.TestSound = cn and "测试声音" or "測試聲音"
-L.SelectIcon = cn and "选择图标" or "選擇圖示"
-L.IconTexture = cn and "图标材质" or "圖示材質"
-L.SoundKitId = cn and "声音套件 ID" or "聲音套件 ID"
-
--- 高亮选项 (Highlight Options)
-L.HighlightCircle           = cn and "圆圈" or "圓圈"
-L.HighlightOutline          = cn and "轮廓" or "輪廓"
-L.HighlightIcon             = cn and "图标" or "圖示"
-L.HighlightCircleOutline    = cn and "圆圈 + 轮廓" or "圓圈 + 輪廓"
-L.HighlightCircleIcon       = cn and "圆圈 + 图标" or "圓圈 + 圖示"
-L.HighlightOutlineIcon      = cn and "轮廓 + 图标" or "輪廓 + 圖示"
-L.HighlightCircleOutlineIcon = cn and "圆圈 + 轮廓 + 图标" or "圓圈 + 輪廓 + 圖示"
-
--- 默认消息 (Default Messages)
-L.DefaultMessage     = cn and "已潜行" or "已潛行"
-L.ShadowDanceMessage = cn and "暗影之舞" or "暗影之舞"
-L.LethalPoisonMissing = cn and "缺少致命毒药" or "缺少致命毒藥"
-L.NonLethalPoisonMissing = cn and "缺少非致命毒药" or "缺少非致命毒藥"
-
--- 帷幕细节 (Shroud Specifics)
-L.EnableShroudCountdown = cn and "启用聊天倒计时" or "啟用聊天倒數計時"
-L.ChatChannel         = cn and "聊天频道" or "聊天頻道"
-L.ShroudMessage       = cn and "倒计时消息" or "倒數計時訊息"
-L.ShroudOnStart       = cn and "开始消息" or "開始訊息"
-L.ShroudOnEnd         = cn and "结束消息" or "結束訊息"
-L.ShroudInterval      = cn and "间隔模式" or "間隔模式"
-L.ShroudIntervalDesc  = cn and "开始、中段和最后5秒" or "開始、中段和最後5秒"
-L.TimeRemainingHint   = cn and "%time = 剩余时间" or "%time = 剩餘時間"
-L.TestShroud          = cn and "测试消息" or "測試訊息"
-
--- 聊天频道 (Chat Channels)
-L.ChannelSay      = cn and "说" or "說"
-L.ChannelParty    = cn and "小队" or "隊伍"
-L.ChannelRaid     = cn and "团队" or "團隊"
-L.ChannelInstance = cn and "副本" or "副本"
-L.ChannelYell     = cn and "大喊" or "大喊"
-
--- 配置文件 (Profiles)
-L.Profiles = cn and "配置文件" or "設定檔"
-L.ActiveProfile = cn and "当前配置" or "目前設定"
-L.ProfileSharing = cn and "导入 / 导出" or "匯入 / 匯出"
-L.CreateProfile = cn and "新建配置" or "新增設定"
-L.DuplicateProfile = cn and "复制配置" or "複製設定"
-L.DeleteProfile = cn and "删除配置" or "刪除設定"
-L.ExportProfile = cn and "导出配置" or "匯出設定"
-L.ImportProfile = cn and "导入配置" or "匯入設定"
-L.CreateProfilePrompt = cn and "请输入新配置名称：" or "請輸入新設定名稱："
-L.DuplicateProfilePrompt = cn and "请输入复制后配置名称：" or "請輸入複製後設定名稱："
-L.DeleteProfileConfirm = cn and "删除配置：\n\n|cffff0000%s|r\n\n无法撤销。" or "刪除設定：\n\n|cffff0000%s|r\n\n無法復原。"
-L.ExportProfilePrompt = cn and "复制此字符串 (Ctrl+C)：\n\n配置：|cff00ff00%s|r" or "複製此字串 (Ctrl+C)：\n\n設定：|cff00ff00%s|r"
-L.ImportProfilePrompt = cn and "请在下方粘贴配置导出字符串：" or "請在下方貼上設定匯出字串："
-L.ImportProfileNamePrompt = cn and "请输入导入后配置名称：" or "請輸入匯入後設定名稱："
-L.Next = cn and "下一步" or "下一步"
-L.Import = cn and "导入" or "匯入"
-
--- 版本
-L.WelcomeMessage = "|cffA361E2Nightveil|r |cffffffffv%s 已加载. 输入 |r|cffffd100/veil|r |cffffffff打开设置窗口.|r"
-L.UpdateMessage = "|cffA361E2Nightveil|r |cffffffff已更新至 |r|cff00ff00v%s|r|cffffffff! 请在设置中查看更新日志.|r"
+    -- Changelog
+    ReleaseNotes = "更新日志",
+    WelcomeMessage = "Night|cffA361E2veil|r |cffffffffv%s 已加载。输入 |r|cffffd100/veil|r |cffffffff打开设置窗口。|r",
+    UpdateMessage = "Night|cffA361E2veil|r |cffffffff已更新至 |r|cff00ff00v%s|r|cffffffff! 请在设置中查看更新日志。|r",
+}

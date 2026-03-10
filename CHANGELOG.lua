@@ -2,6 +2,19 @@ local addonName, ns = ...
 
 ns.ReleaseNotes = {
     notes = {
+        ["v2.0.2"] = {
+            "|cff00d1ff[New]|r Added advanced version compatibility system with automatic config recovery for compatible versions.",
+            "|cff00d1ff[New]|r Added update notification popups when a different but compatible addon version is detected.",
+            "|cff00d1ff[New]|r Added recommended update confirmation popup when version mismatch occurs.",
+            "|cff00d1ff[New]|r Reintroduced |cffffd100SAY|r and |cffffd100YELL|r channels with proper instance restrictions.",
+            "|cff00d1ff[New]|r Added |cffffd100Debug Mode|r via |cffffd100/veil debug|r with runtime diagnostics for message conditions.",
+            "|cff00ff00[Improved]|r Fully redesigned Shroud message system using a new chat handling framework.",
+            "|cff00ff00[Improved]|r Integrated |cffffd100ChatThrottleLib|r |cff808080(by Nevcairiel)|r for safe and throttled chat communication.",
+            "|cff00ff00[Improved]|r Optimized Shroud countdown messages for precise timing and consistency.",
+            "|cff00ff00[Improved]|r Reworked |cffffd100Instance Only|r option to support the new system.",
+            "|cffffd100[Changed]|r Reworked channel condition system to accurately detect party, raid, pets and other group entities.",
+            "|cffffff00[UI]|r Test Message button now sends real chat messages for accurate preview behavior.",
+        },
         ["v2.0.1"] = {
             "|cff00d1ff[New]|r Added login Welcome and Update notification messages.",
             "|cff00d1ff[New]|r Automatic |cffffd100/reload|r prompt when handling incompatible configurations.",

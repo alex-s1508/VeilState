@@ -1,134 +1,166 @@
 local addonName, ns = ...
 if GetLocale() ~= "frFR" then return end
-local L = ns.L
 
--- Général (General)
-L.Description  = "Utilitaires de Voleur"
-L.ReleaseNotes = "Notes de mise à jour"
-L.Management   = "Gestion"
-L.HardResetWarning = "|cffff2020Version ancienne ou incompatible détectée.|r\n\nLes paramètres seront |cffffd100réinitialisés|r pour garantir la stabilité."
+ns.L = {
+    -- UI Elements
+    Description = "Utilitaires de Voleur",
+    Management = "Gestion",
+    Stealth = "Camouflage",
+    ShadowDance = "Danse des ombres",
+    PoisonTracker = "Surveillance des poisons",
+    LethalPoisons = "Poison mortel",
+    NonLethalPoisons = "Poison non mortel",
+    ShroudOfConcealment = "Voile d'occultation",
+    Enable = "Activer",
+    EnableOnStealth = "Activer avec Camouflage",
+    EnableOnShadowDance = "Activer avec Danse des ombres",
+    OnlyInCombat = "Uniquement en combat",
+    OnlyInInstances = "Uniquement en instance",
+    FloatingText = "Texte flottant",
+    IndicatorIcon = "Icône indicatrice",
+    ScreenColor = "Couleur de l'écran",
+    Vignette = "Vignette",
+    Highlight = "Mise en évidence",
+    Messages = "Messages",
+    Sound = "Son",
+    Color = "Couleur",
+    Size = "Taille",
+    Opacity = "Opacité",
+    OffsetX = "Décalage X",
+    OffsetY = "Décalage Y",
+    Thickness = "Épaisseur",
+    CustomText = "Texte personnalisé",
+    Style = "Style",
+    Layer = "Calque",
+    LayerBackground = "Arrière-plan",
+    LayerLow = "Bas",
+    LayerMedium = "Moyen",
+    LayerHigh = "Haut",
+    LayerDialog = "Dialogue",
+    LayerFullscreen = "Plein écran",
+    Animation = "Animation",
+    AnimationSpeed = "Vitesse",
+    AnimNone = "Aucun",
+    AnimBlink = "Clignotement",
+    AnimFade = "Fondu",
+    AnimShake = "Secousse",
+    AnchorToText = "Ancrer au texte",
+    AnchorPoint = "Point d'ancrage",
+    AnchorTopLeft = "En haut à gauche",
+    AnchorTop = "En haut",
+    AnchorTopRight = "En haut à droite",
+    AnchorLeft = "À gauche",
+    AnchorCenter = "Centre",
+    AnchorRight = "À droite",
+    AnchorBottomLeft = "En bas à gauche",
+    AnchorBottom = "En bas",
+    AnchorBottomRight = "En bas à droite",
+    TestSound = "Tester le son",
+    SelectIcon = "Sélectionner une icône",
+    IconTexture = "Texture de l'icône",
+    SoundKitId = "ID SoundKit",
+    HighlightCircle = "Cercle",
+    HighlightOutline = "Contour",
+    HighlightIcon = "Icône",
+    HighlightCircleOutline = "Cercle + Contour",
+    HighlightCircleIcon = "Cercle + Icône",
+    HighlightOutlineIcon = "Contour + Icône",
+    HighlightCircleOutlineIcon = "Cercle, contour et icône",
 
--- Fonctionnalités & Sorts (Features & Spells)
-L.Stealth     = "Camouflage"
-L.ShadowDance = "Danse des ombres"
-L.PoisonTracker = "Surveillance des poisons"
-L.LethalPoisons = "Poisons mortels"
-L.NonLethalPoisons = "Poisons non mortels"
-L.ShroudOfConcealment = "Voile d’occultation"
+    EnableDesc = "Active ou désactive cette fonctionnalité.",
+    EnableIconDesc = "Affiche une icône d'indication.",
+    EnableOnStealthDesc = "Affiche les visuels de Nightveil pendant Camouflé.",
+    LethalPoisonsDesc = "Active les alertes si le poison mortel manque.",
+    NonLethalPoisonsDesc = "Active les alertes si le poison non mortel manque.",
+    OnlyInCombatDesc = "Affiche les alertes uniquement en combat.",
+    OnlyInInstancesDesc = "Affiche les alertes uniquement en instance.",
+    CustomTextDesc = "Texte personnalisé à afficher.",
+    ColorDesc = "Définit la couleur de cet élément.",
+    SizeDesc = "Modifie la taille de l'élément.",
+    OpacityDesc = "Modifie la transparence.",
+    OffsetXDesc = "Déplace l'élément horizontalement.",
+    OffsetYDesc = "Déplace l'élément verticalement.",
+    AnimationDesc = "Animation utilisée lors de l'affichage du texte.",
+    AnimationSpeedDesc = "Contrôle la vitesse de l'animation.",
+    AnchorToTextDesc = "Ancre l'icône à la position du texte.",
+    AnchorPointDesc = "Côté du texte utilisé comme ancre.",
+    IconTextureDesc = "Chemin de texture personnalisée de l'icône.",
+    LayerDesc = "Calque d'affichage (plus haut = au-dessus).",
+    ScreenColorDesc = "Teinte l'écran lorsqu'actif.",
+    VignetteDesc = "Ajoute un effet de vignette autour de l'écran.",
+    ThicknessDesc = "Contrôle l'épaisseur de la vignette.",
+    HighlightDesc = "Met en évidence votre personnage à l'écran.",
+    StyleDesc = "Sélectionne le style de surbrillance.",
+    SoundDesc = "Joue un son d'alerte quand déclenché.",
+    SoundKitIdDesc = "ID SoundKit à jouer (nombre).",
+    TestSoundDesc = "Joue le son sélectionné maintenant.",
+    EnableShroudCountdownDesc = "Envoie des messages de compte à rebours de Cape au chat.",
+    ShroudOnlyInstancesDesc = "Envoie les messages de Cape uniquement en instance.\n\nNote : certains canaux sont bloqués hors instance par l'anti-spam de Blizzard.",
+    ShroudMuteErrors = "Masquer les erreurs",
+    ShroudMuteErrorsDesc = "Désactive les messages d'erreur de la Cape dans le chat.",
+    ChatChannelDesc = "Canal principal utilisé pour les messages de Cape.",
+    ChatChannelFallbackDesc = "Canal de secours si le précédent est indisponible.",
+    ShroudMessageDesc = "Modèle de message pendant le compte à rebours.\n\n%time = temps restant.",
+    ShroudOnStartDesc = "Message envoyé au début de la Cape.",
+    ShroudOnEndDesc = "Message envoyé à la fin de la Cape (0s).",
+    TestShroudDesc = "Simule un compte à rebours de 5s via les canaux réels.",
+    ActiveProfileDesc = "Sélectionne le profil actif.",
+    CreateProfileDesc = "Crée un nouveau profil avec les valeurs par défaut.",
+    DuplicateProfileDesc = "Copie le profil actuel dans un nouveau.",
+    DeleteProfileDesc = "Supprime le profil sélectionné (irréversible).",
+    ExportProfileDesc = "Génère une chaîne pour partager ce profil.",
+    ImportProfileDesc = "Importe un profil depuis une chaîne exportée.",
 
--- Conditions Globales (Global Conditions)
-L.Enable = "Activer"
-L.EnableOnStealth     = "Activar avec Camouflage"
-L.EnableOnShadowDance = "Activer avec Danse des ombres"
-L.OnlyInCombat        = "Uniquement en combat"
-L.OnlyInInstances     = "Uniquement en instance"
+    -- Chat Messages
+    DefaultMessage = "CAMOUFLÉ",
+    ShadowDanceMessage = "DANSE DES OMBRES",
+    LethalPoisonMissing = "POISON MORTEL MANQUANT",
+    NonLethalPoisonMissing = "POISON NON MORTEL MANQUANT",
+    EnableShroudCountdown = "Activer le compte à rebours",
+    ChatChannel = "Canal de discussion",
+    ShroudMessage = "Message du compte à rebours",
+    ShroudOnStart = "Message de début",
+    ShroudOnEnd = "Message de fin",
+    ShroudInterval = "Mode intervalle",
+    ShroudIntervalDesc = "Début, milieu et 5 dernières sec.",
+    TimeRemainingHint = "%time = temps restant",
+    TestShroud = "Tester le message",
+    ChannelSay = "Dire",
+    ChannelParty = "Groupe",
+    ChannelRaid = "Raid",
+    ChannelInstance = "Instance",
+    ChannelYell = "Crier",
 
--- Visuels & Éléments d'interface (Visuals & UI Elements)
-L.FloatingText  = "Texte flottant"
-L.IndicatorIcon = "Icône indicatrice"
-L.ScreenColor   = "Couleur de l’écran"
-L.Vignette      = "Vignette"
-L.Highlight     = "Mise en évidence"
-L.Messages = "Messages"
-L.Sound = "Son"
+    -- Profiles
+    Profiles = "Profils",
+    ActiveProfile = "Profil actif",
+    ProfileSharing = "Import / Export",
+    CreateProfile = "Créer un profil",
+    DuplicateProfile = "Dupliquer le profil",
+    DeleteProfile = "Supprimer le profil",
+    ExportProfile = "Exporter le profil",
+    ImportProfile = "Importer le profil",
+    CreateProfilePrompt = "Nom du nouveau profil :",
+    DuplicateProfilePrompt = "Nom du profil dupliqué :",
+    DeleteProfileConfirm = "Supprimer le profil :\n\n|cffff0000%s|r\n\nCette action est irréversible.",
+    ExportProfilePrompt = "Copiez cette chaîne d'exportation (Ctrl+C) :\n\nProfil : |cff00ff00%s|r",
+    ImportProfilePrompt = "Collez la chaîne d'exportation du profil ci-dessous :",
+    ImportProfileNamePrompt = "Nom du profil importé :",
+    Next = "Suivant",
+    Import = "Importer",
 
--- Options de Style (Styling Options)
-L.Color      = "Couleur"
-L.Size       = "Taille"
-L.Opacity    = "Opacité"
-L.OffsetX    = "Décalage X"
-L.OffsetY    = "Décalage Y"
-L.Thickness  = "Épaisseur"
-L.CustomText = "Texte personnalisé"
-L.Style      = "Style"
+    -- Error Messages
+    HardResetWarning = "|cffff2020Version ancienne ou incompatible détectée.|r\n\nLes paramètres seront |cffffd100réinitialisés|r pour garantir la stabilité.",
+    ErrorNoValidChannel = "Night|cffA361E2veil|r: |cffff2020Aucun canal de discussion valide disponible.|r",
+    ErrorBlizzardAntiSpam = "Night|cffA361E2veil|r: |cffff2020Les restrictions anti-spam de Blizzard empêchent l'utilisation du canal |r|cffffd100%s|r|cffff2020 en dehors des instances.|r",
+    ErrorNotInGroup = "Night|cffA361E2veil|r: |cffff2020Vous n'êtes pas en groupe. Le canal |r|cffffd100%s|r|cffff2020 n'est pas disponible.|r",
+    ErrorNotInRaid = "Night|cffA361E2veil|r: |cffff2020Vous n'êtes pas en raid. Le canal |r|cffffd100%s|r|cffff2020 n'est pas disponible.|r",
+    ErrorFollowersDungeonGroup = "Night|cffA361E2veil|r: |cffff2020Vous êtes seul ou dans un groupe invalide. Le canal |r|cffffd100%s|r|cffff2020 n'est pas disponible.|r",
+    ErrorShroudInstanceOnly = "Night|cffA361E2veil|r: |cffff2020Vous n’êtes pas dans une instance. Le canal |r|cffffd100%s|r|cffff2020 n’est pas disponible.|r",
+    WarningOutdatedConfig = "|cffA361E2Configuration plus récente détectée !|r\n\nLe profil que vous utilisez a été créé dans une version plus récente de Night|cffA361E2veil|r.\n\nIl est recommandé de mettre à jour l'addon ou de réinitialiser le profil pour éviter les erreurs.",
 
--- Calques (Layers)
-L.Layer           = "Calque"
-L.LayerBackground = "Arrière-plan"
-L.LayerLow        = "Bas"
-L.LayerMedium     = "Moyen"
-L.LayerHigh       = "Haut"
-L.LayerDialog     = "Dialogue"
-L.LayerFullscreen = "Plein écran"
-
--- Animations
-L.Animation      = "Animation"
-L.AnimationSpeed = "Vitesse"
-L.AnimNone  = "Aucun"
-L.AnimBlink = "Clignotement"
-L.AnimFade  = "Fondu"
-L.AnimShake = "Secousse"
-
--- Points d'ancrage (Anchors)
-L.AnchorToText = "Ancrer au texte"
-L.AnchorPoint  = "Point d’ancrage"
-L.AnchorTopLeft     = "En haut à gauche"
-L.AnchorTop         = "En haut"
-L.AnchorTopRight    = "En haut à droite"
-L.AnchorLeft        = "À gauche"
-L.AnchorCenter      = "Centre"
-L.AnchorRight       = "À droite"
-L.AnchorBottomLeft  = "En bas à gauche"
-L.AnchorBottom      = "En bas"
-L.AnchorBottomRight = "En bas à droite"
-
--- Options d'Icônes & Sons (Icons & Sounds Options)
-L.TestSound = "Tester le son"
-L.SelectIcon = "Sélectionner une icône"
-L.IconTexture = "Texture de l’icône"
-L.SoundKitId = "ID SoundKit"
-
--- Options de Mise en évidence (Highlight Options)
-L.HighlightCircle           = "Cercle"
-L.HighlightOutline          = "Contour"
-L.HighlightIcon             = "Icône"
-L.HighlightCircleOutline    = "Cercle + Contour"
-L.HighlightCircleIcon       = "Cercle + Icône"
-L.HighlightOutlineIcon      = "Contour + Icône"
-L.HighlightCircleOutlineIcon = "Cercle + Contour + Icône"
-
--- Messages par défaut (Default Messages)
-L.DefaultMessage     = "CAMOUFLÉ"
-L.ShadowDanceMessage = "DANSE DES OMBRES"
-L.LethalPoisonMissing = "POISON MORTEL MANQUANT"
-L.NonLethalPoisonMissing = "POISON NON MORTEL MANQUANT"
-
--- Détails du Voile (Shroud Specifics)
-L.EnableShroudCountdown = "Activer le compte à rebours"
-L.ChatChannel         = "Canal de discussion"
-L.ShroudMessage       = "Message du compte à rebours"
-L.ShroudOnStart       = "Message de début"
-L.ShroudOnEnd         = "Message de fin"
-L.ShroudInterval      = "Mode intervalle"
-L.ShroudIntervalDesc  = "Début, milieu et 5 dernières s"
-L.TimeRemainingHint   = "%time = temps restant"
-L.TestShroud          = "Tester le message"
-
--- Canaux de discussion (Chat Channels)
-L.ChannelSay      = "Dire"
-L.ChannelParty    = "Groupe"
-L.ChannelRaid     = "Raid"
-L.ChannelInstance = "Instance"
-L.ChannelYell     = "Crier"
-
--- Profils
-L.Profiles = "Profils"
-L.ActiveProfile = "Profil actif"
-L.ProfileSharing = "Importer / Exporter"
-L.CreateProfile = "Créer um profil"
-L.DuplicateProfile = "Dupliquer le profil"
-L.DeleteProfile = "Supprimer le profil"
-L.ExportProfile = "Exporter le profil"
-L.ImportProfile = "Importer le profil"
-L.CreateProfilePrompt = "Entrez un nom pour le nouveau profil :"
-L.DuplicateProfilePrompt = "Entrez un nom pour le profil dupliqué :"
-L.DeleteProfileConfirm = "Supprimer le profil :\n\n|cffff0000%s|r\n\nCette action é irréversible."
-L.ExportProfilePrompt = "Copiez cette chaîne (Ctrl+C) :\n\nProfil : |cff00ff00%s|r"
-L.ImportProfilePrompt = "Collez la chaîne d’export du profil ci-dessous :"
-L.ImportProfileNamePrompt = "Entrez un nome pour le profil importé :"
-L.Next = "Suivant"
-L.Import = "Importer"
-
--- Version
-L.WelcomeMessage = "|cffA361E2Nightveil|r |cffffffffv%s chargé. Tapez |r|cffffd100/veil|r |cffffffffpour ouvrir la fenêtre de réglages.|r"
-L.UpdateMessage = "|cffA361E2Nightveil|r |cffffffffmis à jour vers |r|cff00ff00v%s|r|cffffffff ! Consultez les notes de mise à jour dans les réglages.|r"
+    -- Changelog
+    ReleaseNotes = "Notes de mise à jour",
+    WelcomeMessage = "Night|cffA361E2veil|r |cffffffffv%s chargé. Tapez |r|cffffd100/veil|r |cffffffffpour ouvrir les paramètres.|r",
+    UpdateMessage = "Night|cffA361E2veil|r |cffffffffmis à jour en |r|cff00ff00v%s|r|cffffffff ! Consultez les notes de mise à jour dans les paramètres.|r",
+}

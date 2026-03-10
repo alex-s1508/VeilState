@@ -1,8 +1,10 @@
 local addonName, ns = ...
 
+-- Addon Defaults
 ns.Defaults = {
-    version = "2.0.1",
+    version = "2.0.2",
 
+    -- Stealth
     stealthEnabled = true,
     stealthOnlyInstances = false,
     stealthEnableText = true,
@@ -32,19 +34,23 @@ ns.Defaults = {
     stealthEnableHighlight = true,
     stealthHighlightType = 2,
 
+    -- Shroud
     shroudCountdown = false,
     shroudOnlyInstances = true,
-    shroudChannel = "PARTY",
-    shroudChannelFallback1 = "INSTANCE_CHAT",
-    shroudChannelFallback2 = "NONE",
+    shroudMuteErrors = false,
+    shroudChannel = "SAY",
+    shroudChannelFallback1 = "PARTY",
+    shroudChannelFallback2 = "INSTANCE_CHAT",
     shroudMessage = "%time",
     shroudInterval = false,
     shroudStartMsg = "%time",
     shroudEndMsg = "%time",
 
+    -- Global Poison Settings
     poisonOnlyCombat = false,
     poisonOnlyInstances = false,
 
+    -- Lethal Poison
     poisonLethalEnabled = true,
     poisonLethalEnableText = true,
     poisonLethalCustomText = ns.L.LethalPoisonMissing,
@@ -67,6 +73,7 @@ ns.Defaults = {
     poisonLethalEnableSound = true,
     poisonLethalSoundKit = (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959,
 
+    -- Non-Lethal Poison
     poisonNonLethalEnabled = true,
     poisonNonLethalEnableText = true,
     poisonNonLethalCustomText = ns.L.NonLethalPoisonMissing,
@@ -90,6 +97,7 @@ ns.Defaults = {
     poisonNonLethalSoundKit = (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959,
 }
 
+-- Utility Functions
 function ns.CopyDefaults(src, dst)
     for k, v in pairs(src) do
         if type(v) == "table" then
