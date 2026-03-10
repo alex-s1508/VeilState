@@ -2,6 +2,13 @@ local addonName, ns = ...
 
 ns.ReleaseNotes = {
     notes = {
+        ["v2.0.3"] = {
+            "|cff00d1ff[New]|r Added |cffffd100/veil shroud|r — a |cffffd100Debug Mode|r command that simulates a real Shroud countdown using your configured channels, messages, and error checks, identical to an actual cast. Default duration is 15 seconds.",
+            "|cff00ff00[Improved]|r Debug Mode structure refined via |cffffd100/veil debug|r, isolating technical commands to prevent accidental use during normal gameplay.",
+            "|cff00ff00[Improved]|r The |cffffd100Test Message|r button in Settings now performs a fixed 5-second local-only simulation, safe to use at any time without broadcasting to chat.",
+            "|cff00ff00[Improved]|r Shroud error messages (such as 'No Valid Channel' or 'Not in Instance') are now strictly suppressed after the first occurrence per cast, preventing repeated spam.",
+            "|cff00ff00[Fixed]|r Fixed an issue where editing configuration options had no effect, preventing changes from properly updating their behavior.",
+        },
         ["v2.0.2"] = {
             "|cff00d1ff[New]|r Added advanced version compatibility system with automatic config recovery for compatible versions.",
             "|cff00d1ff[New]|r Added update notification popups when a different but compatible addon version is detected.",

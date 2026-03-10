@@ -2,7 +2,7 @@ local addonName, ns = ...
 
 -- Addon Defaults
 ns.Defaults = {
-    version = "2.0.2",
+    version = "2.0.3",
 
     -- Stealth
     stealthEnabled = true,

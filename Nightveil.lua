@@ -9,12 +9,12 @@ local hasCaptured = false
 local shroudTicker = nil
 local shroudActive = false
 local shroudTesting = false
-local shroudErrorShown = false
-local lastShroudTime = 0
 local warnedSayRange = false
 local channelDenyUntil = {}
 local errorDenyUntil = {}
 ns.IsRogue = false
+ns.debugMode = false
+ns.shroudErrorsDisplayed = {}
 
 -- Popups
 StaticPopupDialogs["NIGHTVEIL_HARD_RESET"] = {
@@ -100,11 +100,6 @@ local function GetGroupComposition()
     end
 
     return players, pets, others, inGroup, isRaid
-end
-
-local function CountRealPlayers()
-    local players = GetGroupComposition()
-    return players
 end
 
 local function ThrottleError(key, seconds)
@@ -221,18 +216,22 @@ local function SendChat(channel, msg, silent)
     end
 end
 
-local function SendChatOrPrint(msg)
+local function SendChatOrPrint(msg, isSynthetic)
     if not msg or msg == "" then return end
+    
+    if isSynthetic then
+        print("Night|cffA361E2veil|r: " .. msg)
+        return
+    end
+
     local db = ns.db
     if not db then return end
 
-    if not shroudTesting and db.shroudOnlyInstances and not ns.IsInInstance() then
-
-        if not shroudErrorShown then
-            shroudErrorShown = true
-            print(ns.L.ErrorShroudInstanceOnly or "Night|cffA361E2veil|r: " .. ColorRed("Shroud messages only work inside instances."))
+    if db.shroudOnlyInstances and not ns.IsInInstance() then
+        if not ns.shroudErrorsDisplayed["INSTANCE_ONLY"] then
+            ns.shroudErrorsDisplayed["INSTANCE_ONLY"] = true
+            print(ns.L.ErrorShroudOnlyInstances or "Night|cffA361E2veil|r: " .. ColorRed("Shroud messages only work inside instances."))
         end
-
         return
     end
 
@@ -244,9 +243,11 @@ local function SendChatOrPrint(msg)
     if SendChat(db.shroudChannelFallback2, msg, true) then return end
 
     -- If no channel worked, show error
-    if not shroudTesting and not muteErrors then
-        shroudErrorShown = true
-        print(ns.L.ErrorNoValidChannel or ("Night|cffA361E2veil|r: " .. ColorRed("No valid chat channel available.")))
+    if not muteErrors then
+        if not ns.shroudErrorsDisplayed["NO_CHANNEL"] then
+            ns.shroudErrorsDisplayed["NO_CHANNEL"] = true
+            print(ns.L.ErrorNoValidChannel or ("Night|cffA361E2veil|r: " .. ColorRed("No valid chat channel available.")))
+        end
     end
 end
 
@@ -268,7 +269,7 @@ local function NormalizeProfile(profile)
     if not profile or type(profile) ~= "table" then return "ERROR" end
     
     local defaults = ns.Defaults or {}
-    local currentVer = defaults.version or "2.0.2"
+    local currentVer = defaults.version or "2.0.3"
     local profileVer = profile.version or "2.0.0"
     
     local currentScore = GetVerScore(currentVer)
@@ -329,7 +330,7 @@ end
 
 -- Database Versioning
 function ns.CheckDatabaseVersion()
-    local currentVer = ns.Defaults and ns.Defaults.version or "2.0.2"
+    local currentVer = ns.Defaults and ns.Defaults.version or "2.0.3"
     local savedVer = NightveilDB and NightveilDB.version
     local minSupportedVer = "2.0.0"
 
@@ -726,15 +727,12 @@ function ns.StopShroudCountdown(sendEnd)
         msg = msg:gsub("%%time", "0")
         msg = msg:gsub("%%t%f[%A]", "0")
         
-        if wasTesting then shroudTesting = true end
-        SendChatOrPrint(msg)
-        if wasTesting then shroudTesting = false end
+        SendChatOrPrint(msg, wasTesting)
     end
     
     if shroudTicker then shroudTicker:Cancel() end
     shroudTicker = nil
     shroudActive = false
-    shroudErrorShown = false
     ns.UpdateState()
 end
 
@@ -762,7 +760,7 @@ end
 function ns.StartShroudCountdown(expirationTime, duration)
     ns.StopShroudCountdown(false)
 
-    shroudErrorShown = false
+    ns.shroudErrorsDisplayed = {}
 
     local db = ns.db
     if not db or not db.shroudCountdown then return end
@@ -816,7 +814,7 @@ function ns.StartShroudCountdown(expirationTime, duration)
                 end
             else
                 local template = (db.shroudMessage and db.shroudMessage:gsub("%s+", "") ~= "") and db.shroudMessage or "%time"
-                SendChatOrPrint(FormatMsg(template, timeLeft))
+                SendChatOrPrint(FormatMsg(template, timeLeft), shroudTesting)
             end
         end
     end
@@ -830,6 +828,7 @@ function ns.TestShroudMessage()
     local db = ns.db
     if not db or shroudActive then return end
 
+    ns.shroudErrorsDisplayed = {}
     local duration = 5
     local exp = GetTime() + duration
     shroudActive = true
@@ -844,8 +843,8 @@ function ns.TestShroudMessage()
     end
 
     local useInterval = db.shroudInterval
-    local total = 15
-    local middle = 10 -- (15+5)/2
+    local total = duration
+    local middle = math.floor((total + 5) / 2)
 
     local function Tick()
         if not shroudActive or not shroudTesting then return end
@@ -865,12 +864,12 @@ function ns.TestShroudMessage()
         if timeLeft == total then
             local startMsg = db.shroudStartMsg
             if startMsg and startMsg:gsub("%s+", "") ~= "" then
-                SendChatOrPrint(FormatMsg(startMsg, total))
+                SendChatOrPrint(FormatMsg(startMsg, total), true)
             else
-                SendChatOrPrint(FormatMsg(template, total))
+                SendChatOrPrint(FormatMsg(template, total), true)
             end
         else
-            SendChatOrPrint(FormatMsg(template, timeLeft))
+            SendChatOrPrint(FormatMsg(template, timeLeft), true)
         end
     end
 
@@ -900,7 +899,9 @@ local function CheckShroud()
 end
 
 -- Core Logic
-function ns.UpdateState()
+ns._lastCvarStealthState = ns._lastCvarStealthState or false
+
+function ns.UpdateState(force)
     local db = ns.db
     if not db then return end
 
@@ -910,14 +911,20 @@ function ns.UpdateState()
     end
     
     if stealthActive or shroudActive then
-        ns.CaptureOriginal()
-        ns.ApplyHighlight()
+        if not ns._lastCvarStealthState then
+            ns.CaptureOriginal()
+            ns.ApplyHighlight()
+            ns._lastCvarStealthState = true
+        end
     else
-        ns.RestoreOriginal()
+        if ns._lastCvarStealthState then
+            ns.RestoreOriginal()
+            ns._lastCvarStealthState = false
+        end
     end
-    ns.RefreshVisuals()
+    ns.RefreshVisuals(force)
     if ns.IsRogue and ns.RefreshPoisonVisuals then
-        ns.RefreshPoisonVisuals()
+        ns.RefreshPoisonVisuals(force)
     end
 end
 
@@ -933,10 +940,6 @@ eventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
 eventFrame:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == addonName then
-        if not NightveilDB and VeilStateDB then
-            NightveilDB = VeilStateDB
-            VeilStateDB = nil
-        end
         
         NightveilDB = NightveilDB or {}
         local verResult = ns.CheckDatabaseVersion()
@@ -969,21 +972,10 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
 
         local _, _, classId = UnitClass("player")
         ns.IsRogue = (classId == 4)
-        
-        if not NightveilSavedState and VeilStateSavedState then
-            NightveilSavedState = VeilStateSavedState
-            VeilStateSavedState = nil
-        end
         RecoverState()
         
         if ns.InitSettings then ns.InitSettings() end
         ns.RefreshVisuals()
-        
-        if ns.IsRogue and ns.RefreshPoisonVisuals then
-            C_Timer.After(2, function()
-                ns.RefreshPoisonVisuals()
-            end)
-        end
         
         if IsStealthed() then ns.UpdateState() end
 
@@ -1025,9 +1017,14 @@ local function DebugState()
     local prefix = isRaid and "raid" or "party"
     local membersInfo = {}
     
-    table.insert(membersInfo, string.format(" - [1] %s (YOU) [|cff00ff00PLAYER|r]", UnitName("player")))
+    local strPlayer = ns.L and ns.L.DebugPlayer or "PLAYER"
+    local strPet = ns.L and ns.L.DebugPet or "PET"
+    local strOther = ns.L and ns.L.DebugOther or "OTHER"
+    local strUnknown = ns.L and ns.L.DebugUnknown or "Unknown"
+
+    table.insert(membersInfo, string.format(" - [1] %s (YOU) [|cff00ff00%s|r]", UnitName("player"), strPlayer))
     if UnitExists("pet") and not isRaid then
-        table.insert(membersInfo, string.format(" - [P] %s [|cff00d1ffPET|r]", UnitName("pet") or "Pet"))
+        table.insert(membersInfo, string.format(" - [P] %s [|cff00d1ff%s|r]", UnitName("pet") or strPet, strPet))
     end
 
     local loopEnd = isRaid and numMembers or (numMembers - 1)
@@ -1035,27 +1032,31 @@ local function DebugState()
         for i = 1, loopEnd do
             local unit = prefix .. i
             if UnitExists(unit) and not UnitIsUnit(unit, "player") then
-                local name = UnitName(unit) or "Unknown"
+                local name = UnitName(unit) or strUnknown
                 local isPlayer = UnitIsPlayer(unit)
-                local typeStr = isPlayer and "|cff00ff00PLAYER|r" or "|cffff0000OTHER|r"
+                local typeStr = isPlayer and ("|cff00ff00" .. strPlayer .. "|r") or ("|cffff0000" .. strOther .. "|r")
                 
                 table.insert(membersInfo, string.format(" - [%d] %s [%s]", #membersInfo + 1, name, typeStr))
             end
 
             local petUnit = (isRaid and ("raidpet" .. i) or ("partypet" .. i))
             if UnitExists(petUnit) then
-                table.insert(membersInfo, string.format(" - [P] %s [|cff00d1ffPET|r]", UnitName(petUnit) or "Pet"))
+                table.insert(membersInfo, string.format(" - [P] %s [|cff00d1ff%s|r]", UnitName(petUnit) or strPet, strPet))
             end
         end
     end
     
-    print("Night|cffA361E2veil|r Debug:")
-    print(string.format(" - Combat: %s", combat and "|cff00ff00YES|r" or "|cffff0000NO|r"))
-    print(string.format(" - Stealth: %s", stealthed and "|cff00ff00YES|r" or "|cffff0000NO|r"))
-    print(string.format(" - Instance: %s (Type: %s)", inInstance and "|cff00ff00YES|r" or "|cffff0000NO|r", instanceType or "none"))
-    print(string.format(" - Group: %s (Raid: %s, Total: %d)", inGroup and "|cff00ff00YES|r" or "|cffff0000NO|r", isRaid and "|cff00ff00YES|r" or "|cffff0000NO|r", numMembers))
-    print(string.format(" - Composition: |cff00ff00%d Players|r, |cff00d1ff%d Pets|r, |cffff0000%d Others|r", players, pets, others))
-    print(string.format(" - Invalid Group: %s", (inGroup and players <= 1 and others > 0) and "|cff00ff00YES|r" or "|cffff0000NO|r"))
+    local function GetYesNo(val)
+        return val and ("|cff00ff00" .. (ns.L and ns.L.DebugYes or "YES") .. "|r") or ("|cffff0000" .. (ns.L and ns.L.DebugNo or "NO") .. "|r")
+    end
+
+    print(ns.L and ns.L.DebugHeader or "Night|cffA361E2veil|r Debug:")
+    print(string.format(ns.L and ns.L.DebugCombat or " - Combat: %s", GetYesNo(combat)))
+    print(string.format(ns.L and ns.L.DebugStealth or " - Stealth: %s", GetYesNo(stealthed)))
+    print(string.format(ns.L and ns.L.DebugInstance or " - Instance: %s (Type: %s)", GetYesNo(inInstance), instanceType or (ns.L and ns.L.DebugNone or "none")))
+    print(string.format(ns.L and ns.L.DebugGroup or " - Group: %s (Raid: %s, Total: %d)", GetYesNo(inGroup), GetYesNo(isRaid), numMembers))
+    print(string.format(ns.L and ns.L.DebugComposition or " - Composition: |cff00ff00%d Players|r, |cff00d1ff%d Pets|r, |cffff0000%d Others|r", players, pets, others))
+    print(string.format(ns.L and ns.L.DebugInvalidGroup or " - Invalid Group: %s", GetYesNo(inGroup and players <= 1 and others > 0)))
     
     for _, info in ipairs(membersInfo) do
         print(info)
@@ -1066,16 +1067,114 @@ local function DebugState()
         local function label(c)
             return (ns.L and ns.L["Channel" .. (c or "NONE")]) or (c or "NONE")
         end
-        print(string.format(" - Shroud Channel: |cffffff00%s|r (Usable: %s)", label(db.shroudChannel), IsChannelUsable(db.shroudChannel) and "|cff00ff00YES|r" or "|cffff0000NO|r"))
-        print(string.format(" - Fallback 1: |cffffff00%s|r (Usable: %s)", label(db.shroudChannelFallback1), IsChannelUsable(db.shroudChannelFallback1) and "|cff00ff00YES|r" or "|cffff0000NO|r"))
-        print(string.format(" - Fallback 2: |cffffff00%s|r (Usable: %s)", label(db.shroudChannelFallback2), IsChannelUsable(db.shroudChannelFallback2) and "|cff00ff00YES|r" or "|cffff0000NO|r"))
+        print(string.format(ns.L and ns.L.DebugFallback1 or " - Fallback 1: |cffffff00%s|r (Usable: %s)", label(db.shroudChannelFallback1), GetYesNo(IsChannelUsable(db.shroudChannelFallback1))))
+        print(string.format(ns.L and ns.L.DebugFallback2 or " - Fallback 2: |cffffff00%s|r (Usable: %s)", label(db.shroudChannelFallback2), GetYesNo(IsChannelUsable(db.shroudChannelFallback2))))
     end
 end
 
+local function RunShroudTest(duration)
+    if shroudActive then
+        print(ns.L.DebugModeRequired or "Night|cffA361E2veil|r: |cffff2020This command requires Debug Mode.|r Type |cffffd100/veil debug|r to enable.")
+        return
+    end
+
+    local db = ns.db
+    if not db or not db.shroudCountdown then
+        print("Night|cffA361E2veil|r: |cffff2020Shroud countdown is disabled in settings.|r")
+        return
+    end
+
+    duration = math.max(1, math.min(20, math.floor(tonumber(duration) or 15)))
+
+    ns.shroudErrorsDisplayed = {}
+
+    local expirationTime = GetTime() + duration
+    local total = duration
+    local middle = math.floor((total + 5) / 2)
+    local useInterval = db.shroudInterval
+
+    shroudActive = true
+    shroudTesting = false  -- NOT synthetic: real channel routing
+
+    local function FormatMsg(template, timeLeft)
+        template = tostring(template or "")
+        local t = tostring(timeLeft or 0)
+        template = template:gsub("%%time", t)
+        template = template:gsub("%%t%f[%A]", t)
+        return template
+    end
+
+    local function Tick()
+        if not shroudActive or shroudTesting then return end
+
+        local remaining = expirationTime - GetTime()
+        local timeLeft = math.floor(remaining + 0.5)
+
+        if timeLeft <= 0 then
+            ns.StopShroudCountdown(true)
+            return
+        end
+
+        local shouldSend = not useInterval or timeLeft == total or timeLeft == middle or timeLeft <= 5
+        if not shouldSend then return end
+
+        if timeLeft == total then
+            local startMsg = db.shroudStartMsg
+            if startMsg and startMsg:gsub("%s+", "") ~= "" then
+                SendChatOrPrint(FormatMsg(startMsg, total), false)
+            else
+                local template = (db.shroudMessage and db.shroudMessage:gsub("%s+", "") ~= "") and db.shroudMessage or "%time"
+                SendChatOrPrint(FormatMsg(template, total), false)
+            end
+        else
+            local template = (db.shroudMessage and db.shroudMessage:gsub("%s+", "") ~= "") and db.shroudMessage or "%time"
+            SendChatOrPrint(FormatMsg(template, timeLeft), false)
+        end
+    end
+
+    ns.UpdateState()
+    Tick()
+    if shroudActive then
+        shroudTicker = C_Timer.NewTicker(1, Tick)
+    end
+end
+
+local function PrintDebugHelp()
+    print(ns.L.DebugModeActivated or "Night|cffA361E2veil|r: |cff00ff00Debug Mode ACTIVATED|r")
+    print(ns.L.DebugCommandList1 or " |cffffd100/veil info|r - Prints technical diagnostics")
+    print(ns.L.DebugCommandList2 or " |cffffd100/veil shroud [1-20]|r - Simulates Shroud countdown (default: 15s)")
+end
+
 SlashCmdList["NIGHTVEIL"] = function(msg)
-    if msg == "debug" then
+    local cmd, arg1 = string.split(" ", strtrim(msg or ""):lower())
+
+    if cmd == "debug" then
+        ns.debugMode = not ns.debugMode
+        if ns.debugMode then
+            PrintDebugHelp()
+        else
+            print(ns.L.DebugModeDeactivated or "Night|cffA361E2veil|r: |cffff2020Debug Mode DEACTIVATED|r")
+        end
+    elseif cmd == "info" then
+        if not ns.debugMode then
+            print(ns.L.DebugModeRequired or "Night|cffA361E2veil|r: |cffff2020This command requires Debug Mode.|r Type |cffffd100/veil debug|r to enable.")
+            return
+        end
         DebugState()
-    elseif ns.MainCategory then 
-        Settings.OpenToCategory(ns.MainCategory:GetID()) 
+    elseif cmd == "shroud" then
+        if not ns.debugMode then
+            print(ns.L.DebugModeRequired or "Night|cffA361E2veil|r: |cffff2020This command requires Debug Mode.|r Type |cffffd100/veil debug|r to enable.")
+            return
+        end
+        local n = tonumber(arg1)
+        if arg1 and arg1 ~= "" and (not n or n < 1 or n > 20) then
+            print(ns.L.DebugShroudUsage or "Night|cffA361E2veil|r: |cffff2020Usage:|r |cffffd100/veil shroud [1-20]|r")
+            return
+        end
+        RunShroudTest(n or 15)
+    elseif cmd == "" then
+        if ns.MainCategory then 
+            Settings.OpenToCategory(ns.MainCategory:GetID()) 
+        end
     end
 end

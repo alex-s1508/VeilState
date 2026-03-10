@@ -131,7 +131,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("enableText"), name = ns.L.Enable or "Enable",
         default = DefaultFor(K("enableText"), true),
         get = function() return G(K("enableText"), DefaultFor(K("enableText"), true)) end,
-        set = function(v) ns.db[K("enableText")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("enableText")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.EnableDesc,
     })
@@ -139,7 +139,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("customText"), name = ns.L.CustomText or "Custom Text",
         default = DefaultFor(K("customText"), ""),
         get = function() return G(K("customText"), DefaultFor(K("customText"), "")) end,
-        set = function(v) ns.db[K("customText")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("customText")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.CustomTextDesc,
     })
@@ -147,7 +147,7 @@ function ns.AddStealthSettings(cat, prefix)
         entries = { { key = K("textColor"), label = ns.L.Color or "Color" } },
         getColor = function(key) local def = ns.Defaults[key] or { r = 0.64, g = 0.38, b = 0.89 }; return GetColor(key, def.r, def.g, def.b) end,
         getDefaultColor = function(key) local def = ns.Defaults[key] or { r = 0.64, g = 0.38, b = 0.89 }; return def.r, def.g, def.b end,
-        setColor = function(key, r, g, b) ns.db[key] = { r = r, g = g, b = b }; ns.RefreshVisuals() end,
+        setColor = function(key, r, g, b) ns.db[key] = { r = r, g = g, b = b }; ns.RefreshVisuals(true) end,
         parentSection = textSection,
         desc = ns.L.ColorDesc,
     })
@@ -155,7 +155,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("textSize"), name = ns.L.Size or "Size", min = 10, max = 100, step = 1,
         default = DefaultFor(K("textSize"), 32),
         get = function() return G(K("textSize"), DefaultFor(K("textSize"), 32)) end,
-        set = function(v) ns.db[K("textSize")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textSize")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.SizeDesc,
     })
@@ -163,7 +163,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("textAlpha"), name = ns.L.Opacity or "Opacity", min = 0, max = 1, step = 0.05,
         default = DefaultFor(K("textAlpha"), 1),
         get = function() return G(K("textAlpha"), DefaultFor(K("textAlpha"), 1)) end,
-        set = function(v) ns.db[K("textAlpha")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textAlpha")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.OpacityDesc,
     })
@@ -171,7 +171,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("textX"), name = ns.L.OffsetX or "Offset X", min = -1200, max = 1200, step = 1,
         default = DefaultFor(K("textX"), 0),
         get = function() return G(K("textX"), DefaultFor(K("textX"), 0)) end,
-        set = function(v) ns.db[K("textX")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textX")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.OffsetXDesc,
     })
@@ -179,7 +179,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("textY"), name = ns.L.OffsetY or "Offset Y", min = -600, max = 600, step = 1,
         default = DefaultFor(K("textY"), 185),
         get = function() return G(K("textY"), DefaultFor(K("textY"), 185)) end,
-        set = function(v) ns.db[K("textY")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textY")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.OffsetYDesc,
     })
@@ -187,7 +187,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("textAnim"), name = ns.L.Animation or "Animation", values = ANIM_MAP, order = ANIM_ORDER,
         default = DefaultFor(K("textAnim"), "NONE"),
         get = function() return G(K("textAnim"), DefaultFor(K("textAnim"), "NONE")) end,
-        set = function(v) ns.db[K("textAnim")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textAnim")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.AnimationDesc,
     })
@@ -195,7 +195,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("textAnimSpeed"), name = ns.L.AnimationSpeed or "Speed", min = 0.2, max = 3, step = 0.1,
         default = DefaultFor(K("textAnimSpeed"), 1),
         get = function() return G(K("textAnimSpeed"), DefaultFor(K("textAnimSpeed"), 1)) end,
-        set = function(v) ns.db[K("textAnimSpeed")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textAnimSpeed")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.AnimationSpeedDesc,
     })
@@ -205,7 +205,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("enableIcon"), name = ns.L.Enable or "Enable",
         default = DefaultFor(K("enableIcon"), false),
         get = function() return G(K("enableIcon"), DefaultFor(K("enableIcon"), false)) end,
-        set = function(v) ns.db[K("enableIcon")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("enableIcon")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.EnableIconDesc or ns.L.EnableDesc,
     })
@@ -213,7 +213,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("iconAnchorToText"), name = ns.L.AnchorToText or "Anchor to Text",
         default = DefaultFor(K("iconAnchorToText"), true),
         get = function() return G(K("iconAnchorToText"), DefaultFor(K("iconAnchorToText"), true)) end,
-        set = function(v) ns.db[K("iconAnchorToText")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconAnchorToText")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.AnchorToTextDesc,
     })
@@ -221,7 +221,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("iconAnchorPoint"), name = ns.L.AnchorPoint or "Anchor Point", values = ANCHOR_MAP, order = ANCHOR_ORDER,
         default = DefaultFor(K("iconAnchorPoint"), "LEFT"),
         get = function() return G(K("iconAnchorPoint"), DefaultFor(K("iconAnchorPoint"), "LEFT")) end,
-        set = function(v) ns.db[K("iconAnchorPoint")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconAnchorPoint")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.AnchorPointDesc,
     })
@@ -229,7 +229,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("iconSize"), name = ns.L.Size or "Size", min = 16, max = 300, step = 1,
         default = DefaultFor(K("iconSize"), 64),
         get = function() return G(K("iconSize"), DefaultFor(K("iconSize"), 64)) end,
-        set = function(v) ns.db[K("iconSize")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconSize")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.SizeDesc,
     })
@@ -237,7 +237,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("iconAlpha"), name = ns.L.Opacity or "Opacity", min = 0, max = 1, step = 0.05,
         default = DefaultFor(K("iconAlpha"), 1),
         get = function() return G(K("iconAlpha"), DefaultFor(K("iconAlpha"), 1)) end,
-        set = function(v) ns.db[K("iconAlpha")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconAlpha")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.OpacityDesc,
     })
@@ -245,7 +245,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("iconX"), name = ns.L.OffsetX or "Offset X", min = -1200, max = 1200, step = 1,
         default = DefaultFor(K("iconX"), 0),
         get = function() return G(K("iconX"), DefaultFor(K("iconX"), 0)) end,
-        set = function(v) ns.db[K("iconX")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconX")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.OffsetXDesc,
     })
@@ -253,7 +253,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("iconY"), name = ns.L.OffsetY or "Offset Y", min = -600, max = 600, step = 1,
         default = DefaultFor(K("iconY"), 0),
         get = function() return G(K("iconY"), DefaultFor(K("iconY"), 0)) end,
-        set = function(v) ns.db[K("iconY")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconY")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.OffsetYDesc,
     })
@@ -263,7 +263,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("enableScreenColor"), name = ns.L.Enable or "Enable",
         default = DefaultFor(K("enableScreenColor"), true),
         get = function() return G(K("enableScreenColor"), DefaultFor(K("enableScreenColor"), true)) end,
-        set = function(v) ns.db[K("enableScreenColor")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("enableScreenColor")] = v; ns.UpdateState(true) end,
         parentSection = screenSection,
         desc = ns.L.ScreenColorDesc or ns.L.EnableDesc,
     })
@@ -271,7 +271,7 @@ function ns.AddStealthSettings(cat, prefix)
         entries = { { key = K("screenColor"), label = ns.L.Color or "Color" } },
         getColor = function(key) local def = ns.Defaults[key] or { r = 0.64, g = 0.38, b = 0.89 }; return GetColor(key, def.r, def.g, def.b) end,
         getDefaultColor = function(key) local def = ns.Defaults[key] or { r = 0.64, g = 0.38, b = 0.89 }; return def.r, def.g, def.b end,
-        setColor = function(key, r, g, b) ns.db[key] = { r = r, g = g, b = b }; ns.RefreshVisuals() end,
+        setColor = function(key, r, g, b) ns.db[key] = { r = r, g = g, b = b }; ns.RefreshVisuals(true) end,
         parentSection = screenSection,
         desc = ns.L.ColorDesc,
     })
@@ -279,7 +279,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("screenAlpha"), name = ns.L.Opacity or "Opacity", min = 0, max = 0.8, step = 0.01,
         default = DefaultFor(K("screenAlpha"), 0.1),
         get = function() return G(K("screenAlpha"), DefaultFor(K("screenAlpha"), 0.1)) end,
-        set = function(v) ns.db[K("screenAlpha")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("screenAlpha")] = v; ns.UpdateState(true) end,
         parentSection = screenSection,
         desc = ns.L.OpacityDesc,
     })
@@ -287,7 +287,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("screenStrata"), name = ns.L.Layer or "Layer", values = LAYER_MAP, order = LAYER_ORDER,
         default = DefaultFor(K("screenStrata"), "BACKGROUND"),
         get = function() return G(K("screenStrata"), DefaultFor(K("screenStrata"), "BACKGROUND")) end,
-        set = function(v) ns.db[K("screenStrata")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("screenStrata")] = v; ns.UpdateState(true) end,
         parentSection = screenSection,
         desc = ns.L.LayerDesc,
     })
@@ -297,7 +297,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("enableVignette"), name = ns.L.Enable or "Enable",
         default = DefaultFor(K("enableVignette"), true),
         get = function() return G(K("enableVignette"), DefaultFor(K("enableVignette"), true)) end,
-        set = function(v) ns.db[K("enableVignette")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("enableVignette")] = v; ns.UpdateState(true) end,
         parentSection = vigSection,
         desc = ns.L.VignetteDesc or ns.L.EnableDesc,
     })
@@ -305,7 +305,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("vignetteSize"), name = ns.L.Thickness or "Thickness", min = 50, max = 600, step = 1,
         default = DefaultFor(K("vignetteSize"), 250),
         get = function() return G(K("vignetteSize"), DefaultFor(K("vignetteSize"), 250)) end,
-        set = function(v) ns.db[K("vignetteSize")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("vignetteSize")] = v; ns.UpdateState(true) end,
         parentSection = vigSection,
         desc = ns.L.ThicknessDesc,
     })
@@ -313,7 +313,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("vignetteAlpha"), name = ns.L.Opacity or "Opacity", min = 0, max = 1, step = 0.05,
         default = DefaultFor(K("vignetteAlpha"), 0.6),
         get = function() return G(K("vignetteAlpha"), DefaultFor(K("vignetteAlpha"), 0.6)) end,
-        set = function(v) ns.db[K("vignetteAlpha")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("vignetteAlpha")] = v; ns.UpdateState(true) end,
         parentSection = vigSection,
         desc = ns.L.OpacityDesc,
     })
@@ -321,7 +321,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("vignetteStrata"), name = ns.L.Layer or "Layer", values = LAYER_MAP, order = LAYER_ORDER,
         default = DefaultFor(K("vignetteStrata"), "BACKGROUND"),
         get = function() return G(K("vignetteStrata"), DefaultFor(K("vignetteStrata"), "BACKGROUND")) end,
-        set = function(v) ns.db[K("vignetteStrata")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("vignetteStrata")] = v; ns.UpdateState(true) end,
         parentSection = vigSection,
         desc = ns.L.LayerDesc,
     })
@@ -331,7 +331,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("enableHighlight"), name = ns.L.Enable or "Enable",
         default = DefaultFor(K("enableHighlight"), true),
         get = function() return G(K("enableHighlight"), DefaultFor(K("enableHighlight"), true)) end,
-        set = function(v) ns.db[K("enableHighlight")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("enableHighlight")] = v; ns.UpdateState(true) end,
         parentSection = hlSection,
         desc = ns.L.HighlightDesc or ns.L.EnableDesc,
     })
@@ -339,7 +339,7 @@ function ns.AddStealthSettings(cat, prefix)
         key = K("highlightType"), name = ns.L.Style or "Style", values = HL_MODES, order = HL_ORDER,
         default = DefaultFor(K("highlightType"), 2),
         get = function() return G(K("highlightType"), DefaultFor(K("highlightType"), 2)) end,
-        set = function(v) ns.db[K("highlightType")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("highlightType")] = v; ns.UpdateState(true) end,
         parentSection = hlSection,
         desc = ns.L.StyleDesc,
     })
@@ -359,7 +359,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("enableText"), name = ns.L.Enable or "Enable",
         default = DefaultFor(K("enableText"), true),
         get = function() return G(K("enableText"), DefaultFor(K("enableText"), true)) end,
-        set = function(v) ns.db[K("enableText")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("enableText")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.EnableDesc,
     })
@@ -367,7 +367,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("customText"), name = ns.L.CustomText or "Custom Text",
         default = DefaultFor(K("customText"), ""),
         get = function() return G(K("customText"), DefaultFor(K("customText"), "")) end,
-        set = function(v) ns.db[K("customText")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("customText")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.CustomTextDesc,
     })
@@ -375,7 +375,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         entries = { { key = K("textColor"), label = ns.L.Color or "Color" } },
         getColor = function(key) local def = ns.Defaults[key] or { r = 1, g = 0.2, b = 0.2 }; return GetColor(key, def.r, def.g, def.b) end,
         getDefaultColor = function(key) local def = ns.Defaults[key] or { r = 1, g = 0.2, b = 0.2 }; return def.r, def.g, def.b end,
-        setColor = function(key, r, g, b) ns.db[key] = { r = r, g = g, b = b }; if ns.RefreshPoisonVisuals then ns.RefreshPoisonVisuals() end end,
+        setColor = function(key, r, g, b) ns.db[key] = { r = r, g = g, b = b }; if ns.RefreshPoisonVisuals then ns.RefreshPoisonVisuals(true) end end,
         parentSection = textSection,
         desc = ns.L.ColorDesc,
     })
@@ -383,7 +383,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("textSize"), name = ns.L.Size or "Size", min = 10, max = 100, step = 1,
         default = DefaultFor(K("textSize"), 28),
         get = function() return G(K("textSize"), DefaultFor(K("textSize"), 28)) end,
-        set = function(v) ns.db[K("textSize")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textSize")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.SizeDesc,
     })
@@ -391,7 +391,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("textAlpha"), name = ns.L.Opacity or "Opacity", min = 0, max = 1, step = 0.05,
         default = DefaultFor(K("textAlpha"), 1),
         get = function() return G(K("textAlpha"), DefaultFor(K("textAlpha"), 1)) end,
-        set = function(v) ns.db[K("textAlpha")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textAlpha")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.OpacityDesc,
     })
@@ -399,7 +399,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("textX"), name = ns.L.OffsetX or "Offset X", min = -1200, max = 1200, step = 1,
         default = DefaultFor(K("textX"), 0),
         get = function() return G(K("textX"), DefaultFor(K("textX"), 0)) end,
-        set = function(v) ns.db[K("textX")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textX")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.OffsetXDesc,
     })
@@ -407,7 +407,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("textY"), name = ns.L.OffsetY or "Offset Y", min = -600, max = 600, step = 1,
         default = DefaultFor(K("textY"), 185),
         get = function() return G(K("textY"), DefaultFor(K("textY"), 185)) end,
-        set = function(v) ns.db[K("textY")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textY")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.OffsetYDesc,
     })
@@ -415,7 +415,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("textAnim"), name = ns.L.Animation or "Animation", values = ANIM_MAP, order = ANIM_ORDER,
         default = DefaultFor(K("textAnim"), "NONE"),
         get = function() return G(K("textAnim"), DefaultFor(K("textAnim"), "NONE")) end,
-        set = function(v) ns.db[K("textAnim")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textAnim")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.AnimationDesc,
     })
@@ -423,7 +423,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("textAnimSpeed"), name = ns.L.AnimationSpeed or "Speed", min = 0.2, max = 3, step = 0.1,
         default = DefaultFor(K("textAnimSpeed"), 1),
         get = function() return G(K("textAnimSpeed"), DefaultFor(K("textAnimSpeed"), 1)) end,
-        set = function(v) ns.db[K("textAnimSpeed")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("textAnimSpeed")] = v; ns.UpdateState(true) end,
         parentSection = textSection,
         desc = ns.L.AnimationSpeedDesc,
     })
@@ -433,7 +433,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("enableIcon"), name = ns.L.Enable or "Enable",
         default = DefaultFor(K("enableIcon"), true),
         get = function() return G(K("enableIcon"), DefaultFor(K("enableIcon"), true)) end,
-        set = function(v) ns.db[K("enableIcon")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("enableIcon")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.EnableIconDesc or ns.L.EnableDesc,
     })
@@ -441,7 +441,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("iconTexture"), name = ns.L.IconTexture or "Icon Texture",
         default = DefaultFor(K("iconTexture"), ""),
         get = function() return G(K("iconTexture"), DefaultFor(K("iconTexture"), "")) end,
-        set = function(v) ns.db[K("iconTexture")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconTexture")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.IconTextureDesc,
     })
@@ -449,7 +449,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("iconAnchorToText"), name = ns.L.AnchorToText or "Anchor to Text",
         default = DefaultFor(K("iconAnchorToText"), true),
         get = function() return G(K("iconAnchorToText"), DefaultFor(K("iconAnchorToText"), true)) end,
-        set = function(v) ns.db[K("iconAnchorToText")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconAnchorToText")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.AnchorToTextDesc,
     })
@@ -457,7 +457,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("iconAnchorPoint"), name = ns.L.AnchorPoint or "Anchor Point", values = ANCHOR_MAP, order = ANCHOR_ORDER,
         default = DefaultFor(K("iconAnchorPoint"), "LEFT"),
         get = function() return G(K("iconAnchorPoint"), DefaultFor(K("iconAnchorPoint"), "LEFT")) end,
-        set = function(v) ns.db[K("iconAnchorPoint")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconAnchorPoint")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.AnchorPointDesc,
     })
@@ -465,7 +465,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("iconSize"), name = ns.L.Size or "Size", min = 16, max = 150, step = 1,
         default = DefaultFor(K("iconSize"), 36),
         get = function() return G(K("iconSize"), DefaultFor(K("iconSize"), 36)) end,
-        set = function(v) ns.db[K("iconSize")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconSize")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.SizeDesc,
     })
@@ -473,7 +473,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("iconAlpha"), name = ns.L.Opacity or "Opacity", min = 0, max = 1, step = 0.05,
         default = DefaultFor(K("iconAlpha"), 1),
         get = function() return G(K("iconAlpha"), DefaultFor(K("iconAlpha"), 1)) end,
-        set = function(v) ns.db[K("iconAlpha")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconAlpha")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.OpacityDesc,
     })
@@ -481,7 +481,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("iconX"), name = ns.L.OffsetX or "Offset X", min = -1200, max = 1200, step = 1,
         default = DefaultFor(K("iconX"), -45),
         get = function() return G(K("iconX"), DefaultFor(K("iconX"), -45)) end,
-        set = function(v) ns.db[K("iconX")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconX")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.OffsetXDesc,
     })
@@ -489,7 +489,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("iconY"), name = ns.L.OffsetY or "Offset Y", min = -600, max = 600, step = 1,
         default = DefaultFor(K("iconY"), 0),
         get = function() return G(K("iconY"), DefaultFor(K("iconY"), 0)) end,
-        set = function(v) ns.db[K("iconY")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("iconY")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.OffsetYDesc,
     })
@@ -499,7 +499,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("enableSound"), name = ns.L.Enable or "Enable",
         default = DefaultFor(K("enableSound"), true),
         get = function() return G(K("enableSound"), DefaultFor(K("enableSound"), true)) end,
-        set = function(v) ns.db[K("enableSound")] = v; ns.UpdateState() end,
+        set = function(v) ns.db[K("enableSound")] = v; ns.UpdateState(true) end,
         parentSection = soundSection,
         desc = ns.L.SoundDesc or ns.L.EnableDesc,
     })
@@ -507,7 +507,7 @@ function ns.AddPoisonSettings(cat, prefix, title)
         key = K("soundKit"), name = ns.L.SoundKitId or "Sound Kit ID",
         default = DefaultFor(K("soundKit"), (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959),
         get = function() return G(K("soundKit"), DefaultFor(K("soundKit"), (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959)) end,
-        set = function(v) ns.db[K("soundKit")] = tonumber(v) or DefaultFor(K("soundKit"), (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959); ns.UpdateState() end,
+        set = function(v) ns.db[K("soundKit")] = tonumber(v) or DefaultFor(K("soundKit"), (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959); ns.UpdateState(true) end,
         numeric = true,
         parentSection = soundSection,
         desc = ns.L.SoundKitIdDesc,
@@ -633,13 +633,13 @@ function ns.InitSettings()
     SettingsLib:CreateCheckbox(stealthCat, {
         key = "stealthEnabled", name = ns.L.EnableOnStealth or "Enable on Stealth", default = ns.Defaults.stealthEnabled,
         get = function() return G("stealthEnabled", ns.Defaults.stealthEnabled) end,
-        set = function(v) ns.db.stealthEnabled = v; ns.UpdateState() end,
+        set = function(v) ns.db.stealthEnabled = v; ns.UpdateState(true) end,
         desc = ns.L.EnableOnStealthDesc,
     })
     SettingsLib:CreateCheckbox(stealthCat, {
         key = "stealthOnlyInstances", name = ns.L.OnlyInInstances or "Only in instances", default = ns.Defaults.stealthOnlyInstances,
         get = function() return G("stealthOnlyInstances", ns.Defaults.stealthOnlyInstances) end,
-        set = function(v) ns.db.stealthOnlyInstances = v; ns.UpdateState() end,
+        set = function(v) ns.db.stealthOnlyInstances = v; ns.UpdateState(true) end,
         desc = ns.L.OnlyInInstancesDesc,
     })
     ns.AddStealthSettings(stealthCat, "stealth")
@@ -650,25 +650,25 @@ function ns.InitSettings()
         SettingsLib:CreateCheckbox(poisonCat, {
             key = "poisonLethalEnabled", name = ns.L.LethalPoisons or "Lethal Poison", default = ns.Defaults.poisonLethalEnabled,
             get = function() return G("poisonLethalEnabled", ns.Defaults.poisonLethalEnabled) end,
-            set = function(v) ns.db.poisonLethalEnabled = v; ns.UpdateState() end,
+            set = function(v) ns.db.poisonLethalEnabled = v; ns.UpdateState(true) end,
             desc = ns.L.LethalPoisonsDesc,
         })
         SettingsLib:CreateCheckbox(poisonCat, {
             key = "poisonNonLethalEnabled", name = ns.L.NonLethalPoisons or "Non-Lethal Poison", default = ns.Defaults.poisonNonLethalEnabled,
             get = function() return G("poisonNonLethalEnabled", ns.Defaults.poisonNonLethalEnabled) end,
-            set = function(v) ns.db.poisonNonLethalEnabled = v; ns.UpdateState() end,
+            set = function(v) ns.db.poisonNonLethalEnabled = v; ns.UpdateState(true) end,
             desc = ns.L.NonLethalPoisonsDesc,
         })
         SettingsLib:CreateCheckbox(poisonCat, {
             key = "poisonOnlyCombat", name = ns.L.OnlyInCombat or "Only in combat", default = ns.Defaults.poisonOnlyCombat,
             get = function() return G("poisonOnlyCombat", ns.Defaults.poisonOnlyCombat) end,
-            set = function(v) ns.db.poisonOnlyCombat = v; ns.UpdateState() end,
+            set = function(v) ns.db.poisonOnlyCombat = v; ns.UpdateState(true) end,
             desc = ns.L.OnlyInCombatDesc,
         })
         SettingsLib:CreateCheckbox(poisonCat, {
             key = "poisonOnlyInstances", name = ns.L.OnlyInInstances or "Only in instances", default = ns.Defaults.poisonOnlyInstances,
             get = function() return G("poisonOnlyInstances", ns.Defaults.poisonOnlyInstances) end,
-            set = function(v) ns.db.poisonOnlyInstances = v; ns.UpdateState() end,
+            set = function(v) ns.db.poisonOnlyInstances = v; ns.UpdateState(true) end,
             desc = ns.L.OnlyInInstancesDesc,
         })
         ns.AddPoisonSettings(poisonCat, "poisonLethal", ns.L.LethalPoisons or "Lethal Poison")

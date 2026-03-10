@@ -180,7 +180,7 @@ function ns.RefreshVisuals(force)
     screenFrame:SetShown(anyActive)
 
     if ns.IsRogue and ns.RefreshPoisonVisuals then
-        ns.RefreshPoisonVisuals()
+        ns.RefreshPoisonVisuals(force)
     end
 end
 
@@ -308,7 +308,7 @@ ns._poisonState = ns._poisonState or {
     lastSoundTime = {lethal = 0, nonLethal = 0},
 }
 
-function ns.RefreshPoisonVisuals()
+function ns.RefreshPoisonVisuals(force)
     if not ns.IsRogue then return end
     local db = ns.db
     if not db then return end
@@ -327,12 +327,22 @@ function ns.RefreshPoisonVisuals()
     if db.poisonOnlyCombat and not UnitAffectingCombat("player") then return HideAll() end
     if db.poisonOnlyInstances and not ns.IsInInstance() then return HideAll() end
 
+    ns._poisonLastState = ns._poisonLastState or { lethal = -1, nonLethal = -1 }
+
     local required = IsPlayerSpell(DRAGON_TEMPERED_BLADES_SPELL_ID) and 2 or 1
     local missingLethal = math.max(0, required - CountActivePoisons(LETHAL_POISONS))
     local missingNonLethal = math.max(0, required - CountActivePoisons(NON_LETHAL_POISONS))
 
     local showLethal = lethalEnabled and missingLethal > 0
     local showNonLethal = nonLethalEnabled and missingNonLethal > 0
+
+    if ns._poisonLastState.lethal == missingLethal and ns._poisonLastState.nonLethal == missingNonLethal and not force then
+        return
+    end
+
+    ns._poisonLastState.lethal = missingLethal
+    ns._poisonLastState.nonLethal = missingNonLethal
+
     local frames = GetPoisonFrames()
 
     local function UpdatePoisonFrame(kind, show, missing, customText, fallbackText, x, y, anim, speed, iconTexture, iconSpell, iconSize, iconAlpha, anchorToText, anchorPoint, iconX, iconY, color)

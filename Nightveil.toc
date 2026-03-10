@@ -1,6 +1,6 @@
 ## Interface: 120001
 ## Title: Night|cffA361E2veil|r
-## Version: 2.0.2
+## Version: 2.0.3
 ## Author: iLoviP4g
 ## X-Website: https://www.curseforge.com/wow/addons/nightveil
 ## X-Category: Combat, Rogue, HUDs
@@ -20,7 +20,7 @@
 ## Category-zhTW: 戰鬥
 ## SavedVariables: NightveilDB
 ## SavedVariablesPerCharacter: NightveilSavedState
-## IconTexture: Interface\AddOns\Nightveil\Interface\Icon.png
+## IconTexture: Interface\AddOns\Nightveil\Media\Icon.png
 
 Libs\ChatThrottleLib\ChatThrottleLib.xml
 
@@ -37,7 +37,7 @@ Locales\koKR.lua
 Locales\ruRU.lua
 Locales\zhCN.lua
 
-Interface\Constants.lua
+Defaults.lua
 CHANGELOG.lua
 
 Interface\Frames.lua
