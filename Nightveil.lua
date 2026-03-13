@@ -12,6 +12,7 @@ local shroudTesting = false
 local warnedSayRange = false
 local channelDenyUntil = {}
 local errorDenyUntil = {}
+local lastShroudTime = 0
 ns.IsRogue = false
 ns.debugMode = false
 ns.shroudErrorsDisplayed = {}
@@ -889,7 +890,7 @@ local function CheckShroud()
 
     local exp, dur = GetShroudAuraTiming()
     if exp and not shroudActive then
-        if GetTime() - lastShroudTime > 0.5 then
+        if GetTime() - (lastShroudTime or 0) > 0.5 then
             lastShroudTime = GetTime()
             ns.StartShroudCountdown(exp, dur)
         end

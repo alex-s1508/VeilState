@@ -3,6 +3,7 @@ local addonName, ns = ...
 ns.ReleaseNotes = {
     notes = {
         ["v2.0.3"] = {
+            "|cffff2020[Hotfix 2.0.3a]|r Fixed a Lua error (nil value) occurring when entering Shroud mode immediately after addon load.",
             "|cff00d1ff[New]|r Added |cffffd100/veil shroud|r — a |cffffd100Debug Mode|r command that simulates a real Shroud countdown using your configured channels, messages, and error checks, identical to an actual cast. Default duration is 15 seconds.",
             "|cff00ff00[Improved]|r Debug Mode structure refined via |cffffd100/veil debug|r, isolating technical commands to prevent accidental use during normal gameplay.",
             "|cff00ff00[Improved]|r The |cffffd100Test Message|r button in Settings now performs a fixed 5-second local-only simulation, safe to use at any time without broadcasting to chat.",
