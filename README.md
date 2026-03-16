@@ -2,6 +2,9 @@
 
 **Nightveil** is a Rogue utility addon focused on tracking what matters most during gameplay. It’s a lightweight and customizable toolkit built specifically for Rogues, designed to integrate seamlessly into your UI without getting in the way.
 
+
+_To open the addon settings, just type: **`/veil`** — or **`/veil help`** to see all available commands._
+
 <h2 style="font-size: 20px;">What it does:</h2>
 
 * **Floating Text & Icons:** Visual trackers with full control over size, color, opacity, position, and animations.
@@ -81,4 +84,10 @@ Nightveil features a smart targeting system for **Tricks of the Trade**, automat
 
 ***
 
-_To open the addon settings, just type: **`/veil`** — or **`/veil help`** to see all available commands._
+## Buy me a coffee? ☕
+
+If you want to support my work, feel free to buy me a coffee. It’s completely optional, but always appreciated. 
+
+You can also find my other works on my Ko-fi page.
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/ilovip4g)
