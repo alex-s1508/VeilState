@@ -122,7 +122,6 @@ local function BuildChangelog(cat)
             local line = tostring(entry):gsub("^%s*[•%-–—]+%s*", "")
             SettingsLib:CreateText(cat, { name = "  • " .. line, height = 12, offsetY = -4, basePadding = 0 })
         end
-        if i < maxVersions then SettingsLib:CreateText(cat, { name = " ", height = 10 }) end
     end
 end
 
@@ -764,12 +763,48 @@ function ns.InitSettings()
         local tricksCat = SettingsLib:CreateCategory(root, ns.L.TricksOfTheTrade or "Tricks of the Trade", false)
         
         SettingsLib:CreateHeader(tricksCat, { name = ns.L.Management or "Management" })
-        SettingsLib:CreateCheckbox(tricksCat, {
-            key = "tricksEnabled", name = ns.L.Enable or "Enable", default = ns.Defaults.tricksEnabled,
-            get = function() return G("tricksEnabled", ns.Defaults.tricksEnabled) end,
-            set = function(v) ns.db.tricksEnabled = v; ns.Tricks_UpdateMacro(true) end,
+        SettingsLib:CreateButton(tricksCat, {
+            text = ns.L.TricksBtnEnable or "Activate & Sync Macro",
+            func = function()
+                if InCombatLockdown() then
+                    print("Night|cffA361E2veil|r: " .. (ns.L and ns.L.DebugCombatLock or "This action cannot be used in combat."))
+                    return
+                end
+                if ns.db.tricksEnabled then
+                    print("Night|cffA361E2veil|r: " .. (ns.L and ns.L.TricksAlreadyEnabled or "Tricks of the Trade system is already enabled."))
+                else
+                    ns.db.tricksEnabled = true
+                    print("Night|cffA361E2veil|r: |cff00ff00" .. (ns.L and ns.L.TricksMsgEnabled or "Tricks system activated and macro synchronized.") .. "|r")
+                    ns.Tricks_UpdateMacro(true)
+                    if ns.UpdateState then ns.UpdateState(true) end
+                end
+            end,
             desc = ns.L.TricksEnabledDesc,
         })
+        SettingsLib:CreateButton(tricksCat, {
+            text = ns.L.TricksBtnDisable or "Deactivate & Remove Macro",
+            func = function()
+                if InCombatLockdown() then
+                    print("Night|cffA361E2veil|r: " .. (ns.L and ns.L.DebugCombatLock or "This action cannot be used in combat."))
+                    return
+                end
+                if not ns.db.tricksEnabled then
+                    print("Night|cffA361E2veil|r: " .. (ns.L and ns.L.TricksAlreadyDisabled or "Tricks of the Trade system is already disabled."))
+                else
+                    print("Night|cffA361E2veil|r: |cffff2020" .. (ns.L and ns.L.TricksMsgDisabled or "Tricks system deactivated and macro removed.") .. "|r")
+                    ns.Tricks_DisableAndRemoveMacro()
+                    if ns.UpdateState then ns.UpdateState(true) end
+                end
+            end,
+            desc = ns.L.TricksBtnDisableDesc,
+        })
+        
+        SettingsLib:CreateText(tricksCat, {
+            text = ns.L.TricksMacroAutoUpdate,
+            color = "ffffa500",
+            small = true,
+        })
+        
         SettingsLib:CreateCheckbox(tricksCat, {
             key = "tricksMute", name = ns.L.MuteChanges or "Mute Changes", default = ns.Defaults.tricksMute,
             get = function() return G("tricksMute", ns.Defaults.tricksMute) end,
@@ -815,7 +850,6 @@ function ns.InitSettings()
             desc = ns.L.TricksDelveCompanionDesc,
         })
 
-        SettingsLib:CreateHeader(tricksCat, { name = ns.L.TricksMacroWarning or "|cffffa500Use the Nightveil - Tricks macro instead of the original spell.|r" })
     end
 
 

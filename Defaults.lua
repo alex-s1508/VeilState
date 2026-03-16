@@ -2,7 +2,7 @@ local addonName, ns = ...
 
 -- Addon Defaults
 ns.Defaults = {
-    version = "2.1.0",
+    version = "2.1.1",
 
     -- Stealth
     stealthEnabled = true,
@@ -47,7 +47,7 @@ ns.Defaults = {
     shroudEndMsg = "%time",
 
     -- Tricks of the Trade
-    tricksEnabled = true,
+    tricksEnabled = false,
     tricksUseMouseover = false,
     tricksUseFocus = false,
     tricksLogic = "TANK",

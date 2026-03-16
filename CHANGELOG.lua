@@ -2,6 +2,10 @@ local addonName, ns = ...
 
 ns.ReleaseNotes = {
     notes = {
+        ["v2.1.1"] = {
+            "|cff00d1ff[New]|r Replaced Tricks checkbox with dedicated Activate/Deactivate buttons.",
+            "|cff00ff00[Fixed]|r Adjusted chat message priority for better logging order.",
+        },
         ["v2.1.0"] = {
             "|cff00d1ff[New]|r Added the Tricks system: smart macro management, mode switching, and custom targeting.",
             "|cff00d1ff[New]|r Added |cffffd100/veil tricks|r commands to easily manage targeting modes.",

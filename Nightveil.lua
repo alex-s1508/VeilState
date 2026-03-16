@@ -294,8 +294,8 @@ local function NormalizeProfile(profile)
     if not profile or type(profile) ~= "table" then return "ERROR" end
     
     local defaults = ns.Defaults or {}
-    local currentVer = defaults.version or "2.1.0"
-    local profileVer = profile.version or "2.1.0"
+    local currentVer = defaults.version or "2.1.1"
+    local profileVer = profile.version or "2.1.1"
     
     local currentScore = GetVerScore(currentVer)
     local profileScore = GetVerScore(profileVer)
@@ -359,9 +359,8 @@ end
 
 -- Database Versioning
 function ns.CheckDatabaseVersion()
-    local currentVer = ns.Defaults and ns.Defaults.version or "2.1.0"
+    local currentVer = ns.Defaults and ns.Defaults.version or "2.1.1"
     local savedVer = NightveilDB and NightveilDB.version
-    -- Removed minSupportedVer logic as requested
 
     -- Fresh install
     if not NightveilDB or not NightveilDB.profiles then
@@ -1015,14 +1014,15 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
         
         if IsStealthed() then ns.UpdateState() end
         
-        if ns.IsRogue then
-            ns.Tricks_UpdateMacro(true)
-        end
 
         if verResult == "FRESH" then
             print(string.format(ns.L.WelcomeMessage, ns.Defaults.version))
         elseif verResult == "UPDATED" then
             print(string.format(ns.L.UpdateMessage, ns.Defaults.version))
+        end
+
+        if ns.IsRogue then
+            ns.Tricks_UpdateMacro(true)
         end
     elseif event == "UNIT_AURA" then
         if arg1 == "player" then 
@@ -1177,7 +1177,7 @@ local function RunShroudTest(duration)
     local useInterval = db.shroudInterval
 
     shroudActive = true
-    shroudTesting = false  -- NOT synthetic: real channel routing
+    shroudTesting = false  -- Real channel routing
 
     local function FormatMsg(template, timeLeft)
         template = tostring(template or "")
@@ -1323,8 +1323,27 @@ function ns.Tricks_FindBestTargetID()
     return nil
 end
 
+function ns.Tricks_DisableAndRemoveMacro()
+    if not ns.db then return end
+    ns.db.tricksEnabled = false
+    
+    local macroName = "Nightveil - Tricks"
+    local index = GetMacroIndexByName(macroName)
+    
+    if index > 0 then
+        if not InCombatLockdown() then
+            DeleteMacro(index)
+            ns.tricksLastTargetID = nil
+            ns.tricksLastMacroBody = nil
+        else
+            print("Night|cffA361E2veil|r: " .. (ns.L and ns.L.DebugCombatLock or "This action cannot be used in combat."))
+            ns.tricksUpdateQueued = true
+        end
+    end
+end
+
 function ns.Tricks_UpdateMacro(force)
-    if not ns.db then return false end
+    if not ns.db or not ns.db.tricksEnabled then return false end
     
     if InCombatLockdown() then
         ns.tricksUpdateQueued = true
