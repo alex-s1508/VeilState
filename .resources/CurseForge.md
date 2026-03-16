@@ -13,7 +13,7 @@
 ***
 
 <h2 style="font-size: 20px;">
-  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_stealth.jpg" width="29" style="vertical-align: middle;"> Stealth Tracker
+  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_stealth.jpg" width="29" style="vertical-align: middle;"> Stealth
 </h2>
 
 The original core of Nightveil — a clean and highly configurable stealth tracking system.
@@ -47,7 +47,7 @@ Everything is modular and fully independent between poison types.
 ***
 
 <h2 style="font-size: 20px;">
-  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_rogue_shroudofconcealment.jpg" width="29" style="vertical-align: middle;"> Shroud Tracker
+  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_rogue_shroudofconcealment.jpg" width="29" style="vertical-align: middle;"> Shroud of Concealment
 </h2>
 
 Nightveil includes a dedicated messaging system for **Shroud of Concealment** to help coordinate with your group.
@@ -63,4 +63,22 @@ You can easily configure:
 
 ***
 
-_To open the addon settings, just type: **`/veil`**_
+<h2 style="font-size: 20px;">
+  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_rogue_tricksofthetrade.jpg" width="29" style="vertical-align: middle;"> Tricks of the Trade
+</h2>
+
+Nightveil features a smart targeting system for **Tricks of the Trade**, automating your redirects without losing tempo.
+
+* **Smart Macro Management:** Generates a dynamic macro that always reflects your current settings.
+* **Target Selector Logic:** Choose between Normal, Tank, Target of Target, or Custom modes.
+* **Prioritized Overrides:** Mouseover and Focus targets have their own priority rules.
+* **Delve Companion Support:** Automatically targets Brann or other companions inside Delves.
+* **Slash Commands:** Control targeting mode:
+  * `/veil tricks` — Show current mode and resolved target.
+  * `/veil tricks normal` / `tank` / `tt` / `custom` — Switch targeting mode instantly.
+  * `/veil tricks list [#]` — List group/raid members and set target by index.
+  * `/veil tricks set <name>` — Set a specific player by name.
+
+***
+
+_To open the addon settings, just type: **`/veil`** — or **`/veil help`** to see all available commands._

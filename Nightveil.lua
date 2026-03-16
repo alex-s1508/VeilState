@@ -14,8 +14,32 @@ local channelDenyUntil = {}
 local errorDenyUntil = {}
 local lastShroudTime = 0
 ns.IsRogue = false
+ns.KnowsTricks = false
 ns.debugMode = false
 ns.shroudErrorsDisplayed = {}
+
+-- Tricks State
+ns.tricksLastTargetID = nil
+ns.tricksLastMacroBody = nil
+ns.tricksUpdateQueued = false
+ns.tricksLastEventTime = 0
+
+-- Class Colors
+local CLASS_COLORS = {
+    ["DEATHKNIGHT"] = "C41E3A",
+    ["DEMONHUNTER"] = "A330C9",
+    ["DRUID"]       = "FF7C0A",
+    ["EVOKER"]      = "33937F",
+    ["HUNTER"]      = "AAD372",
+    ["MAGE"]        = "3FC7EB",
+    ["MONK"]        = "00FF98",
+    ["PALADIN"]     = "F48CBA",
+    ["PRIEST"]      = "FFFFFF",
+    ["ROGUE"]       = "FFF468",
+    ["SHAMAN"]      = "0070DD",
+    ["WARLOCK"]     = "8788EE",
+    ["WARRIOR"]     = "C69B6D",
+}
 
 -- Popups
 StaticPopupDialogs["NIGHTVEIL_HARD_RESET"] = {
@@ -270,8 +294,8 @@ local function NormalizeProfile(profile)
     if not profile or type(profile) ~= "table" then return "ERROR" end
     
     local defaults = ns.Defaults or {}
-    local currentVer = defaults.version or "2.0.3"
-    local profileVer = profile.version or "2.0.0"
+    local currentVer = defaults.version or "2.1.0"
+    local profileVer = profile.version or "2.1.0"
     
     local currentScore = GetVerScore(currentVer)
     local profileScore = GetVerScore(profileVer)
@@ -307,11 +331,15 @@ local function NormalizeProfile(profile)
         end
     end
 
-    -- 4. Inject missing defaults and prune obsolete keys
     for k, v in pairs(defaults) do
         if profile[k] == nil then
             profile[k] = type(v) == "table" and ns.DeepCopy(v) or v
         end
+    end
+
+    -- Legacy migration for Tricks logic
+    if profile.tricksLogic == "TARGET" then
+        profile.tricksLogic = "NORMAL"
     end
 
     for k in pairs(profile) do
@@ -331,9 +359,9 @@ end
 
 -- Database Versioning
 function ns.CheckDatabaseVersion()
-    local currentVer = ns.Defaults and ns.Defaults.version or "2.0.3"
+    local currentVer = ns.Defaults and ns.Defaults.version or "2.1.0"
     local savedVer = NightveilDB and NightveilDB.version
-    local minSupportedVer = "2.0.0"
+    -- Removed minSupportedVer logic as requested
 
     -- Fresh install
     if not NightveilDB or not NightveilDB.profiles then
@@ -352,12 +380,11 @@ function ns.CheckDatabaseVersion()
 
     local currentScore = GetVerScore(currentVer)
     local savedScore = GetVerScore(savedVer)
-    local minScore = GetVerScore(minSupportedVer)
     local currentMajor = GetMajor(currentVer)
     local savedMajor = GetMajor(savedVer)
 
     -- 1. Major Version Incompatibility (Hard Reset)
-    if savedMajor ~= currentMajor or savedScore < minScore then
+    if savedMajor ~= currentMajor then
         wipe(NightveilDB)
         NightveilDB.version = "PENDING_RELOAD"
         StaticPopup_Show("NIGHTVEIL_HARD_RESET")
@@ -938,6 +965,12 @@ eventFrame:RegisterEvent("PLAYER_REGEN_DISABLED")
 eventFrame:RegisterEvent("PLAYER_REGEN_ENABLED")
 eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+eventFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+eventFrame:RegisterEvent("PLAYER_ROLES_ASSIGNED")
+eventFrame:RegisterEvent("PLAYER_FOCUS_CHANGED")
+eventFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
+eventFrame:RegisterEvent("UNIT_TARGET")
+eventFrame:RegisterEvent("SPELLS_CHANGED")
 
 eventFrame:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == addonName then
@@ -973,12 +1006,18 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
 
         local _, _, classId = UnitClass("player")
         ns.IsRogue = (classId == 4)
+        ns.KnowsTricks = IsPlayerSpell(57934)
+        
         RecoverState()
         
         if ns.InitSettings then ns.InitSettings() end
         ns.RefreshVisuals()
         
         if IsStealthed() then ns.UpdateState() end
+        
+        if ns.IsRogue then
+            ns.Tricks_UpdateMacro(true)
+        end
 
         if verResult == "FRESH" then
             print(string.format(ns.L.WelcomeMessage, ns.Defaults.version))
@@ -994,6 +1033,27 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
         ns.UpdateState()
         CheckShroud()
         if ns.RefreshPoisonVisuals then ns.RefreshPoisonVisuals() end
+        
+        if ns.IsRogue then
+            if ns.tricksUpdateQueued then
+                ns.Tricks_UpdateMacro()
+            end
+        end
+    elseif event == "GROUP_ROSTER_UPDATE" or event == "PLAYER_ROLES_ASSIGNED" or event == "PLAYER_FOCUS_CHANGED" or event == "PLAYER_TARGET_CHANGED" or (event == "UNIT_TARGET" and arg1 and (arg1:find("party") or arg1:find("raid") or arg1 == "focus")) then
+        if ns.IsRogue then
+            local now = GetTime()
+            if now - ns.tricksLastEventTime > 0.1 then
+                ns.tricksLastEventTime = now
+                ns.Tricks_UpdateMacro()
+            end
+        end
+    elseif event == "SPELLS_CHANGED" then
+        if ns.IsRogue then
+            ns.KnowsTricks = IsPlayerSpell(57934)
+            if ns.KnowsTricks then
+                ns.Tricks_UpdateMacro(true)
+            end
+        end
     else
         ns.UpdateState()
     end
@@ -1001,8 +1061,14 @@ end)
 
 -- Slash Commands
 SLASH_NIGHTVEIL1 = "/veil"
-_G["Nightveil_OnAddonCompartmentClick"] = function()
-    if ns.MainCategory then Settings.OpenToCategory(ns.MainCategory:GetID()) end
+function Nightveil_OnAddonCompartmentClick(addonName, button)
+    if InCombatLockdown() then
+        print("Night|cffA361E2veil|r: |cffffaa00" .. (ns.L and ns.L.CombatBlocked or "Cannot open settings during combat.") .. "|r")
+        return
+    end
+    if ns.MainCategory then 
+        Settings.OpenToCategory(ns.MainCategory:GetID()) 
+    end
 end
 
 local function DebugState()
@@ -1037,7 +1103,12 @@ local function DebugState()
                 local isPlayer = UnitIsPlayer(unit)
                 local typeStr = isPlayer and ("|cff00ff00" .. strPlayer .. "|r") or ("|cffff0000" .. strOther .. "|r")
                 
-                table.insert(membersInfo, string.format(" - [%d] %s [%s]", #membersInfo + 1, name, typeStr))
+                -- Class color for name in list
+                local _, class = UnitClass(unit)
+                local cStr = (class and RAID_CLASS_COLORS[class]) and RAID_CLASS_COLORS[class].colorStr or "ffffffff"
+                local nameStr = "|c" .. cStr .. name .. "|r"
+
+                table.insert(membersInfo, string.format(" - [%d] %s [%s]", #membersInfo + 1, nameStr, typeStr))
             end
 
             local petUnit = (isRaid and ("raidpet" .. i) or ("partypet" .. i))
@@ -1071,11 +1142,23 @@ local function DebugState()
         print(string.format(ns.L and ns.L.DebugFallback1 or " - Fallback 1: |cffffff00%s|r (Usable: %s)", label(db.shroudChannelFallback1), GetYesNo(IsChannelUsable(db.shroudChannelFallback1))))
         print(string.format(ns.L and ns.L.DebugFallback2 or " - Fallback 2: |cffffff00%s|r (Usable: %s)", label(db.shroudChannelFallback2), GetYesNo(IsChannelUsable(db.shroudChannelFallback2))))
     end
+
+    if ns.IsRogue then
+        print(string.format(" - Tricks Known: %s", GetYesNo(ns.KnowsTricks)))
+        local tankUnit = ns.Tricks_FindBestTargetID()
+        local targetName = tankUnit and ns.GetClassColoredName(tankUnit) or "none"
+        print(string.format(" - Tricks Target: %s (%s)", targetName, tankUnit or "nil"))
+        print(string.format(" - Tricks Macro: %s", ns.tricksLastMacroBody and "|cff00ff00OK|r" or "|cffff0000Missing|r"))
+    end
 end
 
 local function RunShroudTest(duration)
-    if shroudActive then
+    if not ns.debugMode then
         print(ns.L.DebugModeRequired or "Night|cffA361E2veil|r: |cffff2020This command requires Debug Mode.|r Type |cffffd100/veil debug|r to enable.")
+        return
+    end
+    if shroudActive then
+        print("Night|cffA361E2veil|r: |cffff2020Shroud countdown is already active.|r")
         return
     end
 
@@ -1088,7 +1171,6 @@ local function RunShroudTest(duration)
     duration = math.max(1, math.min(20, math.floor(tonumber(duration) or 15)))
 
     ns.shroudErrorsDisplayed = {}
-
     local expirationTime = GetTime() + duration
     local total = duration
     local middle = math.floor((total + 5) / 2)
@@ -1141,9 +1223,217 @@ local function RunShroudTest(duration)
 end
 
 local function PrintDebugHelp()
-    print(ns.L.DebugModeActivated or "Night|cffA361E2veil|r: |cff00ff00Debug Mode ACTIVATED|r")
-    print(ns.L.DebugCommandList1 or " |cffffd100/veil info|r - Prints technical diagnostics")
-    print(ns.L.DebugCommandList2 or " |cffffd100/veil shroud [1-20]|r - Simulates Shroud countdown (default: 15s)")
+    print("\n |cff9370db[Debug Commands]|r")
+    print(" |cff9370db/veil utricks|r - Force immediate macro refresh")
+    print(" |cff9370db/veil info|r - " .. (ns.L.HelpInfo or "Diagnostic info"))
+    print(" |cff9370db/veil shroud [1-20]|r - " .. (ns.L.HelpShroudTest or "Test shroud countdown"))
+end
+
+local function IsValidTricksTarget(unit)
+    if not unit or not UnitExists(unit) then return false end
+    if UnitIsUnit("player", unit) or UnitIsDeadOrGhost(unit) then return false end
+    
+    -- Check for Brann specifically (Delve prioritization)
+    local guid = UnitGUID(unit)
+    local npcID = guid and select(6, strsplit("-", guid))
+    if npcID == "210759" then return true end
+    
+    -- For everything else, rely on assistability and group status
+    -- Follower dungeon NPCs might not be "players" but are assistable and have roles
+    return UnitCanAssist("player", unit)
+end
+
+function ns.GetClassColoredName(unit)
+    if not unit or not UnitExists(unit) then return nil end
+    local name = UnitName(unit)
+    if not name or name == "Unknown" or name == "Desconhecido" then 
+        -- Try to wait or use unit ID if name is not yet cached by client
+        name = unit
+    end
+    
+    local _, class = UnitClass(unit)
+    local color = (class and RAID_CLASS_COLORS[class]) and RAID_CLASS_COLORS[class].colorStr or "ffffffff"
+    return "|c" .. color .. name .. "|r"
+end
+
+function ns.Tricks_GetSpellName()
+    if C_Spell and C_Spell.GetSpellName then
+        return C_Spell.GetSpellName(57934)
+    elseif GetSpellInfo then
+        local name = GetSpellInfo(57934)
+        return name
+    end
+    return nil
+end
+
+function ns.Tricks_FindDelveCompanionID()
+    local BRANN_ID = "210759"
+    local count = GetNumGroupMembers()
+    if count > 0 then
+        for i = 1, count do
+            local unit = "party" .. i
+            if UnitExists(unit) then
+                local guid = UnitGUID(unit)
+                local npcID = guid and select(6, strsplit("-", guid))
+                if npcID == BRANN_ID then
+                    return unit
+                end
+            end
+        end
+    end
+    return nil
+end
+
+function ns.Tricks_FindBestTargetID()
+    -- Delve logic
+    if ns.db and ns.db.tricksDelveCompanion then
+        local delveUnit = ns.Tricks_FindDelveCompanionID()
+        if delveUnit then return delveUnit end
+    end
+
+    -- Logic selection
+    local logic = ns.db and ns.db.tricksLogic or "TANK"
+    
+    if logic == "TANK" then
+        local inRaid = IsInRaid()
+        local prefix = inRaid and "raid" or "party"
+        local count = GetNumGroupMembers()
+        
+        if inRaid then
+            for i = 1, count do
+                local unit = "raid" .. i
+                if IsValidTricksTarget(unit) and UnitGroupRolesAssigned(unit) == "TANK" then
+                    return unit
+                end
+            end
+        else
+            for i = 1, count do
+                local unit = "party" .. i
+                if IsValidTricksTarget(unit) and UnitGroupRolesAssigned(unit) == "TANK" then
+                    return unit
+                end
+            end
+        end
+    elseif logic == "TARGETTARGET" then
+        return "targettarget"
+    elseif logic == "CUSTOM" then
+        return (ns.db.tricksCustomName ~= "" and ns.db.tricksCustomName) or nil
+    end
+    
+    return nil
+end
+
+function ns.Tricks_UpdateMacro(force)
+    if not ns.db then return false end
+    
+    if InCombatLockdown() then
+        ns.tricksUpdateQueued = true
+        return false
+    end
+
+    local spellName = ns.Tricks_GetSpellName() or (ns.L and ns.L.TricksOfTheTrade or "Tricks of the Trade")
+
+    local lines = {}
+    table.insert(lines, "#showtooltip")
+    
+    local tankUnit = nil
+    local body = ""
+
+    if not ns.db.tricksEnabled then
+        table.insert(lines, "/cast " .. spellName)
+        body = table.concat(lines, "\n")
+    else
+        tankUnit = ns.Tricks_FindBestTargetID()
+        local castParts = {}
+        table.insert(castParts, "/cast")
+        
+        -- Delve Companion priority
+        local inDelveWithCompanion = false
+        if ns.db.tricksDelveCompanion then
+            local delveUnit = ns.Tricks_FindDelveCompanionID()
+            if delveUnit then
+                table.insert(castParts, "[@" .. delveUnit .. ",help,nodead]")
+                inDelveWithCompanion = true
+            end
+        end
+
+        if not inDelveWithCompanion then
+            if ns.db.tricksUseMouseover then
+                table.insert(castParts, "[@mouseover,help,nodead]")
+            end
+            if ns.db.tricksUseFocus then
+                table.insert(castParts, "[@focus,help,nodead]")
+            end
+            if tankUnit and tankUnit ~= "" then
+                table.insert(castParts, "[@" .. tankUnit .. ",help,nodead]")
+            end
+        end
+        
+        table.insert(castParts, "[] " .. spellName)
+        table.insert(lines, table.concat(castParts, " "))
+        body = table.concat(lines, "\n")
+    end
+    
+    -- Cache & Verification check
+    local macroName = "Nightveil - Tricks"
+    local index = GetMacroIndexByName(macroName)
+    local actualBody = index > 0 and GetMacroBody(index) or ""
+
+    if not force and body == ns.tricksLastMacroBody and tankUnit == ns.tricksLastTargetID and body == actualBody then
+        return true
+    end
+    local icon = 236283 -- Ability_Rogue_TricksOftheTrade
+    
+    if index == 0 then
+        local numGlobal, numChar = GetNumMacros()
+        if numGlobal < 120 then
+            index = CreateMacro(macroName, icon, body, nil)
+        elseif numChar < 18 then
+            index = CreateMacro(macroName, icon, body, 1)
+        else
+            if ns.debugMode then print("Night|cffA361E2veil|r: Macro limit reached.") end
+            return
+        end
+    else
+        EditMacro(index, macroName, icon, body)
+        if ns.debugMode then
+            print("Night|cffA361E2veil|r: |cff9370db[Debug]|r " .. (ns.L and ns.L.DebugMacroEdited or "Macro content modified and synchronized."))
+        end
+    end
+
+    -- Logging
+    if tankUnit ~= ns.tricksLastTargetID then
+        if ns.debugMode then
+            local targetName
+            if tankUnit == "targettarget" then
+                targetName = "|cff00ffff" .. (ns.L and ns.L.TargetTarget or "Target of Target") .. "|r"
+            elseif tankUnit then
+                targetName = ns.GetClassColoredName(tankUnit)
+            end
+            if targetName then
+                print(string.format("Night|cffA361E2veil|r: |cff9370db[Debug]|r %s: %s", ns.L and ns.L.TricksTargetLog or "Tricks target", targetName))
+            end
+        elseif not ns.db.tricksMute and tankUnit then
+            local targetName
+            if tankUnit == "targettarget" then
+                targetName = "|cff00ffff" .. (ns.L and ns.L.TargetTarget or "Target of Target") .. "|r"
+            elseif tankUnit then
+                targetName = ns.GetClassColoredName(tankUnit)
+            end
+            if targetName then
+                print(string.format("Night|cffA361E2veil|r: %s: %s", ns.L and ns.L.TricksTargetLog or "Tricks target", targetName))
+            end
+        end
+    end
+
+    ns.tricksLastTargetID = tankUnit
+    ns.tricksLastMacroBody = body
+    ns.tricksUpdateQueued = false
+
+    if force and ns.debugMode and tankUnit then
+        print(string.format("Night|cffA361E2veil|r: |cff9370db[Debug]|r " .. (ns.L and ns.L.DebugMacroUpdated or "Macro updated: %s"), tankUnit))
+    end
+    return true
 end
 
 SlashCmdList["NIGHTVEIL"] = function(msg)
@@ -1152,6 +1442,7 @@ SlashCmdList["NIGHTVEIL"] = function(msg)
     if cmd == "debug" then
         ns.debugMode = not ns.debugMode
         if ns.debugMode then
+            print(ns.L.DebugModeActivated or "Night|cffA361E2veil|r: |cff00ff00Debug Mode ACTIVATED|r")
             PrintDebugHelp()
         else
             print(ns.L.DebugModeDeactivated or "Night|cffA361E2veil|r: |cffff2020Debug Mode DEACTIVATED|r")
@@ -1169,13 +1460,162 @@ SlashCmdList["NIGHTVEIL"] = function(msg)
         end
         local n = tonumber(arg1)
         if arg1 and arg1 ~= "" and (not n or n < 1 or n > 20) then
-            print(ns.L.DebugShroudUsage or "Night|cffA361E2veil|r: |cffff2020Usage:|r |cffffd100/veil shroud [1-20]|r")
+            print(ns.L and ns.L.DebugShroudUsage or "Night|cffA361E2veil|r: |cffff2020Usage:|r |cffffd100/veil shroud [1-20]|r")
             return
         end
         RunShroudTest(n or 15)
+    elseif cmd == "tricks" or cmd == "target" then
+        local rawMsg = strtrim(msg or "")
+        local _, rest = rawMsg:match("^(%S+)%s*(.*)$")
+        
+        if rest and rest ~= "" then
+            if InCombatLockdown() then
+                print("Night|cffA361E2veil|r: " .. (ns.L and ns.L.DebugCombatLock or "This command cannot be used in combat."))
+                return
+            end
+
+            local sub, val = rest:match("^(%S+)%s*(.*)$")
+            sub = sub and sub:lower() or ""
+            
+            if sub == "list" then
+                local isRaid = IsInRaid()
+                local count = GetNumGroupMembers()
+                local prefix = isRaid and "raid" or "party"
+                local max = isRaid and count or count - 1
+                local idx = tonumber(val)
+                
+                -- If a number was given, set it as target
+                if idx then
+                    local unit = idx == 0 and "player" or prefix .. idx
+                    if UnitExists(unit) then
+                        if UnitIsUnit(unit, "player") then
+                            print("Night|cffA361E2veil|r: |cffff2020" .. (ns.L and ns.L.TricksNoSelf or "You cannot target yourself.") .. "|r")
+                            return
+                        end
+                        local name = UnitName(unit)
+                        ns.db.tricksLogic = "CUSTOM"
+                        ns.db.tricksCustomName = name
+                        local text = ns.L and ns.L.TricksCustomSet or "Custom target set: %s"
+                        print(string.format("Night|cffA361E2veil|r: " .. text, ns.GetClassColoredName(unit)))
+                        ns.Tricks_UpdateMacro(true)
+                    else
+                        local text = ns.L and ns.L.TricksInvalidIndex or "Invalid group index."
+                        print("Night|cffA361E2veil|r: |cffff2020" .. text .. "|r")
+                    end
+                    return
+                end
+                
+                -- No number: just print the list
+                print("Night|cffA361E2veil|r: " .. (ns.L and ns.L.TricksGroupMembers or "Group members:"))
+                print(string.format(" |cffffd100[0]|r %s (%s)", ns.GetClassColoredName("player"), ns.L and ns.L.DebugPlayer or "PLAYER"))
+                for i = 1, max do
+                    local unit = prefix .. i
+                    local role = UnitGroupRolesAssigned(unit)
+                    local colorName = ns.GetClassColoredName(unit)
+                    print(string.format(" |cffffd100[%d]|r %s (%s)", i, colorName, role))
+                end
+                return
+            elseif sub == "normal" then
+                ns.db.tricksLogic = "NORMAL"
+                local text = ns.L and ns.L.TricksLogicSet or "Targeting mode set: %s"
+                print(string.format("Night|cffA361E2veil|r: " .. text, "|cffffd100" .. (ns.L and ns.L.TricksNormal or "Normal") .. "|r"))
+                ns.Tricks_UpdateMacro(true)
+                return
+            elseif sub == "tank" then
+                ns.db.tricksLogic = "TANK"
+                local text = ns.L and ns.L.TricksLogicSet or "Targeting mode set: %s"
+                print(string.format("Night|cffA361E2veil|r: " .. text, "|cffffd100" .. (ns.L and ns.L.Tank or "Tank") .. "|r"))
+                ns.Tricks_UpdateMacro(true)
+                return
+            elseif sub == "tt" or sub == "targettarget" then
+                ns.db.tricksLogic = "TARGETTARGET"
+                local text = ns.L and ns.L.TricksLogicSet or "Targeting mode set: %s"
+                print(string.format("Night|cffA361E2veil|r: " .. text, "|cffffd100" .. (ns.L and ns.L.TargetTarget or "Target of Target") .. "|r"))
+                ns.Tricks_UpdateMacro(true)
+                return
+            elseif sub == "custom" then
+                ns.db.tricksLogic = "CUSTOM"
+                local text = ns.L and ns.L.TricksLogicSet or "Targeting mode set: %s"
+                print(string.format("Night|cffA361E2veil|r: " .. text, "|cff00ff00" .. (ns.L and ns.L.TricksCustom or "Custom") .. "|r"))
+                ns.Tricks_UpdateMacro(true)
+                return
+            elseif sub == "set" and val ~= "" then
+                ns.db.tricksLogic = "CUSTOM"
+                ns.db.tricksCustomName = val
+                local text = ns.L and ns.L.TricksCustomSet or "Custom target set: %s"
+                print(string.format("Night|cffA361E2veil|r: " .. text, "|cff00ff00" .. val .. "|r"))
+                ns.Tricks_UpdateMacro(true)
+                return
+            else
+                local errMsg = ns.L and ns.L.ErrorUnknownSubCmd or "Unknown sub-command: |cffffd100%s|r. Use |cffffd100/veil help|r."
+                print("Night|cffA361E2veil|r: |cffff6020" .. string.format(errMsg, rest) .. "|r")
+                return
+            end
+        end
+
+        local logic = ns.db.tricksLogic or ns.Defaults.tricksLogic
+        local tankUnit = ns.Tricks_FindBestTargetID()
+        local targetName = tankUnit and ns.GetClassColoredName(tankUnit) or ("|cffaaaaaa" .. (ns.L and ns.L.DebugNone or "none") .. "|r")
+        
+        local modeName
+        if logic == "TANK" then
+            modeName = "|cffffd100" .. (ns.L and ns.L.Tank or "Tank") .. "|r"
+        elseif logic == "TARGETTARGET" then
+            modeName = "|cffffd100" .. (ns.L and ns.L.TargetTarget or "Target of Target") .. "|r"
+        elseif logic == "CUSTOM" then
+            local cname = (ns.db.tricksCustomName or "") 
+            modeName = "|cff00ff00" .. (ns.L and ns.L.TricksCustom or "Custom") .. "|r" .. (cname ~= "" and (" (" .. cname .. ")") or "")
+        else
+            modeName = "|cffffd100" .. (ns.L and ns.L.TricksNormal or "Normal") .. "|r"
+        end
+        
+        print(string.format("Night|cffA361E2veil|r: |cffcccccc%s|r %s → %s",
+            ns.L and ns.L.TricksTargetLog or "Tricks target",
+            modeName, targetName))
+        if ns.debugMode then
+            local statusStr = ns.tricksLastMacroBody and ("|cff00ff00" .. (ns.L and ns.L.DebugYes or "OK") .. "|r") or ("|cffff2020" .. (ns.L and ns.L.DebugNo or "ERR") .. "|r")
+            print(string.format("Night|cff9370db[Debug]|r " .. (ns.L and ns.L.DebugMacroStatus or "Macro: %s"), statusStr))
+        end
+    elseif cmd == "utricks" then
+        if not ns.debugMode then
+            print(ns.L.DebugModeRequired or "Night|cffA361E2veil|r: |cffff2020This command requires Debug Mode.|r Type |cffffd100/veil debug|r to enable.")
+            return
+        end
+        print("Night|cffA361E2veil|r: |cff9370db[Debug]|r " .. (ns.L and ns.L.DebugTricksForcing or "Forcing Tricks update..."))
+        local ok = ns.Tricks_UpdateMacro(true)
+        if ok then
+            print("Night|cffA361E2veil|r: |cff00ff00[Debug]|r " .. (ns.L and ns.L.DebugTricksSuccess or "Macro refresh SUCCESS."))
+        end
+    elseif cmd == "help" then
+        print(string.format("Night|cffA361E2veil|r |cffffd100v%s|r", ns.Defaults.version))
+        print(" ")
+        print(" |cffffd100/veil|r - " .. (ns.L.HelpSettings or "Open settings"))
+        print(" ")
+        print(" |cffffd100/veil tricks|r - " .. (ns.L.HelpTricks or "Tricks status"))
+        print(" |cffffd100/veil tricks normal|r - " .. (ns.L.HelpTricksNormal or "Normal mode"))
+        print(" |cffffd100/veil tricks tank|r - " .. (ns.L.HelpTricksTank or "Tank mode"))
+        print(" |cffffd100/veil tricks tt|r - " .. (ns.L.HelpTricksTT or "Target-of-Target mode"))
+        print(" |cffffd100/veil tricks custom|r - " .. (ns.L.HelpTricksCustom or "Custom mode"))
+        print(" |cffffd100/veil tricks list [#]|r - " .. (ns.L.HelpTricksList or "List group / pick by index"))
+        print(" |cffffd100/veil tricks set <name>|r - " .. (ns.L.HelpTricksSet or "Set custom target name"))
+        print(" ")
+        print(" |cffffd100/veil debug|r - " .. (ns.L.HelpDebugToggle or "Toggle debug mode"))
+
+        if ns.debugMode then
+            print(" |cff9370db/veil utricks|r - " .. (ns.L.HelpUTricks or "Force macro refresh"))
+            print(" |cff9370db/veil info|r - " .. (ns.L.HelpInfo or "Diagnostic info"))
+            print(" |cff9370db/veil shroud [1-20]|r - " .. (ns.L.HelpShroudTest or "Test shroud"))
+        end
     elseif cmd == "" then
+        if InCombatLockdown() then
+            print("Night|cffA361E2veil|r: |cffffaa00" .. (ns.L and ns.L.CombatBlocked or "Cannot open settings during combat.") .. "|r")
+            return
+        end
         if ns.MainCategory then 
             Settings.OpenToCategory(ns.MainCategory:GetID()) 
         end
+    else
+        local errMsg = ns.L and ns.L.ErrorUnknownCmd or "Unknown command: |cffffd100%s|r. Use |cffffd100/veil help|r."
+        print("Night|cffA361E2veil|r: |cffff6020" .. string.format(errMsg, cmd) .. "|r")
     end
 end

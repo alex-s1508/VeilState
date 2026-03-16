@@ -73,6 +73,14 @@ local CHANNELS = {
 }
 local CHANNEL_ORDER = { "NONE", "SAY", "YELL", "PARTY", "RAID", "INSTANCE_CHAT" }
 
+local TRICKS_LOGIC_OPTIONS = {
+    ["TANK"]         = ns.L and ns.L.Tank or "Tank",
+    ["NORMAL"]       = ns.L and ns.L.TricksNormal or "Normal",
+    ["TARGETTARGET"] = ns.L and ns.L.TargetTarget or "Target of Target",
+    ["CUSTOM"]       = ns.L and ns.L.TricksCustom or "Custom",
+}
+local TRICKS_LOGIC_ORDER = { "NORMAL", "TANK", "TARGETTARGET", "CUSTOM" }
+
 -- Changelog Builder
 local function BuildChangelog(cat)
     local notes = ns.ReleaseNotes and ns.ReleaseNotes.notes or {}
@@ -623,9 +631,16 @@ function ns.InitSettings()
     end
 
     EnsureProfilePopups()
+    if ns.settingsInitialized then return end
+    ns.settingsInitialized = true
 
     ns.MainCategory = SettingsLib:CreateRootCategory("Night|cffA361E2veil|r", false)
     local root = ns.MainCategory
+
+    if not ns.IsRogue then
+        SettingsLib:CreateHeader(root, { name = "|cffff2020" .. (ns.L and ns.L.WarningNotRogue or "You are not a Rogue. Class-specific features are disabled.") .. "|r" })
+    end
+
     BuildChangelog(root)
 
     local stealthCat = SettingsLib:CreateCategory(root, ns.L.Stealth or "Stealth", false)
@@ -673,76 +688,136 @@ function ns.InitSettings()
         })
         ns.AddPoisonSettings(poisonCat, "poisonLethal", ns.L.LethalPoisons or "Lethal Poison")
         ns.AddPoisonSettings(poisonCat, "poisonNonLethal", ns.L.NonLethalPoisons or "Non-Lethal Poison")
+
+
+        -- Shroud Category (Rogue Only)
+        local shroudCat = SettingsLib:CreateCategory(root, ns.L.ShroudOfConcealment or "Shroud of Concealment", false)
+        SettingsLib:CreateHeader(shroudCat, { name = ns.L.Management or "Management" })
+        SettingsLib:CreateCheckbox(shroudCat, {
+            key = "shroudCountdown", name = ns.L.EnableShroudCountdown or (ns.L.Countdown or "Countdown in Chat"), default = ns.Defaults.shroudCountdown,
+            get = function() return G("shroudCountdown", ns.Defaults.shroudCountdown) end,
+            set = function(v) ns.db.shroudCountdown = v end,
+            desc = ns.L.EnableShroudCountdownDesc,
+        })
+        SettingsLib:CreateCheckbox(shroudCat, {
+            key = "shroudOnlyInstances", name = ns.L.OnlyInInstances or "Only in instances", default = ns.Defaults.shroudOnlyInstances,
+            get = function() return G("shroudOnlyInstances", ns.Defaults.shroudOnlyInstances) end,
+            set = function(v) ns.db.shroudOnlyInstances = v end,
+            desc = ns.L.ShroudOnlyInstancesDesc,
+        })
+        SettingsLib:CreateCheckbox(shroudCat, {
+            key = "shroudMuteErrors", name = ns.L.ShroudMuteErrors or "Mute error messages", default = ns.Defaults.shroudMuteErrors,
+            get = function() return G("shroudMuteErrors", ns.Defaults.shroudMuteErrors) end,
+            set = function(v) ns.db.shroudMuteErrors = v end,
+            desc = ns.L.ShroudMuteErrorsDesc,
+        })
+        SettingsLib:CreateHeader(shroudCat, { name = ns.L.Messages or "Messages" })
+        SettingsLib:CreateDropdown(shroudCat, {
+            key = "shroudChannel", name = ns.L.ChatChannel or "Chat Channel", values = CHANNELS, order = CHANNEL_ORDER, default = ns.Defaults.shroudChannel or "SAY",
+            get = function() return G("shroudChannel", ns.Defaults.shroudChannel or "SAY") end,
+            set = function(v) ns.db.shroudChannel = v end,
+            desc = ns.L.ChatChannelDesc,
+        })
+        SettingsLib:CreateDropdown(shroudCat, {
+            key = "shroudChannelFallback1", name = " ", values = CHANNELS, order = CHANNEL_ORDER, default = ns.Defaults.shroudChannelFallback1 or "NONE",
+            get = function() return G("shroudChannelFallback1", ns.Defaults.shroudChannelFallback1 or "NONE") end,
+            set = function(v) ns.db.shroudChannelFallback1 = v end,
+            desc = ns.L.ChatChannelFallbackDesc,
+        })
+        SettingsLib:CreateDropdown(shroudCat, {
+            key = "shroudChannelFallback2", name = " ", values = CHANNELS, order = CHANNEL_ORDER, default = ns.Defaults.shroudChannelFallback2 or "NONE",
+            get = function() return G("shroudChannelFallback2", ns.Defaults.shroudChannelFallback2 or "NONE") end,
+            set = function(v) ns.db.shroudChannelFallback2 = v end,
+            desc = ns.L.ChatChannelFallbackDesc,
+        })
+        SettingsLib:CreateInput(shroudCat, {
+            key = "shroudMessage", name = ns.L.ShroudMessage or "Countdown Message", default = ns.Defaults.shroudMessage or "%time",
+            get = function() return G("shroudMessage", ns.Defaults.shroudMessage or "%time") end,
+            set = function(v) ns.db.shroudMessage = v end,
+            desc = ns.L.ShroudMessageDesc or (ns.L.TimeRemainingHint or "%time = time remaining"),
+        })
+        SettingsLib:CreateInput(shroudCat, {
+            key = "shroudStartMsg", name = ns.L.ShroudOnStart or "Start Message", default = ns.Defaults.shroudStartMsg or "%time",
+            get = function() return G("shroudStartMsg", ns.Defaults.shroudStartMsg or "%time") end,
+            set = function(v) ns.db.shroudStartMsg = v end,
+            desc = ns.L.ShroudOnStartDesc,
+        })
+        SettingsLib:CreateInput(shroudCat, {
+            key = "shroudEndMsg", name = ns.L.ShroudOnEnd or "End Message", default = ns.Defaults.shroudEndMsg or "%time",
+            get = function() return G("shroudEndMsg", ns.Defaults.shroudEndMsg or "%time") end,
+            set = function(v) ns.db.shroudEndMsg = v end,
+            desc = ns.L.ShroudOnEndDesc,
+        })
+        SettingsLib:CreateCheckbox(shroudCat, {
+            key = "shroudInterval", name = ns.L.ShroudInterval or "Interval Mode", default = ns.Defaults.shroudInterval,
+            get = function() return G("shroudInterval", ns.Defaults.shroudInterval) end,
+            set = function(v) ns.db.shroudInterval = v end,
+            desc = ns.L.ShroudIntervalDesc or "Start, middle, and last 5s",
+        })
+        SettingsLib:CreateButton(shroudCat, {
+            text = ns.L.TestShroud or "Test Message",
+            func = function() if ns.TestShroudMessage then ns.TestShroudMessage() end end,
+            desc = ns.L.TestShroudDesc,
+        })
+
+        -- Tricks Tab
+        local tricksCat = SettingsLib:CreateCategory(root, ns.L.TricksOfTheTrade or "Tricks of the Trade", false)
+        
+        SettingsLib:CreateHeader(tricksCat, { name = ns.L.Management or "Management" })
+        SettingsLib:CreateCheckbox(tricksCat, {
+            key = "tricksEnabled", name = ns.L.Enable or "Enable", default = ns.Defaults.tricksEnabled,
+            get = function() return G("tricksEnabled", ns.Defaults.tricksEnabled) end,
+            set = function(v) ns.db.tricksEnabled = v; ns.Tricks_UpdateMacro(true) end,
+            desc = ns.L.TricksEnabledDesc,
+        })
+        SettingsLib:CreateCheckbox(tricksCat, {
+            key = "tricksMute", name = ns.L.MuteChanges or "Mute Changes", default = ns.Defaults.tricksMute,
+            get = function() return G("tricksMute", ns.Defaults.tricksMute) end,
+            set = function(v) ns.db.tricksMute = v end,
+            desc = ns.L.TricksMuteDesc,
+        })
+
+        SettingsLib:CreateHeader(tricksCat, { name = ns.L.TricksTargetHeader or "Target" })
+        SettingsLib:CreateCheckbox(tricksCat, {
+            key = "tricksUseMouseover", name = ns.L.Mouseover or "Mouseover", default = ns.Defaults.tricksUseMouseover,
+            get = function() return G("tricksUseMouseover", ns.Defaults.tricksUseMouseover) end,
+            set = function(v) ns.db.tricksUseMouseover = v; ns.Tricks_UpdateMacro(true) end,
+            desc = ns.L.TricksMouseoverDesc,
+        })
+        SettingsLib:CreateCheckbox(tricksCat, {
+            key = "tricksUseFocus", name = ns.L.Focus or "Focus", default = ns.Defaults.tricksUseFocus,
+            get = function() return G("tricksUseFocus", ns.Defaults.tricksUseFocus) end,
+            set = function(v) ns.db.tricksUseFocus = v; ns.Tricks_UpdateMacro(true) end,
+            desc = ns.L.TricksFocusDesc,
+        })
+        SettingsLib:CreateDropdown(tricksCat, {
+            key = "tricksLogic", name = ns.L.TricksTargetSelector or "Target Selector", values = TRICKS_LOGIC_OPTIONS, order = TRICKS_LOGIC_ORDER,
+            default = ns.Defaults.tricksLogic,
+            get = function() return G("tricksLogic", ns.Defaults.tricksLogic) end,
+            set = function(v) ns.db.tricksLogic = v; ns.Tricks_UpdateMacro(true) end,
+            desc = ns.L.TricksTargetSelectorDesc,
+        })
+        SettingsLib:CreateInput(tricksCat, {
+            key = "tricksCustomName", name = ns.L.TricksCustomName or "Custom Target",
+            default = ns.Defaults.tricksCustomName or "",
+            get = function() return G("tricksCustomName", ns.Defaults.tricksCustomName or "") end,
+            set = function(v)
+                ns.db.tricksCustomName = v
+                ns.db.tricksLogic = "CUSTOM"
+                ns.Tricks_UpdateMacro(true)
+            end,
+            desc = ns.L.TricksCustomNameDesc,
+        })
+        SettingsLib:CreateCheckbox(tricksCat, {
+            key = "tricksDelveCompanion", name = ns.L.TricksDelveCompanion or "Delve Companion", default = ns.Defaults.tricksDelveCompanion,
+            get = function() return G("tricksDelveCompanion", ns.Defaults.tricksDelveCompanion) end,
+            set = function(v) ns.db.tricksDelveCompanion = v; ns.Tricks_UpdateMacro(true) end,
+            desc = ns.L.TricksDelveCompanionDesc,
+        })
+
+        SettingsLib:CreateHeader(tricksCat, { name = ns.L.TricksMacroWarning or "|cffffa500Use the Nightveil - Tricks macro instead of the original spell.|r" })
     end
 
-    local shroudCat = SettingsLib:CreateCategory(root, ns.L.ShroudOfConcealment or "Shroud of Concealment", false)
-    SettingsLib:CreateHeader(shroudCat, { name = ns.L.Management or "Management" })
-    SettingsLib:CreateCheckbox(shroudCat, {
-        key = "shroudCountdown", name = ns.L.EnableShroudCountdown or (ns.L.Countdown or "Countdown in Chat"), default = ns.Defaults.shroudCountdown,
-        get = function() return G("shroudCountdown", ns.Defaults.shroudCountdown) end,
-        set = function(v) ns.db.shroudCountdown = v end,
-        desc = ns.L.EnableShroudCountdownDesc,
-    })
-    SettingsLib:CreateCheckbox(shroudCat, {
-        key = "shroudOnlyInstances", name = ns.L.OnlyInInstances or "Only in instances", default = ns.Defaults.shroudOnlyInstances,
-        get = function() return G("shroudOnlyInstances", ns.Defaults.shroudOnlyInstances) end,
-        set = function(v) ns.db.shroudOnlyInstances = v end,
-        desc = ns.L.ShroudOnlyInstancesDesc,
-    })
-    SettingsLib:CreateCheckbox(shroudCat, {
-        key = "shroudMuteErrors", name = ns.L.ShroudMuteErrors or "Mute error messages", default = ns.Defaults.shroudMuteErrors,
-        get = function() return G("shroudMuteErrors", ns.Defaults.shroudMuteErrors) end,
-        set = function(v) ns.db.shroudMuteErrors = v end,
-        desc = ns.L.ShroudMuteErrorsDesc,
-    })
-    SettingsLib:CreateHeader(shroudCat, { name = ns.L.Messages or "Messages" })
-    SettingsLib:CreateDropdown(shroudCat, {
-        key = "shroudChannel", name = ns.L.ChatChannel or "Chat Channel", values = CHANNELS, order = CHANNEL_ORDER, default = ns.Defaults.shroudChannel or "SAY",
-        get = function() return G("shroudChannel", ns.Defaults.shroudChannel or "SAY") end,
-        set = function(v) ns.db.shroudChannel = v end,
-        desc = ns.L.ChatChannelDesc,
-    })
-    SettingsLib:CreateDropdown(shroudCat, {
-        key = "shroudChannelFallback1", name = " ", values = CHANNELS, order = CHANNEL_ORDER, default = ns.Defaults.shroudChannelFallback1 or "NONE",
-        get = function() return G("shroudChannelFallback1", ns.Defaults.shroudChannelFallback1 or "NONE") end,
-        set = function(v) ns.db.shroudChannelFallback1 = v end,
-        desc = ns.L.ChatChannelFallbackDesc,
-    })
-    SettingsLib:CreateDropdown(shroudCat, {
-        key = "shroudChannelFallback2", name = " ", values = CHANNELS, order = CHANNEL_ORDER, default = ns.Defaults.shroudChannelFallback2 or "NONE",
-        get = function() return G("shroudChannelFallback2", ns.Defaults.shroudChannelFallback2 or "NONE") end,
-        set = function(v) ns.db.shroudChannelFallback2 = v end,
-        desc = ns.L.ChatChannelFallbackDesc,
-    })
-    SettingsLib:CreateInput(shroudCat, {
-        key = "shroudMessage", name = ns.L.ShroudMessage or "Countdown Message", default = ns.Defaults.shroudMessage or "%time",
-        get = function() return G("shroudMessage", ns.Defaults.shroudMessage or "%time") end,
-        set = function(v) ns.db.shroudMessage = v end,
-        desc = ns.L.ShroudMessageDesc or (ns.L.TimeRemainingHint or "%time = time remaining"),
-    })
-    SettingsLib:CreateInput(shroudCat, {
-        key = "shroudStartMsg", name = ns.L.ShroudOnStart or "Start Message", default = ns.Defaults.shroudStartMsg or "%time",
-        get = function() return G("shroudStartMsg", ns.Defaults.shroudStartMsg or "%time") end,
-        set = function(v) ns.db.shroudStartMsg = v end,
-        desc = ns.L.ShroudOnStartDesc,
-    })
-    SettingsLib:CreateInput(shroudCat, {
-        key = "shroudEndMsg", name = ns.L.ShroudOnEnd or "End Message", default = ns.Defaults.shroudEndMsg or "%time",
-        get = function() return G("shroudEndMsg", ns.Defaults.shroudEndMsg or "%time") end,
-        set = function(v) ns.db.shroudEndMsg = v end,
-        desc = ns.L.ShroudOnEndDesc,
-    })
-    SettingsLib:CreateCheckbox(shroudCat, {
-        key = "shroudInterval", name = ns.L.ShroudInterval or "Interval Mode", default = ns.Defaults.shroudInterval,
-        get = function() return G("shroudInterval", ns.Defaults.shroudInterval) end,
-        set = function(v) ns.db.shroudInterval = v end,
-        desc = ns.L.ShroudIntervalDesc or "Start, middle, and last 5s",
-    })
-    SettingsLib:CreateButton(shroudCat, {
-        text = ns.L.TestShroud or "Test Message",
-        func = function() if ns.TestShroudMessage then ns.TestShroudMessage() end end,
-        desc = ns.L.TestShroudDesc,
-    })
 
     local profilesCat = SettingsLib:CreateCategory(root, ns.L.Profiles or "Profiles", false)
     SettingsLib:CreateHeader(profilesCat, { name = ns.L.Management or "Management" })

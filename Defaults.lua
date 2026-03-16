@@ -2,7 +2,7 @@ local addonName, ns = ...
 
 -- Addon Defaults
 ns.Defaults = {
-    version = "2.0.3",
+    version = "2.1.0",
 
     -- Stealth
     stealthEnabled = true,
@@ -45,6 +45,15 @@ ns.Defaults = {
     shroudInterval = false,
     shroudStartMsg = "%time",
     shroudEndMsg = "%time",
+
+    -- Tricks of the Trade
+    tricksEnabled = true,
+    tricksUseMouseover = false,
+    tricksUseFocus = false,
+    tricksLogic = "TANK",
+    tricksCustomName = "",
+    tricksDelveCompanion = true,
+    tricksMute = false,
 
     -- Global Poison Settings
     poisonOnlyCombat = false,

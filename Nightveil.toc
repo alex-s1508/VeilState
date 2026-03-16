@@ -1,6 +1,6 @@
-## Interface: 120001
+## Interface: 120001, 120005
 ## Title: Night|cffA361E2veil|r
-## Version: 2.0.3a
+## Version: 2.1.0
 ## Author: iLoviP4g
 ## X-Website: https://www.curseforge.com/wow/addons/nightveil
 ## X-Category: Combat, Rogue, HUDs
