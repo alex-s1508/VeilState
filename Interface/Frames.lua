@@ -1,6 +1,6 @@
 local addonName, ns = ...
 
--- Frame Creation Helpers
+-- [[ UI Frame Creation & Helper Functions ]] ---------------------------------
 local function CreateTrackerFrame(name, label)
     local f = CreateFrame("Frame", name, UIParent)
     f:SetSize(200, 50)
@@ -20,8 +20,8 @@ local function CreateTrackerFrame(name, label)
     return f
 end
 
--- UI Elements
-local stealthFrame = CreateTrackerFrame("NV_StealthFrame", ns.L.StealthMonitor)
+-- [[ Static UI Element Definitions ]] ---------------------------------------
+local stealthFrame = CreateTrackerFrame("NV_StealthFrame", ns.L.Stealth or "Stealth")
 
 local screenFrame = CreateFrame("Frame", "VS_ScreenFrame", UIParent)
 screenFrame:SetAllPoints(UIParent)
@@ -50,7 +50,7 @@ local function BuildVignettes()
     vignetteEdges.right  = MakeEdge("TOPRIGHT");   vignetteEdges.right:SetPoint("BOTTOMRIGHT")
 end
 
--- Anchoring
+-- [[ Advanced UI Anchoring & Positioning ]] ---------------------------------
 local function AnchorIconToText(icon, text, anchorPoint, x, y)
     if not icon or not text then return end
     local p = anchorPoint or "LEFT"
@@ -78,14 +78,15 @@ local function AnchorIconToText(icon, text, anchorPoint, x, y)
     end
 end
 
--- Stealth Visuals
+-- [[ Stealth Visual Update Controller ]] -------------------------------------
 function ns.RefreshVisuals(force)
     if force then stealthFrame._needsForceRefresh = true end
     local db = ns.db
     if not db then return end
 
-    local stealthed = IsStealthed()
-    local stealthActive = stealthed and db.stealthEnabled
+    local hasStealth = ns.HasAura({1784})
+    local hasVanish = ns.HasAura({11327})
+    local stealthActive = (hasStealth or hasVanish) and db.stealthEnabled
     if stealthActive and db.stealthOnlyInstances and not ns.IsInInstance() then
         stealthActive = false
     end
@@ -122,7 +123,12 @@ function ns.RefreshVisuals(force)
             local sz = db.stealthIconSize or 36
             stealthFrame.Icon:SetSize(sz, sz)
             stealthFrame.Icon:SetAlpha(db.stealthIconAlpha or 1)
-            stealthFrame.Icon:SetTexture("Interface\\Icons\\Ability_Stealth")
+            
+            local iconTexture = "Interface\\Icons\\Ability_Stealth"
+            if hasVanish then
+                iconTexture = "Interface\\Icons\\Ability_Vanish"
+            end
+            stealthFrame.Icon:SetTexture(iconTexture)
             if db.stealthIconAnchorToText and hasText then
                 stealthFrame.Icon:ClearAllPoints()
                 AnchorIconToText(stealthFrame.Icon, stealthFrame.Text, db.stealthIconAnchorPoint or "LEFT", db.stealthIconX or 5, db.stealthIconY or 0)
@@ -184,7 +190,7 @@ function ns.RefreshVisuals(force)
     end
 end
 
--- Poison Logic
+-- [[ Poison Tracker Logic & Constants ]] -------------------------------------
 local DRAGON_TEMPERED_BLADES_SPELL_ID = 381801
 local LETHAL_POISONS = { [2823] = true, [315584] = true, [8679] = true, [381664] = true }
 local NON_LETHAL_POISONS = { [3408] = true, [5761] = true, [381637] = true }
@@ -212,16 +218,18 @@ local poisonUI = nil
 local function GetPoisonFrames()
     if poisonUI then return poisonUI end
     poisonUI = { lethal = {}, nonLethal = {} }
-    local function Build(kind, namePrefix, label)
+    local function Build(kind, namePrefix, label, frameName)
         local frame = CreateTrackerFrame(namePrefix, label)
+        frame.name = frameName
         poisonUI[kind] = { frame = frame, textFrame = frame, text = frame.Text, iconFrame = frame, icon = frame.Icon }
     end
-    Build("lethal", "NV_PoisonLethal", ns.L.PoisonLethalMonitor)
-    Build("nonLethal", "NV_PoisonNonLethal", ns.L.PoisonNonLethalMonitor)
+    -- Specific tracker builds
+    Build("lethal", "NV_PoisonLethal", ns.L.LethalPoisons or "Lethal Poison", ns.L.LethalPoisons or "Lethal Poison")
+    Build("nonLethal", "NV_PoisonNonLethal", ns.L.NonLethalPoisons or "Non-Lethal Poison", ns.L.NonLethalPoisons or "Non-Lethal Poison")
     return poisonUI
 end
 
--- Animation Logic
+-- [[ UI Frame Animation & Loop Logic ]] -------------------------------------
 local function StopAllTextAnimations(fs)
     if not fs then return end
     if fs._nvAnimGroups then
@@ -301,7 +309,7 @@ function ns.ApplyTextAnimation(fs, mode, speed)
     end
 end
 
--- Poison Visuals Refresh
+-- [[ Poison Visual Update Controller ]] --------------------------------------
 ns._poisonState = ns._poisonState or {
     lethalMissing = false,
     nonLethalMissing = false,

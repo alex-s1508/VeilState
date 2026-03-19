@@ -1,17 +1,20 @@
-<img src=".resources/images/banners/banner3.png" width="1920" alt="Nightveil Header"> 
+<img src="https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/banners/banner3.png" width="1920" alt="Nightveil Header">
 
-**Nightveil** is a Rogue utility addon focused on tracking what matters most during gameplay. It’s a lightweight and customizable toolkit built specifically for Rogues, designed to integrate seamlessly into your UI without getting in the way.
+**Nightveil** is a lightweight and modular utility addon designed exclusively for **Rogues**, focused on delivering clear, actionable information without cluttering your UI.
 
+It enhances core Rogue mechanics like **Stealth**, **Poisons**, **Shroud of Concealment**, and **Tricks of the Trade** through highly customizable visual and automation systems.
 
-_To open the addon settings, just type: **`/veil`** — or **`/veil help`** to see all available commands._
+_Type `/veil` to open settings or `/veil help` for commands._
 
-<h2 style="font-size: 20px;">What it does:</h2>
+***
 
-* **Floating Text & Icons:** Visual trackers with full control over size, color, opacity, position, and animations.
-* **Instance & Combat Filters:** Show elements only when it makes sense (combat and/or instances).
-* **Highly Customizable:** Every system is modular — enable only what you want.
-* **Native Localization:** Includes automatic translations for all official WoW game languages.
-* **Performance Focused:** Very lightweight. It won’t tank your FPS or stutter your game, even on older PCs.
+## Core Features
+
+* **Minimal & Lightweight:** Built for performance — no unnecessary overhead.
+* **Fully Modular:** Enable only the systems you need.
+* **Highly Customizable:** Control visuals, animations, positioning, and behavior.
+* **Smart Context Filters:** Show elements only in combat and/or instances.
+* **Native Localization:** Supports all official WoW languages.
 
 ***
 
@@ -19,14 +22,14 @@ _To open the addon settings, just type: **`/veil`** — or **`/veil help`** to s
   <img src="https://wow.zamimg.com/images/wow/icons/large/ability_stealth.jpg" width="29" style="vertical-align: middle;"> Stealth
 </h2>
 
-The original core of Nightveil — a clean and highly configurable stealth tracking system.
+A precise and configurable **Stealth tracking system**, built around aura-based detection.
 
-* Floating text and icon trackers for your current stance
-* Optional native character highlight while stealthed
-* Fully adjustable visuals and positioning
-* Non-intrusive and preserves your existing highlight settings
+* Tracks **Stealth** and **Vanish** states accurately  
+* Floating text and icon indicators  
+* Optional character highlight while stealthed  
+* Fully customizable visuals and positioning  
 
-<img src=".resources/images/screenshots/stealthedHighlight.png" width="1920" alt="StealthScreenshot">
+<img src="https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/screenshots/stealthedHighlight.png" width="1920" alt="StealthScreenshot">
 
 ***
 
@@ -34,18 +37,14 @@ The original core of Nightveil — a clean and highly configurable stealth track
   <img src="https://wow.zamimg.com/images/wow/icons/large/trade_brewpoison.jpg" width="29" style="vertical-align: middle;"> Poison Tracker
 </h2>
 
-Nightveil includes a dedicated poison monitoring system for both **Lethal** and **Non-Lethal** poisons.
+A complete monitoring system for **Lethal** and **Non-Lethal** poisons.
 
-You can independently configure:
+* Independent tracking for both poison types  
+* Customizable warning text and icons  
+* Optional sound alerts  
+* Combat and instance visibility filters  
 
-* Floating warning text (with custom message, color, size, opacity, offsets, and animations)
-* Tracker icons (with anchor options and positioning controls)
-* Optional sound alerts
-* Combat-only and instance-only visibility
-
-Everything is modular and fully independent between poison types.
-
-<img src=".resources/images/screenshots/poisons.png" width="1920" alt="PoisonScreenshot">
+<img src="https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/screenshots/poisons.png" width="1920" alt="PoisonScreenshot">
 
 ***
 
@@ -53,16 +52,15 @@ Everything is modular and fully independent between poison types.
   <img src="https://wow.zamimg.com/images/wow/icons/large/ability_rogue_shroudofconcealment.jpg" width="29" style="vertical-align: middle;"> Shroud of Concealment
 </h2>
 
-Nightveil includes a dedicated messaging system for **Shroud of Concealment** to help coordinate with your group.
+A smart communication system to coordinate **Shroud usage** with your group.
 
-You can easily configure:
-
-* Chat alerts for when Shroud starts and ends
-* Custom countdown messages using the **`%time`** variable for remaining time
+* Automatic start and end alerts  
+* Custom countdown messages using `%time`  
+* Multiple chat channel support  
 
 > **Example:** Setting the text to `Shroud: %time remaining!` will automatically post:
 
-<img src=".resources/images/screenshots/shroudCountdown.gif" width="1920" alt="ShroudScreenshot">
+<img src="https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/screenshots/shroudCountdown.gif" width="1920" alt="ShroudScreenshot">
 
 ***
 
@@ -70,17 +68,26 @@ You can easily configure:
   <img src="https://wow.zamimg.com/images/wow/icons/large/ability_rogue_tricksofthetrade.jpg" width="29" style="vertical-align: middle;"> Tricks of the Trade
 </h2>
 
-Nightveil features a smart targeting system for **Tricks of the Trade**, automating your redirects without losing tempo.
+An advanced targeting system that automates **Tricks** without breaking your flow.
 
-* **Smart Macro Management:** Generates a dynamic macro that always reflects your current settings.
-* **Target Selector Logic:** Choose between Normal, Tank, Target of Target, or Custom modes.
-* **Prioritized Overrides:** Mouseover and Focus targets have their own priority rules.
-* **Delve Companion Support:** Automatically targets Brann or other companions inside Delves.
-* **Slash Commands:** Control targeting mode:
-  * `/veil tricks` — Show current mode and resolved target.
-  * `/veil tricks normal` / `tank` / `tt` / `custom` — Switch targeting mode instantly.
-  * `/veil tricks list [#]` — List group/raid members and set target by index.
-  * `/veil tricks set <name>` — Set a specific player by name.
+* **Dynamic Macro:** Always synced with your settings  
+* **Flexible Targeting:** Normal, Tank, Target of Target, or Custom  
+* **Priority System:** Mouseover and Focus overrides  
+* **Delve Companion Support:** Includes Brann and Valeera  
+* **Quick Commands:**
+  * `/veil tricks`
+  * `/veil tricks normal | tank | tt | custom`
+  * `/veil tricks set <name>`
+
+***
+
+## Feedback
+
+Feel free to use the comment section to report bugs or issues you encounter. Your feedback and ideas for future updates are always welcome!
+
+`Note: Some older bug report comments were removed to keep the page cleaner and make new issues easier to find. All reports and fixes are credited in the changelogs, and anyone who reports a bug that gets fixed will also be credited there.`
+
+Thank you for the feedback and support. I hope Nightveil continues to be useful for anyone who needs it. :)
 
 ***
 

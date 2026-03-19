@@ -1,15 +1,15 @@
 local addonName, ns = ...
 
--- Addon Defaults
+-- [[ Core Addon Defaults & Configuration ]] ----------------------------------
 ns.Defaults = {
-    version = "2.1.1",
+    version = "2.1.2",
 
-    -- Stealth
+    -- Stealth Module Defaults
     stealthEnabled = true,
     stealthOnlyInstances = false,
     stealthEnableText = true,
-    stealthCustomText = ns.L.DefaultMessage,
-    stealthTextColor = {r = 0.64, g = 0.38, b = 0.89},
+    stealthCustomText = ns.L.StealthActiveText,
+    stealthTextColor = {r = 0.420, g = 0.518, b = 0.647},
     stealthTextAlpha = 1,
     stealthTextX = 0,
     stealthTextY = 185,
@@ -24,7 +24,7 @@ ns.Defaults = {
     stealthIconX = 0,
     stealthIconY = 0,
     stealthEnableScreenColor = true,
-    stealthScreenColor = {r = 0.64, g = 0.38, b = 0.89},
+    stealthScreenColor = {r = 0.420, g = 0.518, b = 0.647},
     stealthScreenAlpha = 0.1,
     stealthScreenStrata = "BACKGROUND",
     stealthEnableVignette = true,
@@ -34,7 +34,7 @@ ns.Defaults = {
     stealthEnableHighlight = true,
     stealthHighlightType = 2,
 
-    -- Shroud
+    -- Shroud of Concealment Module Defaults
     shroudCountdown = false,
     shroudOnlyInstances = true,
     shroudMuteErrors = false,
@@ -46,7 +46,7 @@ ns.Defaults = {
     shroudStartMsg = "%time",
     shroudEndMsg = "%time",
 
-    -- Tricks of the Trade
+    -- Tricks of the Trade Module Defaults
     tricksEnabled = false,
     tricksUseMouseover = false,
     tricksUseFocus = false,
@@ -55,11 +55,11 @@ ns.Defaults = {
     tricksDelveCompanion = true,
     tricksMute = false,
 
-    -- Global Poison Settings
+    -- Global Poison Tracker Settings
     poisonOnlyCombat = false,
     poisonOnlyInstances = false,
 
-    -- Lethal Poison
+    -- Lethal Poison Configuration
     poisonLethalEnabled = true,
     poisonLethalEnableText = true,
     poisonLethalCustomText = ns.L.LethalPoisonMissing,
@@ -82,7 +82,7 @@ ns.Defaults = {
     poisonLethalEnableSound = true,
     poisonLethalSoundKit = (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959,
 
-    -- Non-Lethal Poison
+    -- Non-Lethal Poison Configuration
     poisonNonLethalEnabled = true,
     poisonNonLethalEnableText = true,
     poisonNonLethalCustomText = ns.L.NonLethalPoisonMissing,
@@ -106,7 +106,7 @@ ns.Defaults = {
     poisonNonLethalSoundKit = (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959,
 }
 
--- Utility Functions
+-- [[ Core Utility Functions ]] ------------------------------------------------
 function ns.CopyDefaults(src, dst)
     for k, v in pairs(src) do
         if type(v) == "table" then

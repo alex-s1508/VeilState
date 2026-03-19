@@ -2,6 +2,16 @@ local addonName, ns = ...
 
 ns.ReleaseNotes = {
     notes = {
+        ["v2.1.2"] = {
+            "|cff00d1ff[New]|r Valeera Sanguinar now supported as a Delve Companion for Tricks.",
+            "|cff00d1ff[New]|r Added dedicated zhTW localization file.",
+            "|cff00d1ff[New]|r Added Factory Reset button with confirmation in Profile tab.",
+            "|cff00ff00[Improved]|r Complete visual redesign: colors, icons, and banner updated.",
+            "|cff00ff00[Improved]|r Improved restrictions for non-Rogues to prevent unintended usage.",
+            "|cff00ff00[Improved]|r Stealth now uses aura-based detection.",
+            "|cff00ff00[Fixed]|r Stealth highlights no longer persist after logout while stealthed.",
+            "|cffffd100[Localization]|r Full overhaul with official terms and improved translations.",
+        },
         ["v2.1.1"] = {
             "|cff00d1ff[New]|r Replaced Tricks checkbox with dedicated Activate/Deactivate buttons.",
             "|cff00ff00[Fixed]|r Adjusted chat message priority for better logging order.",

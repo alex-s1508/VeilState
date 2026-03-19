@@ -3,7 +3,7 @@ local SettingsLib = LibStub("LibEQOLSettingsMode-1.0")
 
 SettingsLib:SetVariablePrefix("Nightveil_")
 
--- Settings Helpers
+-- [[ UI Helper Functions ]] --------------------------------------------------
 local function G(key, default)
     local v = ns.db and ns.db[key]
     if v == nil then return default end
@@ -16,7 +16,7 @@ local function GetColor(key, dr, dg, db)
     return (c.r or dr or 0.64), (c.g or dg or 0.38), (c.b or db or 0.89)
 end
 
--- UI Enums
+-- [[ UI Enumerations & Data Tables ]] ---------------------------------------
 local LAYERS = {
     { value = "BACKGROUND", label = (ns.L and ns.L.LayerBackground) or "Background" },
     { value = "LOW",        label = (ns.L and ns.L.LayerLow) or "Low" },
@@ -81,7 +81,7 @@ local TRICKS_LOGIC_OPTIONS = {
 }
 local TRICKS_LOGIC_ORDER = { "NORMAL", "TANK", "TARGETTARGET", "CUSTOM" }
 
--- Changelog Builder
+-- [[ Changelog Builder Utilities ]] -----------------------------------------
 local function BuildChangelog(cat)
     local notes = ns.ReleaseNotes and ns.ReleaseNotes.notes or {}
 
@@ -125,7 +125,7 @@ local function BuildChangelog(cat)
     end
 end
 
--- Shared Logic Sections
+-- [[ Stealth Settings Tab Construction ]] ------------------------------------
 function ns.AddStealthSettings(cat, prefix)
     local function K(key) return prefix .. key:sub(1,1):upper() .. key:sub(2) end
     local function DefaultFor(key, fallback)
@@ -133,7 +133,8 @@ function ns.AddStealthSettings(cat, prefix)
         return v ~= nil and v or fallback
     end
 
-    local textSection = SettingsLib:CreateExpandableSection(cat, { name = ns.L.FloatingText or "Floating Text", expanded = true })
+    SettingsLib:CreateHeader(cat, { name = ns.L.Customization or "Customization" })
+    local textSection = SettingsLib:CreateExpandableSection(cat, { name = ns.L.FloatingText or "Floating Text", expanded = false })
     SettingsLib:CreateCheckbox(cat, {
         key = K("enableText"), name = ns.L.Enable or "Enable",
         default = DefaultFor(K("enableText"), true),
@@ -159,14 +160,6 @@ function ns.AddStealthSettings(cat, prefix)
         desc = ns.L.ColorDesc,
     })
     SettingsLib:CreateSlider(cat, {
-        key = K("textSize"), name = ns.L.Size or "Size", min = 10, max = 100, step = 1,
-        default = DefaultFor(K("textSize"), 32),
-        get = function() return G(K("textSize"), DefaultFor(K("textSize"), 32)) end,
-        set = function(v) ns.db[K("textSize")] = v; ns.UpdateState(true) end,
-        parentSection = textSection,
-        desc = ns.L.SizeDesc,
-    })
-    SettingsLib:CreateSlider(cat, {
         key = K("textAlpha"), name = ns.L.Opacity or "Opacity", min = 0, max = 1, step = 0.05,
         default = DefaultFor(K("textAlpha"), 1),
         get = function() return G(K("textAlpha"), DefaultFor(K("textAlpha"), 1)) end,
@@ -190,6 +183,14 @@ function ns.AddStealthSettings(cat, prefix)
         parentSection = textSection,
         desc = ns.L.OffsetYDesc,
     })
+    SettingsLib:CreateSlider(cat, {
+        key = K("textSize"), name = ns.L.Size or "Size", min = 10, max = 100, step = 1,
+        default = DefaultFor(K("textSize"), 32),
+        get = function() return G(K("textSize"), DefaultFor(K("textSize"), 32)) end,
+        set = function(v) ns.db[K("textSize")] = v; ns.UpdateState(true) end,
+        parentSection = textSection,
+        desc = ns.L.SizeDesc,
+    })
     SettingsLib:CreateDropdown(cat, {
         key = K("textAnim"), name = ns.L.Animation or "Animation", values = ANIM_MAP, order = ANIM_ORDER,
         default = DefaultFor(K("textAnim"), "NONE"),
@@ -210,43 +211,11 @@ function ns.AddStealthSettings(cat, prefix)
     local iconSection = SettingsLib:CreateExpandableSection(cat, { name = ns.L.IndicatorIcon or "Indicator Icon", expanded = false })
     SettingsLib:CreateCheckbox(cat, {
         key = K("enableIcon"), name = ns.L.Enable or "Enable",
-        default = DefaultFor(K("enableIcon"), false),
-        get = function() return G(K("enableIcon"), DefaultFor(K("enableIcon"), false)) end,
+        default = DefaultFor(K("enableIcon"), true),
+        get = function() return G(K("enableIcon"), DefaultFor(K("enableIcon"), true)) end,
         set = function(v) ns.db[K("enableIcon")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.EnableIconDesc or ns.L.EnableDesc,
-    })
-    SettingsLib:CreateCheckbox(cat, {
-        key = K("iconAnchorToText"), name = ns.L.AnchorToText or "Anchor to Text",
-        default = DefaultFor(K("iconAnchorToText"), true),
-        get = function() return G(K("iconAnchorToText"), DefaultFor(K("iconAnchorToText"), true)) end,
-        set = function(v) ns.db[K("iconAnchorToText")] = v; ns.UpdateState(true) end,
-        parentSection = iconSection,
-        desc = ns.L.AnchorToTextDesc,
-    })
-    SettingsLib:CreateDropdown(cat, {
-        key = K("iconAnchorPoint"), name = ns.L.AnchorPoint or "Anchor Point", values = ANCHOR_MAP, order = ANCHOR_ORDER,
-        default = DefaultFor(K("iconAnchorPoint"), "LEFT"),
-        get = function() return G(K("iconAnchorPoint"), DefaultFor(K("iconAnchorPoint"), "LEFT")) end,
-        set = function(v) ns.db[K("iconAnchorPoint")] = v; ns.UpdateState(true) end,
-        parentSection = iconSection,
-        desc = ns.L.AnchorPointDesc,
-    })
-    SettingsLib:CreateSlider(cat, {
-        key = K("iconSize"), name = ns.L.Size or "Size", min = 16, max = 300, step = 1,
-        default = DefaultFor(K("iconSize"), 64),
-        get = function() return G(K("iconSize"), DefaultFor(K("iconSize"), 64)) end,
-        set = function(v) ns.db[K("iconSize")] = v; ns.UpdateState(true) end,
-        parentSection = iconSection,
-        desc = ns.L.SizeDesc,
-    })
-    SettingsLib:CreateSlider(cat, {
-        key = K("iconAlpha"), name = ns.L.Opacity or "Opacity", min = 0, max = 1, step = 0.05,
-        default = DefaultFor(K("iconAlpha"), 1),
-        get = function() return G(K("iconAlpha"), DefaultFor(K("iconAlpha"), 1)) end,
-        set = function(v) ns.db[K("iconAlpha")] = v; ns.UpdateState(true) end,
-        parentSection = iconSection,
-        desc = ns.L.OpacityDesc,
     })
     SettingsLib:CreateSlider(cat, {
         key = K("iconX"), name = ns.L.OffsetX or "Offset X", min = -1200, max = 1200, step = 1,
@@ -263,6 +232,38 @@ function ns.AddStealthSettings(cat, prefix)
         set = function(v) ns.db[K("iconY")] = v; ns.UpdateState(true) end,
         parentSection = iconSection,
         desc = ns.L.OffsetYDesc,
+    })
+    SettingsLib:CreateSlider(cat, {
+        key = K("iconSize"), name = ns.L.Size or "Size", min = 16, max = 150, step = 1,
+        default = DefaultFor(K("iconSize"), 64),
+        get = function() return G(K("iconSize"), DefaultFor(K("iconSize"), 64)) end,
+        set = function(v) ns.db[K("iconSize")] = v; ns.UpdateState(true) end,
+        parentSection = iconSection,
+        desc = ns.L.SizeDesc,
+    })
+    SettingsLib:CreateSlider(cat, {
+        key = K("iconAlpha"), name = ns.L.Opacity or "Opacity", min = 0, max = 1, step = 0.05,
+        default = DefaultFor(K("iconAlpha"), 1),
+        get = function() return G(K("iconAlpha"), DefaultFor(K("iconAlpha"), 1)) end,
+        set = function(v) ns.db[K("iconAlpha")] = v; ns.UpdateState(true) end,
+        parentSection = iconSection,
+        desc = ns.L.OpacityDesc,
+    })
+    SettingsLib:CreateCheckbox(cat, {
+        key = K("iconAnchorToText"), name = ns.L.AnchorToText or "Anchor to Text",
+        default = DefaultFor(K("iconAnchorToText"), true),
+        get = function() return G(K("iconAnchorToText"), DefaultFor(K("iconAnchorToText"), true)) end,
+        set = function(v) ns.db[K("iconAnchorToText")] = v; ns.UpdateState(true) end,
+        parentSection = iconSection,
+        desc = ns.L.AnchorToTextDesc,
+    })
+    SettingsLib:CreateDropdown(cat, {
+        key = K("iconAnchorPoint"), name = ns.L.AnchorPoint or "Anchor Point", values = ANCHOR_MAP, order = ANCHOR_ORDER,
+        default = DefaultFor(K("iconAnchorPoint"), "LEFT"),
+        get = function() return G(K("iconAnchorPoint"), DefaultFor(K("iconAnchorPoint"), "LEFT")) end,
+        set = function(v) ns.db[K("iconAnchorPoint")] = v; ns.UpdateState(true) end,
+        parentSection = iconSection,
+        desc = ns.L.AnchorPointDesc,
     })
 
     local screenSection = SettingsLib:CreateExpandableSection(cat, { name = ns.L.ScreenColor or "Screen Color", expanded = false })
@@ -352,6 +353,8 @@ function ns.AddStealthSettings(cat, prefix)
     })
 end
 
+
+-- [[ Poison Settings Tab Construction ]] -------------------------------------
 function ns.AddPoisonSettings(cat, prefix, title)
     local function K(key) return prefix .. key:sub(1,1):upper() .. key:sub(2) end
     local function DefaultFor(key, fallback)
@@ -530,11 +533,33 @@ function ns.AddPoisonSettings(cat, prefix, title)
     })
 end
 
--- Settings Initialization
+StaticPopupDialogs["NIGHTVEIL_CONFIRM_FACTORY_RESET"] = {
+    text = ns.L and ns.L.FactoryResetConfirm or "|cffff0000WARNING:|r This will delete |cffff0000ALL|r your Nightveil settings and profiles. Are you sure?",
+    button1 = YES,
+    button2 = NO,
+    OnAccept = function()
+        ns.Tricks_DisableAndRemoveMacro()
+        NightveilDB = nil
+        NightveilProfiles = nil
+        ReloadUI()
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+}
+
+-- [[ UI Settings Interface Initialization ]] ---------------------------------
 function ns.InitSettings()
     local function EnsureProfilePopups()
         if StaticPopupDialogs["NIGHTVEIL_CREATE_PROFILE"] then return end
         ns._pendingExportString = nil; ns._pendingImportString = nil
+
+        StaticPopupDialogs["NIGHTVEIL_DELETE_RESTRICTED"] = {
+            text = ns.GetAddonName() .. "\n\n|cffff2020" .. (ns.L and ns.L.ErrorDeleteRestricted or "You cannot delete the Default or Character profiles.") .. "|r",
+            button1 = "OK",
+            timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3,
+        }
 
         StaticPopupDialogs["NIGHTVEIL_CREATE_PROFILE"] = {
             text = ns.L.CreateProfilePrompt or "Enter a name for the new profile:",
@@ -633,7 +658,7 @@ function ns.InitSettings()
     if ns.settingsInitialized then return end
     ns.settingsInitialized = true
 
-    ns.MainCategory = SettingsLib:CreateRootCategory("Night|cffA361E2veil|r", false)
+    ns.MainCategory = SettingsLib:CreateRootCategory(ns.GetAddonName(), false)
     local root = ns.MainCategory
 
     if not ns.IsRogue then
@@ -642,21 +667,23 @@ function ns.InitSettings()
 
     BuildChangelog(root)
 
-    local stealthCat = SettingsLib:CreateCategory(root, ns.L.Stealth or "Stealth", false)
-    SettingsLib:CreateHeader(stealthCat, { name = ns.L.Management or "Management" })
-    SettingsLib:CreateCheckbox(stealthCat, {
-        key = "stealthEnabled", name = ns.L.EnableOnStealth or "Enable on Stealth", default = ns.Defaults.stealthEnabled,
-        get = function() return G("stealthEnabled", ns.Defaults.stealthEnabled) end,
-        set = function(v) ns.db.stealthEnabled = v; ns.UpdateState(true) end,
-        desc = ns.L.EnableOnStealthDesc,
-    })
-    SettingsLib:CreateCheckbox(stealthCat, {
-        key = "stealthOnlyInstances", name = ns.L.OnlyInInstances or "Only in instances", default = ns.Defaults.stealthOnlyInstances,
-        get = function() return G("stealthOnlyInstances", ns.Defaults.stealthOnlyInstances) end,
-        set = function(v) ns.db.stealthOnlyInstances = v; ns.UpdateState(true) end,
-        desc = ns.L.OnlyInInstancesDesc,
-    })
-    ns.AddStealthSettings(stealthCat, "stealth")
+    if ns.IsRogue then
+        local stealthCat = SettingsLib:CreateCategory(root, ns.L.Stealth or "Stealth", false)
+        SettingsLib:CreateHeader(stealthCat, { name = ns.L.Management or "Management" })
+        SettingsLib:CreateCheckbox(stealthCat, {
+            key = "stealthEnabled", name = ns.L.EnableOnStealth or "Enable on Stealth", default = ns.Defaults.stealthEnabled,
+            get = function() return G("stealthEnabled", ns.Defaults.stealthEnabled) end,
+            set = function(v) ns.db.stealthEnabled = v; ns.UpdateState(true) end,
+            desc = ns.L.EnableOnStealthDesc,
+        })
+        SettingsLib:CreateCheckbox(stealthCat, {
+            key = "stealthOnlyInstances", name = ns.L.OnlyInInstances or "Only in instances", default = ns.Defaults.stealthOnlyInstances,
+            get = function() return G("stealthOnlyInstances", ns.Defaults.stealthOnlyInstances) end,
+            set = function(v) ns.db.stealthOnlyInstances = v; ns.UpdateState(true) end,
+            desc = ns.L.OnlyInInstancesDesc,
+        })
+        ns.AddStealthSettings(stealthCat, "stealth")
+    end
 
     if ns.IsRogue then
         local poisonCat = SettingsLib:CreateCategory(root, ns.L.PoisonTracker or "Poison Tracker", false)
@@ -689,11 +716,11 @@ function ns.InitSettings()
         ns.AddPoisonSettings(poisonCat, "poisonNonLethal", ns.L.NonLethalPoisons or "Non-Lethal Poison")
 
 
-        -- Shroud Category (Rogue Only)
+        -- [[ Shroud of Concealment Section ]] ---------------------------------------
         local shroudCat = SettingsLib:CreateCategory(root, ns.L.ShroudOfConcealment or "Shroud of Concealment", false)
         SettingsLib:CreateHeader(shroudCat, { name = ns.L.Management or "Management" })
         SettingsLib:CreateCheckbox(shroudCat, {
-            key = "shroudCountdown", name = ns.L.EnableShroudCountdown or (ns.L.Countdown or "Countdown in Chat"), default = ns.Defaults.shroudCountdown,
+            key = "shroudCountdown", name = ns.L.EnableShroudCountdown or "Countdown in Chat", default = ns.Defaults.shroudCountdown,
             get = function() return G("shroudCountdown", ns.Defaults.shroudCountdown) end,
             set = function(v) ns.db.shroudCountdown = v end,
             desc = ns.L.EnableShroudCountdownDesc,
@@ -759,7 +786,7 @@ function ns.InitSettings()
             desc = ns.L.TestShroudDesc,
         })
 
-        -- Tricks Tab
+        -- [[ Tricks of the Trade Section ]] -----------------------------------------
         local tricksCat = SettingsLib:CreateCategory(root, ns.L.TricksOfTheTrade or "Tricks of the Trade", false)
         
         SettingsLib:CreateHeader(tricksCat, { name = ns.L.Management or "Management" })
@@ -771,10 +798,10 @@ function ns.InitSettings()
                     return
                 end
                 if ns.db.tricksEnabled then
-                    print("Night|cffA361E2veil|r: " .. (ns.L and ns.L.TricksAlreadyEnabled or "Tricks of the Trade system is already enabled."))
+                    print(ns.GetAddonName() .. ": " .. (ns.L and ns.L.TricksAlreadyEnabled or "Tricks of the Trade system is already enabled."))
                 else
                     ns.db.tricksEnabled = true
-                    print("Night|cffA361E2veil|r: |cff00ff00" .. (ns.L and ns.L.TricksMsgEnabled or "Tricks system activated and macro synchronized.") .. "|r")
+                    print(ns.GetAddonName() .. ": |cff00ff00" .. (ns.L and ns.L.TricksMsgEnabled or "Tricks system activated and macro synchronized.") .. "|r")
                     ns.Tricks_UpdateMacro(true)
                     if ns.UpdateState then ns.UpdateState(true) end
                 end
@@ -789,9 +816,9 @@ function ns.InitSettings()
                     return
                 end
                 if not ns.db.tricksEnabled then
-                    print("Night|cffA361E2veil|r: " .. (ns.L and ns.L.TricksAlreadyDisabled or "Tricks of the Trade system is already disabled."))
+                    print(ns.GetAddonName() .. ": " .. (ns.L and ns.L.TricksAlreadyDisabled or "Tricks of the Trade system is already disabled."))
                 else
-                    print("Night|cffA361E2veil|r: |cffff2020" .. (ns.L and ns.L.TricksMsgDisabled or "Tricks system deactivated and macro removed.") .. "|r")
+                    print(ns.GetAddonName() .. ": |cffff2020" .. (ns.L and ns.L.TricksMsgDisabled or "Tricks system deactivated and macro removed.") .. "|r")
                     ns.Tricks_DisableAndRemoveMacro()
                     if ns.UpdateState then ns.UpdateState(true) end
                 end
@@ -847,14 +874,15 @@ function ns.InitSettings()
             key = "tricksDelveCompanion", name = ns.L.TricksDelveCompanion or "Delve Companion", default = ns.Defaults.tricksDelveCompanion,
             get = function() return G("tricksDelveCompanion", ns.Defaults.tricksDelveCompanion) end,
             set = function(v) ns.db.tricksDelveCompanion = v; ns.Tricks_UpdateMacro(true) end,
-            desc = ns.L.TricksDelveCompanionDesc,
+            desc = (ns.L.TricksDelveCompanionDesc or ""),
         })
 
     end
 
 
-    local profilesCat = SettingsLib:CreateCategory(root, ns.L.Profiles or "Profiles", false)
-    SettingsLib:CreateHeader(profilesCat, { name = ns.L.Management or "Management" })
+    if ns.IsRogue then
+        local profilesCat = SettingsLib:CreateCategory(root, ns.L.Profiles or "Profiles", false)
+        SettingsLib:CreateHeader(profilesCat, { name = ns.L.Management or "Management" })
     SettingsLib:CreateScrollDropdown(profilesCat, {
         key = "profileActive", name = ns.L.ActiveProfile or "Active Profile", default = ns.GetActiveProfileName(),
         get = function() return ns.GetActiveProfileName() end,
@@ -874,9 +902,18 @@ function ns.InitSettings()
             local active = ns.GetActiveProfileName()
             if active ~= "Default" and active ~= ns.GetCharacterKey() then
                 StaticPopup_Show("NIGHTVEIL_CONFIRM_DELETE_PROFILE", active, nil, active)
+            else
+                StaticPopup_Show("NIGHTVEIL_DELETE_RESTRICTED", active)
             end
         end,
         desc = ns.L.DeleteProfileDesc,
+    })
+    SettingsLib:CreateButton(profilesCat, {
+        text = "|cffff0000" .. (ns.L.FactoryResetBtn or "Factory Reset") .. "|r",
+        func = function()
+            StaticPopup_Show("NIGHTVEIL_CONFIRM_FACTORY_RESET")
+        end,
+        desc = ns.L.FactoryResetBtnDesc or "Deletes all addon data and macros, restoring to a clean installation. UI will reload.",
     })
     SettingsLib:CreateHeader(profilesCat, { name = ns.L.Share or "Share" })
     SettingsLib:CreateButton(profilesCat, {
@@ -884,5 +921,6 @@ function ns.InitSettings()
         func = function() ns._pendingExportString = ns.ExportProfileString(); StaticPopup_Show("NIGHTVEIL_EXPORT_PROFILE", ns.GetActiveProfileName()) end,
         desc = ns.L.ExportProfileDesc,
     })
-    SettingsLib:CreateButton(profilesCat, { text = ns.L.ImportProfile or "Import Profile", func = function() StaticPopup_Show("NIGHTVEIL_IMPORT_PROFILE_STRING") end, desc = ns.L.ImportProfileDesc })
+        SettingsLib:CreateButton(profilesCat, { text = ns.L.ImportProfile or "Import Profile", func = function() StaticPopup_Show("NIGHTVEIL_IMPORT_PROFILE_STRING") end, desc = ns.L.ImportProfileDesc })
+    end
 end
