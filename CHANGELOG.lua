@@ -2,6 +2,20 @@ local addonName, ns = ...
 
 ns.ReleaseNotes = {
     notes = {
+        ["v2.2.0"] = {
+            "|cff00d1ff[New]|r Added full multiclass support with shared core systems.",
+            "|cff00d1ff[New]|r Added generic |cffffd100Stealth State|r system available for all classes.",
+            "|cff00d1ff[New]|r Added Hunter support with |cffffd100Camouflage|r tracking and |cffffd100Misdirection|r automation.",
+            "|cff00d1ff[New]|r Highlights are now a standalone system with support for combat, instance, and more conditions.",
+            "|cff00d1ff[New]|r Added conditional instance exclusion system for dungeons and raids.",
+            "|cff00ff00[Improved]|r Stealth detection can now use state-based logic instead of aura-only tracking.",
+            "|cff00ff00[Improved]|r Poison tracking now has independent configuration per poison type.",
+            "|cff00ff00[Refactored]|r Core rewritten to support modular multiclass architecture.",
+            "|cffffd100[Changed]|r Highlights are no longer tied directly to Stealth and now operate independently.",
+            "|cffff2020[Removed]|r Temporarily removed animation system due to stability issues.",
+            "|cffffff00[Misc]|r Added option to delete character profiles to prevent duplication issues.",
+            "|cffffff00[Misc]|r Updated addon license with additional usage and distribution restrictions.",
+        },
         ["v2.1.2"] = {
             "|cff00d1ff[New]|r Valeera Sanguinar now supported as a Delve Companion for Tricks.",
             "|cff00d1ff[New]|r Added dedicated zhTW localization file.",
@@ -41,7 +55,7 @@ ns.ReleaseNotes = {
             "|cff00d1ff[New]|r Reintroduced |cffffd100SAY|r and |cffffd100YELL|r with instance restrictions.",
             "|cff00d1ff[New]|r Added |cffffd100Debug Mode|r with runtime diagnostics for messages.",
             "|cff00ff00[Improved]|r Redesigned Shroud message system using a new chat framework.",
-            "|cff00ff00[Improved]|r Integrated |cffffd100ChatThrottleLib|r for safe, throttled communication.",
+            "|cff00ff00[Improved]|r Integrated |cffffd100ChatThrottleLib|r for safe messages. |cff808080(by NevCairiel and Forge_User_96189362)|r",
             "|cff00ff00[Improved]|r Optimized Shroud countdown messages for precise timing.",
             "|cff00ff00[Improved]|r Reworked |cffffd100Instance Only|r option to support the new system.",
             "|cffffd100[Changed]|r Correctly detect party, raid, pets and other entities.",

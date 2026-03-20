@@ -1,4 +1,4 @@
-local MODULE_MAJOR, EXPECTED_MINOR = "LibEQOLSettingsMode-1.0", 18010001
+local MODULE_MAJOR, EXPECTED_MINOR = "LibEQOLSettingsMode-1.0", 20000001
 local ok, lib = pcall(LibStub, MODULE_MAJOR)
 if not ok or not lib then
 	return
@@ -173,24 +173,17 @@ local function colorFromAny(color)
 	end
 end
 
-local function normalizeColorReturn(r, g, b, a)
-	if type(r) == "table" then
-		return colorFromAny(r)
-	end
-	return r, g, b, a
-end
-
 function LibEQOL_ColorOverridesMixin:ResolveColor(key, useDefault)
 	local r, g, b, a
 	if useDefault then
-		r, g, b, a = normalizeColorReturn(self.getDefaultColorMixin and self.getDefaultColorMixin(key))
+		r, g, b, a = colorFromAny(self.getDefaultColorMixin and self.getDefaultColorMixin(key))
 		if not r and self.getDefaultColor then
-			r, g, b, a = normalizeColorReturn(self.getDefaultColor(key))
+			r, g, b, a = self.getDefaultColor(key)
 		end
 	else
-		r, g, b, a = normalizeColorReturn(self.getColorMixin and self.getColorMixin(key))
+		r, g, b, a = colorFromAny(self.getColorMixin and self.getColorMixin(key))
 		if not r and self.getColor then
-			r, g, b, a = normalizeColorReturn(self.getColor(key))
+			r, g, b, a = self.getColor(key)
 		end
 	end
 	return r or 1, g or 1, b or 1, a

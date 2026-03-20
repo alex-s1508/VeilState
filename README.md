@@ -1,10 +1,22 @@
 <img src="https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/banners/banner3.png" width="1920" alt="Nightveil Header">
 
-**Nightveil** is a lightweight and modular utility addon designed exclusively for **Rogues**, focused on delivering clear, actionable information without cluttering your UI.
+**Nightveil** is a lightweight and modular **multiclass utility addon** focused on providing clear and actionable information without cluttering your UI.
 
-It enhances core Rogue mechanics like **Stealth**, **Poisons**, **Shroud of Concealment**, and **Tricks of the Trade** through highly customizable visual and automation systems.
+Originally created to solve personal needs for the Rogue class, Nightveil has evolved into a multiclass addon with shared systems and class-specific modules.
 
-_Type `/veil` to open settings or `/veil help` for commands._
+### Current Class Support
+
+* **Rogue**
+  * **Stealth** tracking
+  * **Poison** tracking system  
+  * **Shroud of Concealment** communication system  
+  * **Tricks of the Trade** automation system  
+* **Hunter**
+  * **Camouflage** tracking
+  * **Misdirection** automation system  
+* **All Classes**
+  * **Stealth State** system
+  * **Highlight system** with condition support
 
 ***
 
@@ -12,72 +24,25 @@ _Type `/veil` to open settings or `/veil help` for commands._
 
 * **Minimal & Lightweight:** Built for performance — no unnecessary overhead.
 * **Fully Modular:** Enable only the systems you need.
-* **Highly Customizable:** Control visuals, animations, positioning, and behavior.
-* **Smart Context Filters:** Show elements only in combat and/or instances.
-* **Native Localization:** Supports all official WoW languages.
+* **Multiclass Structure:** Shared core with expandable class modules.
+* **Highly Customizable:** Configure visuals, positioning, and behavior.
+* **Context Filters:** Control visibility based on player state.
+* **Instance Exclusion:** Disable systems in specific instance types.
+* **Profile Management:** Create, reset, and manage profiles safely.
+* **Localization:** Supports all official WoW languages.
 
 ***
 
-<h2 style="font-size: 20px;">
-  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_stealth.jpg" width="29" style="vertical-align: middle;"> Stealth
-</h2>
+## How It Works
 
-A precise and configurable **Stealth tracking system**, built around aura-based detection.
+Nightveil is built on a small set of reusable components that work together:
 
-* Tracks **Stealth** and **Vanish** states accurately  
-* Floating text and icon indicators  
-* Optional character highlight while stealthed  
-* Fully customizable visuals and positioning  
+* **State & Condition Handling:** Detects player states using aura and logic-based checks, allowing support for multiple sources of the same effect.
+* **Tracking & Alerts:** Monitors buffs, states, and conditions with independent configuration, custom text/icons, and optional alerts.
+* **Visual Output:** Displays information through icons, text, and highlights, with full control over positioning and behavior.
+* **Automation:** Handles dynamic macros and targeting logic with priority rules (mouseover, focus, etc.).
 
-<img src="https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/screenshots/stealthedHighlight.png" width="1920" alt="StealthScreenshot">
-
-***
-
-<h2 style="font-size: 20px;">
-  <img src="https://wow.zamimg.com/images/wow/icons/large/trade_brewpoison.jpg" width="29" style="vertical-align: middle;"> Poison Tracker
-</h2>
-
-A complete monitoring system for **Lethal** and **Non-Lethal** poisons.
-
-* Independent tracking for both poison types  
-* Customizable warning text and icons  
-* Optional sound alerts  
-* Combat and instance visibility filters  
-
-<img src="https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/screenshots/poisons.png" width="1920" alt="PoisonScreenshot">
-
-***
-
-<h2 style="font-size: 20px;">
-  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_rogue_shroudofconcealment.jpg" width="29" style="vertical-align: middle;"> Shroud of Concealment
-</h2>
-
-A smart communication system to coordinate **Shroud usage** with your group.
-
-* Automatic start and end alerts  
-* Custom countdown messages using `%time`  
-* Multiple chat channel support  
-
-> **Example:** Setting the text to `Shroud: %time remaining!` will automatically post:
-
-<img src="https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/screenshots/shroudCountdown.gif" width="1920" alt="ShroudScreenshot">
-
-***
-
-<h2 style="font-size: 20px;">
-  <img src="https://wow.zamimg.com/images/wow/icons/large/ability_rogue_tricksofthetrade.jpg" width="29" style="vertical-align: middle;"> Tricks of the Trade
-</h2>
-
-An advanced targeting system that automates **Tricks** without breaking your flow.
-
-* **Dynamic Macro:** Always synced with your settings  
-* **Flexible Targeting:** Normal, Tank, Target of Target, or Custom  
-* **Priority System:** Mouseover and Focus overrides  
-* **Delve Companion Support:** Includes Brann and Valeera  
-* **Quick Commands:**
-  * `/veil tricks`
-  * `/veil tricks normal | tank | tt | custom`
-  * `/veil tricks set <name>`
+_Type `/veil` to open settings or `/veil help` for commands._
 
 ***
 
@@ -88,6 +53,15 @@ Feel free to use the comment section to report bugs or issues you encounter. You
 `Note: Some older bug report comments were removed to keep the page cleaner and make new issues easier to find. All reports and fixes are credited in the changelogs, and anyone who reports a bug that gets fixed will also be credited there.`
 
 Thank you for the feedback and support. I hope Nightveil continues to be useful for anyone who needs it. :)
+
+***
+
+## Credits
+
+This addon uses the following libraries:
+
+* **[LibEQOL](https://www.curseforge.com/wow/addons/libeqol)** by [R41Z0R](https://www.curseforge.com/members/r41z0r/projects)  
+* **[ChatThrottleLib](https://www.curseforge.com/wow/addons/chatthrottlelib)** by [NevCairiel](https://www.curseforge.com/members/nevcairiel/projects) and [Forge_User_96189362](https://www.curseforge.com/members/forge_user_96189362/projects)
 
 ***
 

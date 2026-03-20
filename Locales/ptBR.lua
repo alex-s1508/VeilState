@@ -3,25 +3,23 @@ local locale = GetLocale()
 if locale ~= "ptBR" then return end
 
 ns.L = {
+    -- ========================================================================
     -- [[ SYSTEM / GENERAL UI ]] ----------------------------------------------
+    -- ========================================================================
     Enable              = "Ativar",
     EnableDesc          = "Ativa ou desativa este recurso.",
     Management          = "Gerenciamento",
     ReleaseNotes        = "Notas da Versão",
-    OnlyInCombat        = "Apenas em combate",
-    OnlyInCombatDesc    = "Apenas mostra avisos enquanto você está em combate.",
-    OnlyInInstances     = "Apenas em instâncias",
-    OnlyInInstancesDesc = "Apenas mostra avisos dentro de instâncias.",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Elements & Styles ]] ------------------------------------
+    -- ========================================================================
     Color               = "Cor",
     ColorDesc           = "Define a cor usada por este elemento.",
     Size                = "Tamanho",
     SizeDesc            = "Altera o tamanho do elemento.",
     Opacity             = "Opacidade",
     OpacityDesc         = "Altera a transparência.",
-    OffsetX             = "Deslocamento X",
-    OffsetXDesc         = "Move o elemento horizontalmente.",
-    OffsetY             = "Deslocamento Y",
-    OffsetYDesc         = "Move o elemento verticalmente.",
     Layer               = "Camada",
     LayerDesc           = "Camada de desenho (mais alta aparece acima).",
     LayerBackground     = "Fundo",
@@ -30,18 +28,16 @@ ns.L = {
     LayerHigh           = "Alta",
     LayerDialog         = "Diálogo",
     LayerFullscreen     = "Tela Cheia",
-    Animation           = "Animação",
-    AnimationDesc       = "Animação usada ao mostrar o texto.",
-    AnimationSpeed      = "Velocidade",
-    AnimationSpeedDesc  = "Controla quão rápido a animação toca.",
-    AnimNone            = "Nenhuma",
-    AnimBlink           = "Piscar",
-    AnimFade            = "Desvanecer",
-    AnimShake           = "Tremer",
-    IndicatorIcon       = "Ícone Indicador",
-    EnableIconDesc      = "Mostra um indicador de ícone.",
-    IconTexture         = "Textura do Ícone",
-    IconTextureDesc     = "Caminho da textura do ícone personalizado.",
+    Style               = "Estilo",
+    StyleDesc           = "Seleciona o estilo de destaque.",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Positioning & Anchors ]] --------------------------------
+    -- ========================================================================
+    OffsetX             = "Deslocamento X",
+    OffsetXDesc         = "Move o elemento horizontalmente.",
+    OffsetY             = "Deslocamento Y",
+    OffsetYDesc         = "Move o elemento verticalmente.",
     AnchorToText        = "Fixar no Texto",
     AnchorToTextDesc    = "Fixa o ícone na posição do texto.",
     AnchorPoint         = "Ponto de Fixação",
@@ -55,51 +51,104 @@ ns.L = {
     AnchorBottomLeft    = "Inferior Esquerdo",
     AnchorBottom        = "Inferior",
     AnchorBottomRight   = "Inferior Direito",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Icons & Multimedia ]] -----------------------------------
+    -- ========================================================================
+    IndicatorIcon       = "Ícone Indicador",
+    EnableIconDesc      = "Mostra um indicador de ícone.",
+    IconTexture         = "Textura do Ícone",
+    IconTextureDesc     = "Caminho da textura do ícone personalizado.",
     Sound               = "Som",
     SoundDesc           = "Toca um alerta sonoro quando ativado.",
     SoundKitId          = "ID do SoundKit",
     SoundKitIdDesc      = "ID do SoundKit para tocar (número).",
     TestSound           = "Testar Som",
     TestSoundDesc       = "Toca o som selecionado agora.",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Message Customization ]] --------------------------------
+    -- ========================================================================
     CustomText          = "Texto Personalizado",
     CustomTextDesc      = "Texto da mensagem personalizada para exibir.",
-    Style               = "Estilo",
-    StyleDesc           = "Seleciona o estilo de destaque.",
-    Highlight           = "Destaque",
-    HighlightDesc       = "Destaca seu personagem na tela.",
-    HighlightCircle          = "Círculo",
-    HighlightOutline         = "Contorno",
-    HighlightIcon            = "Ícone",
-    HighlightCircleOutline   = "Círculo + Contorno",
-    HighlightCircleIcon      = "Círculo + Ícone",
-    HighlightOutlineIcon     = "Contorno + Ícone",
-    HighlightCircleOutlineIcon = "Círculo + Contorno + Ícone",
+    FloatingText        = "Texto Flutuante",
+    Messages            = "Mensagens",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Logic Filters ]] ----------------------------------------
+    -- ========================================================================
+    OnlyInInstances     = "Apenas em instâncias",
+    OnlyInInstancesDesc = "Apenas ativa dentro de instâncias (Masmorras, Raides, Cenários).",
+    OnlyInCombat        = "Apenas em combate",
+    OnlyInCombatDesc    = "Apenas mostra avisos enquanto você está em combate.",
+    DisableInDungeons   = "Desativar em Masmorras",
+    DisableInDungeonsDesc = "Não se aplica quando estiver dentro de uma instância de Masmorra.",
+    DisableInRaids      = "Desativar em Raides",
+    DisableInRaidsDesc  = "Não se aplica quando estiver dentro de uma instância de Raide.",
+    InstanceFilters     = "Filtros de Instância",
+    InstanceFiltersDesc = "Configure onde este recurso deve ser desativado.",
+
+    -- ========================================================================
+    -- [[ HIGHLIGHTS SYSTEM ]] ------------------------------------------------
+    -- ========================================================================
+    Highlight              = "Destaque",
+    HighlightDesc          = "Destaca seu personagem na tela.",
+    Highlights             = "Destaques",
+    HighlightGlobalDesc    = "|cffffa500Configura o destaque do personagem dinamicamente durante os eventos do jogo.|r",
+    HighlightOptNone              = "Nenhum",
+    HighlightOptCircle            = "Círculo",
+    HighlightOptOutline           = "Contorno",
+    HighlightOptIcon              = "Ícone",
+    HighlightOptCircleOutline     = "Círculo e contorno",
+    HighlightOptCircleIcon        = "Círculo e ícone",
+    HighlightOptOutlineIcon       = "Contorno e ícone",
+    HighlightOptCircleOutlineIcon = "Círculo, contorno e ícone",
+    Highlights             = "Destaques",
+    HighlightGlobalDesc    = "|cffffa500Configura o destaque do personagem dinamicamente durante os eventos do jogo.|r",
+    HighlightCombat        = "Em Combate",
+    HighlightCombatDesc    = "Destaque usado enquanto estiver em combate.",
+    HighlightInstance      = "Em Instância",
+    HighlightInstanceDesc  = "Destaque usado enquanto estiver em Masmorras, Raides ou Cenários.",
+    HighlightHidden        = "Em Estado de Furtividade",
+    HighlightHiddenDesc    = "Destaque usado enquanto estiver em um estado de Furtividade.",
+    HighlightStealth       = "Em Furtividade",
+    HighlightStealthDesc   = "Destaque usado quando você está em Furtividade.",
+    HighlightShroud        = "Em Manto da Ocultação",
+    HighlightShroudDesc    = "Destaque usado enquanto o Manto da Ocultação estiver ativo.",
+    HighlightCamouflage    = "Em Camuflagem",
+    HighlightCamouflageDesc= "Destaque usado enquanto estiver em Camuflagem.",
+    ClassExclusive         = "Exclusivo de Classe",
+    HighlightClassDesc     = "Estas opções usam as configurações específicas da sua classe.",
     ScreenColor         = "Cor da Tela",
     ScreenColorDesc     = "Colore a tela enquanto está ativo.",
     Vignette            = "Vinheta",
     VignetteDesc        = "Adiciona um efeito de vinheta ao redor da tela.",
     Thickness           = "Espessura",
     ThicknessDesc       = "Controla a espessura da vinheta.",
-    Mouseover           = "Mouseover",
-    Focus               = "Foco",
-    Tank                = "Tank",
-    TargetTarget        = "Alvo do Alvo",
-    MuteChanges         = "Silenciar Mudanças",
-    Next                = "Próximo",
-    Import              = "Importar",
-    FloatingText        = "Texto Flutuante",
-    Messages            = "Mensagens",
-    Share               = "Compartilhar",
-    Customization       = "Personalização",
 
-    -- [[ ROGUE — Stealth Module ]] -------------------------------------------
+    -- ========================================================================
+    -- [[ SHARED MODULES ]] ---------------------------------------------------
+    -- ========================================================================
+    -- [[ Stealth State Module ]] ---------------------------------------------
+    StealthStateName        = "Estado de Furtividade",
+    StealthStateDesc        = "Configure os visuais para quando você estiver em Estado de Furtividade.",
+    StealthStateActiveText  = "ESTADO FURTIVO",
+    EnableOnStealthState    = "Ativar no Estado de Furtividade",
+    EnableOnStealthStateDesc = "Mostra os visuais durante qualquer Estado de Furtividade (usa detecção de estado do WoW).",
+
+    -- ========================================================================
+    -- [[ CLASS MODULES — ROGUE ]] --------------------------------------------
+    -- ========================================================================
+    -- [[ Stealth Module ]] ---------------------------------------------------
     Stealth             = "Furtividade",
     EnableOnStealth     = "Ativar com Furtividade",
     EnableOnStealthDesc = "Mostra os visuais enquanto Furtividade ou Sumir estão ativos.",
+    StealthUseState     = "Usar Detecção de Estado",
+    StealthUseStateDesc = "Usa o estado global de furtividade em vez de auras específicas. 'Aura' é mais preciso para habilidades de classe, enquanto 'Estado' ativa em qualquer efeito de furtividade.",
     DefaultMessage      = "FURTIVO",
     StealthActiveText   = "FURTIVO",
 
-    -- [[ ROGUE — Poison Tracker ]] -------------------------------------------
+    -- [[ Poison Tracker ]] ---------------------------------------------------
     PoisonTracker          = "Monitor de Venenos",
     LethalPoisons          = "Veneno Letal",
     LethalPoisonsDesc      = "Mostra avisos quando falta o veneno letal.",
@@ -108,37 +157,45 @@ ns.L = {
     LethalPoisonMissing    = "VENENO LETAL FALTANDO",
     NonLethalPoisonMissing = "VENENO NÃO LETAL FALTANDO",
 
-    -- [[ ROGUE — Tricks of the Trade ]] --------------------------------------
+    -- ========================================================================
+    -- [[ MACRO SYSTEM (SHARED) ]] --------------------------------------------
+    -- ========================================================================
+    MacroTargetHeader       = "Alvo",
+    MacroTargetSelector     = "Seletor de Alvo",
+    MacroTargetSelectorDesc = "Define a lógica principal para seleção automática de alvos.",
+    MacroAutoUpdateWarning  = "|cffffa500O Nightveil atualiza este macro automaticamente.|r",
+    MacroMouseoverDesc      = "Ativa o direcionamento via mouseover.\n\nNota: Isso tem prioridade sobre todos os outros métodos, exceto o Companheiro da Imersão.",
+    MacroFocusDesc          = "Ativa o direcionamento automatizado via foco.\n\nNota: Isso tem prioridade sobre o seletor de alvo, mas é ignorado pelo mouseover ou pelo Companheiro da Imersão.",
+    MacroMuteDesc           = "Oculta notificações no chat quando o macro troca de alvo.",
+    MacroDelveCompanion     = "Companheiro de Imersão",
+    MacroDelveCompanionDesc = "Alveja automaticamente Brann Barbabronze ou Valeera Sanguinar dentro de Imersões.\n\nNota: Isso tem prioridade exclusiva dentro de Imersões.",
+    MacroCustomName         = "Alvo Personalizado",
+    MacroCustomNameDesc     = "Digite o nome exato do jogador.",
+    MacroCustomSet          = "Alvo personalizado definido: %s",
+    MacroGroupMembers       = "Membros do grupo:",
+    MacroInvalidIndex       = "Índice de grupo inválido.",
+    MacroNoSelf             = "Você não pode ser seu próprio alvo.",
+    MacroBtnEnable          = "Ativar e Sincronizar Macro",
+    MacroBtnDisable         = "Desativar e Remover Macro",
+    MacroBtnDisableDesc     = "Desativa o direcionamento automatizado e remove completamente o macro.",
+    Mouseover               = "Mouseover",
+    Focus                   = "Foco",
+    Tank                    = "Tank",
+    TargetTarget            = "Alvo do Alvo",
+
+    -- [[ Tricks of the Trade ]] ----------------------------------------------
     TricksOfTheTrade         = "Truques do Ofício",
-    TricksTargetHeader       = "Alvo",
-    TricksTargetSelector     = "Seletor de Alvo",
-    TricksTargetSelectorDesc = "Define a lógica principal para seleção automática de alvos.",
-    TricksMacroAutoUpdate    = "|cffffa500O Nightveil atualiza este macro automaticamente.|r",
     TricksEnabledDesc        = "Ativa o direcionamento automatizado para Truques do Ofício usando um macro.",
-    TricksMouseoverDesc      = "Ativa o direcionamento via mouseover.\n\nNota: Isso tem prioridade sobre todos os outros métodos, exceto o Companheiro da Imersão.",
-    TricksFocusDesc          = "Ativa o direcionamento automatizado via foco.\n\nNota: Isso tem prioridade sobre o seletor de alvo, mas é ignorado pelo mouseover ou pelo Companheiro da Imersão.",
-    TricksMuteDesc           = "Oculta notificações no chat quando o macro troca de alvo.",
-    TricksDelveCompanion     = "Companheiro de Imersão",
-    TricksDelveCompanionDesc = "Alveja automaticamente Brann Barbabronze ou Valeera Sanguinar dentro de Imersões.\n\nNota: Isso tem prioridade exclusiva dentro de Imersões.",
     TricksTargetLog          = "Alvo de Truques",
     TricksNormal             = "Normal",
     TricksCustom             = "Personalizado",
-    TricksCustomName         = "Alvo Personalizado",
-    TricksCustomNameDesc     = "Digite o nome exato do jogador.",
-    TricksCustomSet          = "Alvo personalizado definido: %s",
-    TricksGroupMembers       = "Membros do grupo:",
-    TricksInvalidIndex       = "Índice de grupo inválido.",
-    TricksNoSelf             = "Você não pode ser seu próprio alvo.",
-    TricksBtnEnable          = "Ativar e Sincronizar Macro",
-    TricksBtnDisable         = "Desativar e Remover Macro",
-    TricksBtnDisableDesc     = "Desativa o direcionamento automatizado e remove completamente o macro.",
     TricksMsgEnabled         = "Sistema de Truques ativado e macro sincronizado.",
     TricksMsgDisabled        = "Sistema de Truques desativado e macro removido.",
     TricksAlreadyEnabled     = "O sistema de Truques do Ofício já está ativado.",
     TricksAlreadyDisabled    = "O sistema de Truques do Ofício já está desativado.",
     TricksLogicSet           = "Modo de alvo definido: %s",
 
-    -- [[ ROGUE — Shroud of Concealment ]] ------------------------------------
+    -- [[ Shroud of Concealment ]] --------------------------------------------
     ShroudOfConcealment      = "Mortalha da Ocultação",
     EnableShroudCountdown    = "Ativar contagem no chat",
     EnableShroudCountdownDesc = "Envia mensagens de contagem regressiva da Mortalha para o chat.",
@@ -159,13 +216,39 @@ ns.L = {
     TimeRemainingHint        = "%time = tempo restante",
     TestShroud               = "Testar Mortalha",
     TestShroudDesc           = "Simula uma contagem regressiva local de 5 segundos.\n\nNota: As mensagens aparecem apenas para você.",
+    ShroudAlreadyActive      = "A contagem regressiva da Mortalha já está ativa.",
+    ShroudDisabled           = "A contagem da Mortalha está desativada nas configurações.",
     ChannelSay               = "Dizer",
     ChannelParty             = "Grupo",
     ChannelRaid              = "Raid",
     ChannelInstance          = "Instância",
     ChannelYell              = "Gritar",
 
-    -- [[ Profile Management ]] -----------------------------------------------
+    -- ========================================================================
+    -- [[ CLASS MODULES — HUNTER ]] --------------------------------------------
+    -- ========================================================================
+    -- [[ Camouflage Module ]] -------------------------------------------------
+    Camouflage              = "Camuflagem",
+    EnableOnCamouflage      = "Ativar na Camuflagem",
+    EnableOnCamouflageDesc  = "Mostra avisos visuais enquanto a Camuflagem está ativa.",
+    CamouflageActiveText    = "CAMUFLADO",
+
+    -- [[ Misdirection ]] ------------------------------------------------------
+    Misdirection                = "Redirecionar",
+    MisdirEnabledDesc           = "Ativa o direcionamento automatizado para Redirecionar usando um macro.",
+    MisdirTargetLog             = "Alvo do Redirecionar",
+    MisdirectionNotLearned      = "Você ainda não aprendeu Redirecionar.",
+    MisdirectionMsgEnabled      = "Sistema de Redirecionar ativado e macro sincronizado.",
+    MisdirectionMsgDisabled     = "Sistema de Redirecionar desativado e macro removido.",
+    MisdirectionAlreadyEnabled  = "Sistema de Redirecionar já está ativado.",
+    MisdirectionAlreadyDisabled = "Sistema de Redirecionar já está desativado.",
+    MisdirLogicSet              = "Modo de alvo definido: %s",
+    MisdirNotLearned            = "Você ainda não aprendeu Redirecionar.",
+    Pet                         = "Mascote",
+
+    -- ========================================================================
+    -- [[ PROFILE MANAGEMENT ]] -----------------------------------------------
+    -- ========================================================================
     Profiles              = "Perfis",
     ActiveProfile         = "Perfil Ativo",
     ActiveProfileDesc     = "Selecione qual perfil está ativo.",
@@ -188,27 +271,47 @@ ns.L = {
     ExportProfilePrompt   = "Copie esta string de exportação (Ctrl+C):\n\nPerfil: |cff00ff00%s|r",
     ImportProfilePrompt   = "Cole a string de exportação do perfil abaixo:",
     ImportProfileNamePrompt = "Digite um nome para o perfil importado:",
-    ErrorDeleteRestricted = "Você não pode excluir os perfis Padrão ou do Personagem.",
+    ErrorDeleteRestricted = "Você não pode excluir o perfil Padrão.",
+    DefaultProfileLabel   = "Padrão",
+    Import                = "Importar",
+    Share                 = "Compartilhar",
 
-    -- [[ SYSTEM — Messages & Warnings ]] -------------------------------------
-    WarningNotRogue         = "Você não é um Ladino. Recursos específicos de classe estão desativados.",
+    -- ========================================================================
+    -- [[ SYSTEM MESSAGES & WARNINGS ]] ---------------------------------------
+    -- ========================================================================
+    WarningNotRogue         = "Você não é um Ladino. Este comando é exclusivo de Ladinos.",
     TricksNotLearned        = "Você ainda não aprendeu Truques do Ofício.",
     HardResetWarning        = "Versão antiga ou incompatível detectada.\n\nAs configurações serão reiniciadas para garantir a estabilidade.",
     WarningOutdatedConfig   = "Configuração mais recente detectada!\n\nO perfil que você está usando foi criado em uma versão mais recente do Nightveil.",
     WelcomeMessage          = "%s |cffffd100v%s|r carregado. Digite |cffffd100/veil|r para abrir as configurações.",
     UpdateMessage           = "%s atualizado para |cffffd100v%s|r! Digite |cffffd100/veil|r para ver as novidades.",
-    ErrorNoValidChannel     = "Nenhum canal de chat válido disponível.",
-    ErrorBlizzardAntiSpam   = "Restrições de anti-spam da Blizzard impedem o uso do canal %s fora de instâncias.",
-    ErrorNotInGroup         = "Você não está em um grupo. Canal %s indisponível.",
-    ErrorNotInRaid          = "Você não está em uma raid. Canal %s indisponível.",
-    ErrorFollowersDungeonGroup = "Você está sozinho ou em um grupo inválido. Canal %s indisponível.",
-    ErrorShroudOnlyInstances = "Mensagens de Mortalha só funcionam dentro de instâncias.",
-    ErrorShroudInstanceOnly  = "Você não está dentro de uma instância. Canal %s indisponível.",
+    ErrorNoValidChannel     = "|cffff2020Nenhum canal de chat válido disponível.|r",
+    ErrorBlizzardAntiSpam   = "|cffff2020Restrições de anti-spam da Blizzard impedem o uso do canal|r |cffffcc00%s|r |cffff2020fora de instâncias.|r",
+    ErrorNotInGroup         = "|cffff2020Você não está em um grupo. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r",
+    ErrorNotInRaid          = "|cffff2020Você não está em uma raid. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r",
+    ErrorFollowersDungeonGroup = "|cffff2020Você está sozinho ou em um grupo inválido. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r",
+    ErrorShroudOnlyInstances = "|cffff2020Mensagens de Mortalha só funcionam dentro de instâncias.|r",
+    ErrorShroudInstanceOnly  = "|cffff2020Você não está dentro de uma instância. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r",
+    CombatBlocked         = "Não é possível abrir as configurações durante o combate.",
+    MacroLimitReached     = "Limite de macros atingido.",
+    MuteChanges           = "Silenciar Mudanças",
+    Next                  = "Próximo",
 
-    -- [[ SYSTEM — Commands Help ]] -------------------------------------------
+    -- ========================================================================
+    -- [[ COMMANDS HELP ]] ----------------------------------------------------
+    -- ========================================================================
     HelpSettings          = "Configurações",
     HelpTricks            = "Alvo de Truques",
     HelpUTricks           = "Forçar atualização do macro",
+    HelpMisdir            = "Alvo do Redirecionar",
+    HelpUMisdir           = "Forçar atualização do macro",
+    HelpMisdirPet         = "Modo Mascote",
+    HelpMisdirNormal      = "Modo Normal",
+    HelpMisdirTank        = "Modo Tank",
+    HelpMisdirTT          = "Modo Alvo do Alvo",
+    HelpMisdirCustom      = "Modo Personalizado",
+    HelpMisdirList        = "Listar e definir por índice",
+    HelpMisdirSet         = "Definir por nome",
     HelpInfo              = "Informações de diagnóstico",
     HelpShroudTest        = "Testar contagem da mortalha",
     HelpDebugToggle       = "Alternar modo debug",
@@ -220,18 +323,23 @@ ns.L = {
     HelpTricksCustom      = "Modo Personalizado",
     ErrorUnknownCmd       = "Comando desconhecido: |cffffd100%s|r. Use |cffffd100/veil help|r.",
     ErrorUnknownSubCmd    = "Sub-comando desconhecido: |cffffd100%s|r. Use |cffffd100/veil help|r.",
-    CombatBlocked         = "Não é possível abrir as configurações durante o combate.",
 
-    -- [[ SYSTEM — Debug Info ]] ----------------------------------------------
+    -- ========================================================================
+    -- [[ DEBUG INFO ]] -------------------------------------------------------
+    -- ========================================================================
     DebugModeActivated   = "Modo Debug ATIVADO",
     DebugModeDeactivated = "Modo Debug DESATIVADO",
     DebugModeRequired    = "Este comando requer Modo Debug. Digite |cffffd100/veil debug|r para ativar.",
-    DebugHeader          = "Diagnósticos %s:",
+    DebugCommands        = "[Comandos de Debug]",
+    DebugHeader          = "%s Diagnósticos:",
     DebugCombat          = " - Combate: %s",
     DebugStealth         = " - Furtividade/Sumir: %s",
     DebugInstance        = " - Instância: %s (Tipo: %s)",
     DebugGroup           = " - Grupo: %s (Raid: %s, Total: %d)",
     DebugComposition     = " - Composição: %d Jogadores, %d Pets, %d Outros",
+    DebugTricksKnown     = " - Truques Conhecidos: %s",
+    DebugTricksTarget    = " - Truques Alvo: %s (%s)",
+    DebugTricksMacro     = " - Truques Macro: %s",
     DebugInvalidGroup    = " - Grupo Inválido: %s",
     DebugPlayer          = "JOGADOR",
     DebugPet             = "PET",
@@ -250,7 +358,9 @@ ns.L = {
     DebugMacroEdited     = "Conteúdo do macro modificado e sincronizado.",
     DebugCombatLock      = "Esta ação não pode ser usada em combate.",
 
-    -- [[ NPC / Game Terms ]] -------------------------------------------------
+    -- ========================================================================
+    -- [[ NPC / GAME TERMS ]] -------------------------------------------------
+    -- ========================================================================
     BrannBronzebeard = "Brann Barbabronze",
     ValeeraSanguinar = "Valeera Sanguinar",
 }

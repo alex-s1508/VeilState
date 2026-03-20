@@ -1,11 +1,11 @@
 ## Interface: 120001
 ## Title: Night|cffBE89E9v|cffBB86E7e|cffB883E5i|cffB580E3l|r
-## Version: 2.1.2
+## Version: 2.2.0
 ## Author: iLoviP4g
 ## X-Website: https://www.curseforge.com/wow/addons/nightveil
-## X-Category: Combat, Rogue, HUDs
+## X-Category: Combat, HUDs, Utility, Rogue, Hunter
 ## X-Localizations: enUS, ptBR, esES, frFR, deDE, itIT, koKR, ruRU, zhCN
-## Notes: Rogue utilities addon.
+## Notes: Modular multiclass utility addon with stealth tracking, highlights, and smart automation systems.
 ## AddonCompartmentFunc: Nightveil_OnAddonCompartmentClick
 ## Category: Combat
 ## Category-deDE: Kampf
@@ -38,10 +38,37 @@ Locales\ruRU.lua
 Locales\zhCN.lua
 Locales\zhTW.lua
 
-Defaults.lua
+# Core Engine
+Core\Constants.lua
+Core\Defaults.lua
+Core\Utils.lua
+Core\Main.lua
 CHANGELOG.lua
 
-Interface\Frames.lua
-Interface\Settings.lua
+# Shared Modules
+Modules\Shared\Auras.lua
+Modules\Shared\Chat.lua
+Modules\Shared\Group.lua
+Modules\Shared\Highlight.lua
+Modules\Shared\Profile.lua
+Modules\Shared\StealthState.lua
 
-Nightveil.lua
+# Class Specific Modules
+Modules\Rogue\Stealth.lua
+Modules\Rogue\Poisons.lua
+Modules\Rogue\Shroud.lua
+Modules\Rogue\Tricks.lua
+Modules\Hunter\Camouflage.lua
+Modules\Hunter\Misdirection.lua
+
+# UI & Interface
+Interface\Frames.lua
+Interface\Settings\Main.lua
+Interface\Settings\Shared\Highlight.lua
+Interface\Settings\Shared\StealthState.lua
+Interface\Settings\Classes\Rogue.lua
+Interface\Settings\Classes\Hunter.lua
+
+# Logic Handlers
+Core\Commands.lua
+Core\Events.lua

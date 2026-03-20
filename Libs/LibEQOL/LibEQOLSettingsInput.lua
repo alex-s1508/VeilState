@@ -1,4 +1,4 @@
-local MODULE_MAJOR, EXPECTED_MINOR = "LibEQOLSettingsMode-1.0", 18010001
+local MODULE_MAJOR, EXPECTED_MINOR = "LibEQOLSettingsMode-1.0", 20000001
 local _, lib = pcall(LibStub, MODULE_MAJOR)
 if not lib then
 	return
@@ -241,15 +241,6 @@ function LibEQOL_InputControlMixin:Commit(box)
 		self:Revert(box)
 		return
 	end
-
-	local ok, setting = pcall(function()
-		return self:GetSetting()
-	end)
-	if not ok or not setting or not setting.SetValue then
-		self:Revert(box)
-		return
-	end
-
 	local text = box:GetText() or ""
 	local value = text
 	if self.numeric then
@@ -268,9 +259,7 @@ function LibEQOL_InputControlMixin:Commit(box)
 
 	if value ~= self.currentValue then
 		self.currentValue = value
-		pcall(function()
-			setting:SetValue(value)
-		end)
+		self:GetSetting():SetValue(value)
 	end
 
 	self:SetValue(self.currentValue)

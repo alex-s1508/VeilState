@@ -3,25 +3,23 @@ local locale = GetLocale()
 if locale ~= "deDE" then return end
 
 ns.L = {
+    -- ========================================================================
     -- [[ SYSTEM / GENERAL UI ]] ----------------------------------------------
+    -- ========================================================================
     Enable              = "Aktivieren",
     EnableDesc          = "Aktiviert oder deaktiviert diese Funktion.",
     Management          = "Verwaltung",
     ReleaseNotes        = "Versionshinweise",
-    OnlyInCombat        = "Nur im Kampf",
-    OnlyInCombatDesc    = "Zeigt Warnungen nur während des Kampfes an.",
-    OnlyInInstances     = "Nur in Instanzen",
-    OnlyInInstancesDesc = "Zeigt Warnungen nur innerhalb von Instanzen an.",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Elements & Styles ]] ------------------------------------
+    -- ========================================================================
     Color               = "Farbe",
     ColorDesc           = "Legt die Farbe für dieses Element fest.",
     Size                = "Größe",
     SizeDesc            = "Ändert die Größe des Elements.",
     Opacity             = "Deckkraft",
     OpacityDesc         = "Ändert die Transparenz.",
-    OffsetX             = "Versatz X",
-    OffsetXDesc         = "Verschiebt das Element horizontal.",
-    OffsetY             = "Versatz Y",
-    OffsetYDesc         = "Verschiebt das Element vertikal.",
     Layer               = "Ebene",
     LayerDesc           = "Zeichenebene (höhere erscheinen weiter vorne).",
     LayerBackground     = "Hintergrund",
@@ -30,18 +28,16 @@ ns.L = {
     LayerHigh           = "Hoch",
     LayerDialog         = "Dialog",
     LayerFullscreen     = "Vollbild",
-    Animation           = "Animation",
-    AnimationDesc       = "Animation bei Textanzeige.",
-    AnimationSpeed      = "Geschwindigkeit",
-    AnimationSpeedDesc  = "Steuert das Tempo der Animation.",
-    AnimNone            = "Keine",
-    AnimBlink           = "Blinken",
-    AnimFade            = "Verblassen",
-    AnimShake           = "Schütteln",
-    IndicatorIcon       = "Indikatorsymbol",
-    EnableIconDesc      = "Zeigt eine Symbolanzeige an.",
-    IconTexture         = "Symboltextur",
-    IconTextureDesc     = "Pfad zur eigenen Symboltextur.",
+    Style               = "Stil",
+    StyleDesc           = "Wählt den Hervorhebungsstil.",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Positioning & Anchors ]] --------------------------------
+    -- ========================================================================
+    OffsetX             = "Versatz X",
+    OffsetXDesc         = "Verschiebt das Element horizontal.",
+    OffsetY             = "Versatz Y",
+    OffsetYDesc         = "Verschiebt das Element vertikal.",
     AnchorToText        = "Am Text verankern",
     AnchorToTextDesc    = "Verankert das Symbol an der Textposition.",
     AnchorPoint         = "Ankerpunkt",
@@ -55,90 +51,141 @@ ns.L = {
     AnchorBottomLeft    = "Unten Links",
     AnchorBottom        = "Unten",
     AnchorBottomRight   = "Unten Rechts",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Icons & Multimedia ]] -----------------------------------
+    -- ========================================================================
+    IndicatorIcon       = "Indikatorsymbol",
+    EnableIconDesc      = "Zeigt eine Symbolanzeige an.",
+    IconTexture         = "Symboltextur",
+    IconTextureDesc     = "Pfad zur eigenen Symboltextur.",
     Sound               = "Sound",
     SoundDesc           = "Spielt einen Soundalarm ab, wenn aktiviert.",
     SoundKitId          = "SoundKit ID",
     SoundKitIdDesc      = "SoundKit ID zum Abspielen (Nummer).",
     TestSound           = "Sound testen",
     TestSoundDesc       = "Spielt den gewählten Sound jetzt ab.",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Message Customization ]] --------------------------------
+    -- ========================================================================
     CustomText          = "Benutzerdefinierter Text",
     CustomTextDesc      = "Eigener Nachrichtentext für die Anzeige.",
-    Style               = "Stil",
-    StyleDesc           = "Wählt den Hervorhebungsstil.",
-    Highlight           = "Hervorhebung",
-    HighlightDesc       = "Hebt deinen Charakter auf dem Bildschirm hervor.",
-    HighlightCircle          = "Kreis",
-    HighlightOutline         = "Umriss",
-    HighlightIcon            = "Symbol",
-    HighlightCircleOutline   = "Kreis + Umriss",
-    HighlightCircleIcon      = "Kreis + Symbol",
-    HighlightOutlineIcon     = "Umriss + Symbol",
-    HighlightCircleOutlineIcon = "Kreis + Umriss + Symbol",
+    FloatingText        = "Schwebender Text",
+    Messages            = "Nachrichten",
+
+    -- ========================================================================
+    -- [[ INTERFACE — Logic Filters ]] ----------------------------------------
+    -- ========================================================================
+    OnlyInInstances     = "Nur in Instanzen",
+    OnlyInInstancesDesc = "Gilt nur innerhalb von Instanzen (Dungeons, Raids, Szenarien).",
+    OnlyInCombat        = "Nur im Kampf",
+    OnlyInCombatDesc    = "Zeigt Warnungen nur während des Kampfes an.",
+    DisableInDungeons   = "In Dungeons deaktivieren",
+    DisableInDungeonsDesc = "Gilt nicht innerhalb von Dungeon-Instanzen.",
+    DisableInRaids      = "In Raids deaktivieren",
+    DisableInRaidsDesc  = "Gilt nicht innerhalb von Raid-Instanzen.",
+    InstanceFilters     = "Instanzfilter",
+    InstanceFiltersDesc = "Konfigurieren Sie, wo diese Funktion deaktiviert werden soll.",
+
+    -- ========================================================================
+    -- [[ HIGHLIGHTS SYSTEM ]] ------------------------------------------------
+    -- ========================================================================
+    Highlight              = "Hervorhebung",
+    HighlightDesc          = "Hebt deinen Charakter auf dem Bildschirm hervor.",
+    Highlights             = "Hervorhebungen",
+    HighlightGlobalDesc    = "|cffffa500Konfigurieren Sie die Charakterhervorhebung dynamisch während der Spielereignisse.|r",
+    HighlightOptNone              = "Keine",
+    HighlightOptCircle            = "Kreis",
+    HighlightOptOutline           = "Umriss",
+    HighlightOptIcon              = "Symbol",
+    HighlightOptCircleOutline     = "Kreis und Umriss",
+    HighlightOptCircleIcon        = "Kreis und Symbol",
+    HighlightOptOutlineIcon       = "Umriss und Symbol",
+    HighlightOptCircleOutlineIcon = "Kreis, Umriss und Symbol",
+    HighlightCombat     = "Im Kampf",
+    HighlightCombatDesc = "Hervorhebung im aktiven Kampf.",
+    HighlightInstance   = "In Instanz",
+    HighlightInstanceDesc = "Hervorhebung in Dungeons, Raids oder Szenarien.",
+    HighlightHidden     = "Im Tarnungszustand",
+    HighlightHiddenDesc = "Hervorhebung im Tarnungszustand.",
     ScreenColor         = "Bildschirmfarbe",
     ScreenColorDesc     = "Färbt den Bildschirm ein, während aktiv.",
     Vignette            = "Vignette",
     VignetteDesc        = "Fügt einen Vignetteneffekt am Bildschirmrand hinzu.",
     Thickness           = "Dicke",
     ThicknessDesc       = "Steuert die Dicke der Vignette.",
-    Mouseover           = "Mouseover",
-    Focus               = "Fokus",
-    Tank                = "Tank",
-    TargetTarget        = "Ziel des Ziels",
-    MuteChanges         = "Änderungen stumm",
-    Next                = "Weiter",
-    Import              = "Importieren",
-    FloatingText        = "Schwebender Text",
-    Messages            = "Nachrichten",
-    Share               = "Teilen",
-    Customization       = "Personalisierung",
 
-    -- [[ ROGUE — Stealth Module ]] -------------------------------------------
+    -- ========================================================================
+    -- [[ SHARED MODULES ]] ---------------------------------------------------
+    -- ========================================================================
+    -- [[ Stealth State Module ]] ---------------------------------------------
+    StealthStateName        = "Tarnungszustand",
+    StealthStateDesc        = "Visuelle Effekte für den Tarnungszustand konfigurieren.",
+    StealthStateActiveText  = "TARNUNGSZUSTAND",
+    EnableOnStealthState    = "Im Tarnungszustand aktivieren",
+    EnableOnStealthStateDesc = "Zeigt visuelle Effekte an, während ein Tarnungszustand aktiv ist (verwendet WoW-Zustandserkennung).",
+
+    -- ========================================================================
+    -- [[ CLASS MODULES — ROGUE ]] --------------------------------------------
+    -- ========================================================================
+    -- [[ Stealth Module ]] ---------------------------------------------------
     Stealth             = "Verstohlenheit",
     EnableOnStealth     = "Bei Verstohlenheit aktivieren",
-    EnableOnStealthDesc = "Zeigt die Nightveil-Visuelleffekte an, während Verstohlenheit oder Verschwinden aktiv ist.",
+    EnableOnStealthDesc = "Zeigt visuelle Effekte an, während Verstohlenheit oder Verschwinden aktiv ist.",
+    StealthUseState     = "Zustandserkennung verwenden",
+    StealthUseStateDesc = "Verwendet die globale Zustandserkennung anstelle spezifischer Auren. 'Aura' ist präziser für Klassenfähigkeiten, während 'Zustand' bei jedem tarnungsähnlichen Effekt aktiviert wird.",
     DefaultMessage      = "VERSTOHLEN",
     StealthActiveText   = "GETARNT",
 
-    -- [[ ROGUE — Poison Tracker ]] -------------------------------------------
+    -- [[ Poison Tracker ]] ---------------------------------------------------
     PoisonTracker          = "Gift-Tracker",
     LethalPoisons          = "Tödliches Gift",
     LethalPoisonsDesc      = "Zeigt Warnungen an, wenn dein tödliches Gift fehlt.",
-    NonLethalPoisons       = "nichttödliches Gift",
-    NonLethalPoisonsDesc   = "Zeigt Warnungen an, wenn dein nichttödliches Gift fehlt.",
+    NonLethalPoisons       = "Nicht-tödliches Gift",
+    NonLethalPoisonsDesc   = "Zeigt Warnungen an, wenn dein nicht-tödliches Gift fehlt.",
     LethalPoisonMissing    = "TÖDLICHES GIFT FEHLT",
     NonLethalPoisonMissing = "NICHTTÖDLICHES GIFT FEHLT",
+    -- ========================================================================
+    -- [[ MACRO SYSTEM (SHARED) ]] --------------------------------------------
+    -- ========================================================================
 
-    -- [[ ROGUE — Tricks of the Trade ]] --------------------------------------
+
+    -- [[ Tricks of the Trade ]] ----------------------------------------------
     TricksOfTheTrade         = "Schurkenhandel",
-    TricksTargetHeader       = "Ziel",
-    TricksTargetSelector     = "Ziel-Auswahllogik",
-    TricksTargetSelectorDesc = "Legt fest, wie das Hauptziel automatisch gewählt wird.",
-    TricksMacroAutoUpdate    = "|cffffa500Nightveil aktualisiert dieses Makro automatisch.|r",
+    MacroTargetHeader =  "Ziel",
+    MacroTargetSelector =  "Ziel-Auswahllogik",
+    MacroTargetSelectorDesc =  "Legt fest, wie das Hauptziel automatisch gewählt wird.",
+    MacroAutoUpdateWarning =  "|cffffa500Nightveil aktualisiert dieses Makro automatisch.|r",
     TricksEnabledDesc        = "Aktiviert das automatische Ziel für Schurkenhandel über ein Makro.",
-    TricksMouseoverDesc      = "Aktiviert Mouseover-Zielauswahl.\n\nHinweis: Dies hat Vorrang vor anderen Methoden, außer dem Delve-Gefährten.",
-    TricksFocusDesc          = "Ermöglicht automatisierte Zielauswahl über das Fokus-Ziel.\n\nHinweis: Das Fokus-Ziel wird vor dem Standard-Zielselektor bevorzugt, jedoch von Mouseover oder dem Delve-Gefährten überschrieben.",
-    TricksMuteDesc           = "Blendet Chat-Benachrichtigungen aus, wenn das Makro das Ziel ändert.",
-    TricksDelveCompanion     = "Delve-Gefährte",
-    TricksDelveCompanionDesc = "Wählt in Delves automatisch Brann Bronzebart oder Valeera Sanguinar aus.\n\nHinweis: Dies hat innerhalb von Delves exklusive Priorität.",
+    MacroMouseoverDesc =  "Aktiviert Mouseover-Zielauswahl.\n\nHinweis: Dies hat Vorrang vor anderen Methoden, außer dem Delve-Gefährten.",
+    MacroFocusDesc =  "Ermöglicht automatisierte Zielauswahl über das Fokus-Ziel.\n\nHinweis: Das Fokus-Ziel wird vor dem Standard-Zielselektor bevorzugt, jedoch von Mouseover oder dem Delve-Gefährten überschrieben.",
+    MacroMuteDesc =  "Blendet Chat-Benachrichtigungen aus, wenn das Makro das Ziel ändert.",
+    MacroDelveCompanion =  "Delve-Gefährte",
+    MacroDelveCompanionDesc =  "Wählt in Delves automatisch Brann Bronzebart oder Valeera Sanguinar aus.\n\nHinweis: Dies hat innerhalb von Delves exklusive Priorität.",
     TricksTargetLog          = "Schurkenhandel-Ziel",
     TricksNormal             = "Normal",
     TricksCustom             = "Benutzerdefiniert",
-    TricksCustomName         = "Eigenes Ziel",
-    TricksCustomNameDesc     = "Gib den exakten Namen des Spielers ein.",
-    TricksCustomSet          = "Benutzerdefiniertes Ziel festgelegt: %s",
-    TricksGroupMembers       = "Gruppenmitglieder:",
-    TricksInvalidIndex       = "Ungültiger Gruppenindex.",
-    TricksNoSelf             = "Du kannst dich nicht selbst als Ziel wählen.",
-    TricksBtnEnable          = "Makro aktivieren & synchronisieren",
-    TricksBtnDisable         = "Makro deaktivieren & entfernen",
-    TricksBtnDisableDesc     = "Deaktiviert das automatische Zielen und entfernt das Makro vollständig.",
+    MacroCustomName =  "Eigenes Ziel",
+    MacroCustomNameDesc =  "Gib den exakten Namen des Spielers ein.",
+    MacroCustomSet =  "Benutzerdefiniertes Ziel festgelegt: %s",
+    MacroGroupMembers =  "Gruppenmitglieder:",
+    MacroInvalidIndex =  "Ungültiger Gruppenindex.",
+    MacroNoSelf =  "Du kannst dich nicht selbst als Ziel wählen.",
+    MacroBtnEnable =  "Makro aktivieren & synchronisieren",
+    MacroBtnDisable =  "Makro deaktivieren & entfernen",
+    MacroBtnDisableDesc =  "Deaktiviert das automatische Zielen und entfernt das Makro vollständig.",
     TricksMsgEnabled         = "Schurkenhandel-System aktiviert und Makro synchronisiert.",
     TricksMsgDisabled        = "Schurkenhandel-System deaktiviert und Makro entfernt.",
     TricksAlreadyEnabled     = "Schurkenhandel-System ist bereits aktiviert.",
     TricksAlreadyDisabled    = "Schurkenhandel-System ist bereits deaktiviert.",
     TricksLogicSet           = "Zielmodus festgelegt: %s",
+    Mouseover                = "Mouseover",
+    Focus                    = "Fokus",
+    Tank                     = "Tank",
+    TargetTarget             = "Ziel des Ziels",
 
-    -- [[ ROGUE — Shroud of Concealment ]] ------------------------------------
+    -- [[ Shroud of Concealment ]] --------------------------------------------
     ShroudOfConcealment      = "Verhüllender Nebel",
     EnableShroudCountdown    = "Chat-Countdown aktivieren",
     EnableShroudCountdownDesc = "Sendet Countdown-Nachrichten für den Schleier in den Chat.",
@@ -159,13 +206,40 @@ ns.L = {
     TimeRemainingHint        = "%time = verbleibende Zeit",
     TestShroud               = "Schleier testen",
     TestShroudDesc           = "Simuliert einen lokalen 5-Sekunden-Countdown.\n\nHinweis: Nachrichten erscheinen nur für dich.",
+    ShroudAlreadyActive      = "Schleier-Countdown ist bereits aktiv.",
+    ShroudDisabled           = "Schleier-Countdown ist in den Einstellungen deaktiviert.",
     ChannelSay               = "Sagen",
     ChannelParty             = "Gruppe",
     ChannelRaid              = "Schlachtzug",
     ChannelInstance          = "Instanz",
     ChannelYell              = "Schreien",
 
-    -- [[ Profile Management ]] -----------------------------------------------
+    -- ========================================================================
+    
+    -- ========================================================================
+    -- [[ CLASS MODULES — HUNTER ]] --------------------------------------------
+    -- ========================================================================
+    -- [[ Camouflage Module ]] -------------------------------------------------
+    Camouflage              = "Tarnung",
+    EnableOnCamouflage      = "Aktivieren Sie bei Tarnung",
+    EnableOnCamouflageDesc  = "Zeigt visuelle Hinweise an, während Tarnung aktiv ist.",
+    CamouflageActiveText    = "GETARNT",
+
+    -- [[ Misdirection ]] ------------------------------------------------------
+    Misdirection                = "Irreführung",
+    MisdirEnabledDesc           = "Aktiviert das automatische Zielen für Irreführung über ein Makro.",
+    MisdirTargetLog             = "Irreführung Ziel",
+    MisdirectionNotLearned      = "Du hast Irreführung noch nicht erlernt.",
+    MisdirectionMsgEnabled      = "Irreführungssystem aktiviert und Makro synchronisiert.",
+    MisdirectionMsgDisabled     = "Irreführungssystem deaktiviert und Makro entfernt.",
+    MisdirectionAlreadyEnabled  = "Das Irreführungssystem ist bereits aktiviert.",
+    MisdirectionAlreadyDisabled = "Das Irreführungssystem ist bereits deaktiviert.",
+    MisdirLogicSet              = "Zielmodus eingestellt: %s",
+    MisdirNotLearned            = "Du hast Irreführung noch nicht erlernt.",
+    Pet                         = "Begleiter",
+
+    -- [[ PROFILE MANAGEMENT ]] -----------------------------------------------
+    -- ========================================================================
     Profiles              = "Profile",
     ActiveProfile         = "Aktives Profil",
     ActiveProfileDesc     = "Wähle das aktive Profil aus.",
@@ -188,27 +262,47 @@ ns.L = {
     ExportProfilePrompt   = "Kopiere diesen Export-Code (Strg+C):\n\nProfil: |cff00ff00%s|r",
     ImportProfilePrompt   = "Füge den Export-Code des Profils unten ein:",
     ImportProfileNamePrompt = "Gib einen Namen für das importierte Profil ein:",
-    ErrorDeleteRestricted = "Du kannst das Standard- oder das Charakterprofil nicht löschen.",
+    ErrorDeleteRestricted = "Du kannst das Standardprofil nicht löschen.",
+    DefaultProfileLabel   = "Standard",
+    Import                = "Importieren",
+    Share                 = "Teilen",
 
-    -- [[ SYSTEM — Messages & Warnings ]] -------------------------------------
-    WarningNotRogue         = "Du bist kein Schurke. Klassenspezifische Funktionen sind deaktiviert.",
+    -- ========================================================================
+    -- [[ SYSTEM MESSAGES & WARNINGS ]] ---------------------------------------
+    -- ========================================================================
+    WarningNotRogue         = "Du bist kein Schurke. Dieser Befehl ist nur für Schurken.",
     TricksNotLearned        = "Du hast Schurkenhandel noch nicht erlernt.",
     HardResetWarning        = "Alte oder inkompatible Version erkannt.\n\nEinstellungen werden zurückgesetzt, um Stabilität zu gewährleisten.",
     WarningOutdatedConfig   = "Neuere Konfiguration erkannt!\n\nDas verwendete Profil wurde mit einer neueren Version von Nightveil erstellt.",
     WelcomeMessage          = "%s |cffffd100v%s|r geladen. Gib |cffffd100/veil|r ein, um die Einstellungen zu öffnen.",
     UpdateMessage           = "%s auf |cffffd100v%s|r aktualisiert! Gib |cffffd100/veil|r ein, um die Neuerungen zu sehen.",
-    ErrorNoValidChannel     = "Kein gültiger Chat-Kanal verfügbar.",
-    ErrorBlizzardAntiSpam   = "Blizzard-Spamschutz verhindert die Nutzung von Kanal %s außerhalb von Instanzen.",
-    ErrorNotInGroup         = "Du bist in keiner Gruppe. Kanal %s nicht verfügbar.",
-    ErrorNotInRaid          = "Du bist in keinem Schlachtzug. Kanal %s nicht verfügbar.",
-    ErrorFollowersDungeonGroup = "Du bist allein oder in einer ungültigen Gruppe. Kanal %s nicht verfügbar.",
-    ErrorShroudOnlyInstances = "Schleier-Nachrichten funktionieren nur innerhalb von Instanzen.",
-    ErrorShroudInstanceOnly  = "Du bist in keiner Instanz. Kanal %s nicht verfügbar.",
+    ErrorNoValidChannel     = "|cffff2020Kein gültiger Chat-Kanal verfügbar.|r",
+    ErrorBlizzardAntiSpam   = "|cffff2020Blizzard-Spamschutz verhindert die Nutzung von Kanal|r |cffffcc00%s|r |cffff2020außerhalb von Instanzen.|r",
+    ErrorNotInGroup         = "|cffff2020Du bist in keiner Gruppe. Kanal|r |cffffcc00%s|r |cffff2020nicht verfügbar.|r",
+    ErrorNotInRaid          = "|cffff2020Du bist in keinem Schlachtzug. Kanal|r |cffffcc00%s|r |cffff2020nicht verfügbar.|r",
+    ErrorFollowersDungeonGroup = "|cffff2020Du bist allein oder in einer ungültigen Gruppe. Kanal|r |cffffcc00%s|r |cffff2020nicht verfügbar.|r",
+    ErrorShroudOnlyInstances = "|cffff2020Schleier-Nachrichten funktionieren nur innerhalb von Instanzen.",
+    ErrorShroudInstanceOnly  = "|cffff2020Du bist in keiner Instanz. Kanal|r |cffffcc00%s|r |cffff2020nicht verfügbar.|r",
+    CombatBlocked         = "Einstellungen können während des Kampfes nicht geöffnet werden.",
+    MacroLimitReached     = "Makro-Limit erreicht.",
+    MuteChanges           = "Änderungen stumm",
+    Next                  = "Weiter",
 
-    -- [[ SYSTEM — Commands Help ]] -------------------------------------------
+    -- ========================================================================
+    -- [[ COMMANDS HELP ]] ----------------------------------------------------
+    -- ========================================================================
     HelpSettings          = "Einstellungen",
     HelpTricks            = "Schurkenhandel-Ziel",
     HelpUTricks           = "Makro-Aktualisierung erzwingen",
+    HelpMisdir            = "Irreführung Ziel",
+    HelpUMisdir           = "Makro-Aktualisierung erzwingen",
+    HelpMisdirPet         = "Begleiter-Modus",
+    HelpMisdirNormal      = "Normaler Modus",
+    HelpMisdirTank        = "Tank-Modus",
+    HelpMisdirTT          = "Ziel-des-Ziels-Modus",
+    HelpMisdirCustom      = "Benutzerdefinierter Modus",
+    HelpMisdirList        = "Gruppe auflisten / nach Index wählen",
+    HelpMisdirSet         = "Benutzerdefinierten Namen setzen",
     HelpInfo              = "Diagnose-Infos",
     HelpShroudTest        = "Schleier-Countdown testen",
     HelpDebugToggle       = "Debug-Modus umschalten",
@@ -220,18 +314,23 @@ ns.L = {
     HelpTricksCustom      = "Benutzerdefinierter Modus",
     ErrorUnknownCmd       = "Unbekannter Befehl: |cffffd100%s|r. Nutze |cffffd100/veil help|r.",
     ErrorUnknownSubCmd    = "Unbekannter Unterbefehl: |cffffd100%s|r. Nutze |cffffd100/veil help|r.",
-    CombatBlocked         = "Einstellungen können während des Kampfes nicht geöffnet werden.",
 
-    -- [[ SYSTEM — Debug Info ]] ----------------------------------------------
+    -- ========================================================================
+    -- [[ DEBUG INFO ]] -------------------------------------------------------
+    -- ========================================================================
     DebugModeActivated   = "Debug-Modus AKTIVIERT",
     DebugModeDeactivated = "Debug-Modus DEAKTIVIERT",
     DebugModeRequired    = "Dieser Befehl erfordert den Debug-Modus. Gib |cffffd100/veil debug|r ein zum Aktivieren.",
+    DebugCommands        = "[Debug-Befehle]",
     DebugHeader          = "%s Diagnose:",
     DebugCombat          = " - Kampf: %s",
     DebugStealth         = " - Verstohlenheit/Verschwinden: %s",
-    DebugInstance        = " - Instanz: %s (Typ: %s)",
+    DebugInstance        = " - Instanz: %s (Type: %s)",
     DebugGroup           = " - Gruppe: %s (Raid: %s, Gesamt: %d)",
     DebugComposition     = " - Zusammensetzung: %d Spieler, %d Begleiter, %d Andere",
+    DebugTricksKnown     = " - Schurkenhandel bekannt: %s",
+    DebugTricksTarget    = " - Schurkenhandel-Ziel: %s (%s)",
+    DebugTricksMacro     = " - Schurkenhandel-Makro: %s",
     DebugInvalidGroup    = " - Ungültige Gruppe: %s",
     DebugPlayer          = "SPIELER",
     DebugPet             = "BEGLEITER",
@@ -250,7 +349,9 @@ ns.L = {
     DebugMacroEdited     = "Makro-Inhalt geändert und synchronisiert.",
     DebugCombatLock      = "Diese Aktion ist im Kampf nicht möglich.",
 
-    -- [[ NPC / Game Terms ]] -------------------------------------------------
+    -- ========================================================================
+    -- [[ NPC / GAME TERMS ]] -------------------------------------------------
+    -- ========================================================================
     BrannBronzebeard = "Brann Bronzebart",
     ValeeraSanguinar = "Valeera Sanguinar",
 }
