@@ -2,6 +2,9 @@ local addonName, ns = ...
 
 ns.ReleaseNotes = {
     notes = {
+        ["v2.2.1"] = {
+            "|cff00ff00[Fixed]|r Shroud now only tracks your own aura to avoid spam. |cff808080(Reported by xrandomassassin)|r",
+        },
         ["v2.2.0"] = {
             "|cff00d1ff[New]|r Added full multiclass support with shared core systems.",
             "|cff00d1ff[New]|r Added generic |cffffd100Stealth State|r system available for all classes.",

@@ -106,7 +106,7 @@ local function BuildChangelog(cat)
         local entries = notes[v] or {}
         for _, entry in ipairs(entries) do
             local line = tostring(entry):gsub("^%s*[•%-–—]+%s*", "")
-            SettingsLib:CreateText(cat, { name = "  • " .. line, height = 12, offsetY = -4, basePadding = 0 })
+            SettingsLib:CreateText(cat, { text = "  • " .. line, height = 12, offsetY = -4, basePadding = 0 })
         end
     end
 end

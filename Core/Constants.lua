@@ -5,7 +5,7 @@ local addonName, ns = ...
 ns.Shared = ns.Shared or {}
 
 -- [[ ADDON METADATA ]] -------------------------------------------------------
-ns.Version    = C_AddOns and C_AddOns.GetAddOnMetadata(addonName, "Version") or GetAddOnMetadata(addonName, "Version") or "2.2.0"
+ns.Version    = C_AddOns and C_AddOns.GetAddOnMetadata(addonName, "Version") or GetAddOnMetadata(addonName, "Version") or "2.2.1"
 ns.MinVersion = "2.0.0"
 
 -- [[ CLASS BRANDING COLORS ]] ------------------------------------------------

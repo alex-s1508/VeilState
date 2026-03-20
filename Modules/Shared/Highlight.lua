@@ -81,7 +81,7 @@ function ns.Modules.Highlight.UpdateState()
     local shouldOverride  = false
 
     -- Priority 1: Shroud of Concealment (Rogue)
-    if ns.IsRogue and ns.Shared.HasAura and ns.Shared.HasAura({114018, 115834}) then
+    if ns.IsRogue and ns.Modules.Shroud and ns.Modules.Shroud.HasOwnShroudAura and ns.Modules.Shroud.HasOwnShroudAura() then
         targetHighlight = db.highlightShroud
         shouldOverride  = (targetHighlight ~= -1)
     

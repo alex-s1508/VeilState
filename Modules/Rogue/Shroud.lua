@@ -42,17 +42,17 @@ local function GetShroudAuraTiming()
     if C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID then
         for _, id in ipairs(SHROUD_IDS) do
             local aura = C_UnitAuras.GetPlayerAuraBySpellID(id)
-            if aura then return aura.expirationTime, aura.duration end
+            if aura and aura.sourceUnit == "player" then return aura.expirationTime, aura.duration end
         end
         return nil
     end
 
     local i = 1
     while true do
-        local name, _, _, _, duration, expirationTime, _, _, _, spellId = UnitBuff("player", i)
+        local name, _, _, _, duration, expirationTime, source, _, _, spellId = UnitBuff("player", i)
         if not name then break end
         for _, id in ipairs(SHROUD_IDS) do
-            if spellId == id then return expirationTime, duration end
+            if spellId == id and source == "player" then return expirationTime, duration end
         end
         i = i + 1
     end
@@ -294,6 +294,11 @@ function ns.Modules.Shroud.IsActive()
     return shroudActive
 end
 
+function ns.Modules.Shroud.HasOwnShroudAura()
+    local exp = GetShroudAuraTiming()
+    return exp ~= nil
+end
+
 -- ============================================================================
 -- [[ INITIALIZATION & EXPORTS ]] ---------------------------------------------
 -- ============================================================================
@@ -305,3 +310,4 @@ ns.StartShroudCountdown = ns.Modules.Shroud.StartCountdown
 ns.TestShroudMessage = ns.Modules.Shroud.TestMessage
 ns.CheckShroud = ns.Modules.Shroud.Check
 ns.RunShroudTest = ns.Modules.Shroud.RunTest
+ns.HasOwnShroudAura = ns.Modules.Shroud.HasOwnShroudAura
