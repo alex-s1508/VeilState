@@ -5,8 +5,19 @@ local addonName, ns = ...
 ns.Shared = ns.Shared or {}
 
 -- [[ ADDON METADATA ]] -------------------------------------------------------
-ns.Version    = C_AddOns and C_AddOns.GetAddOnMetadata(addonName, "Version") or GetAddOnMetadata(addonName, "Version") or "2.2.1"
+local function GetAddonVersion()
+    local v = (C_AddOns and C_AddOns.GetAddOnMetadata(addonName, "Version")) or 
+              (GetAddOnMetadata and GetAddOnMetadata(addonName, "Version")) or 
+              "0.0.0"
+    return v
+end
+ns.Version    = GetAddonVersion()
 ns.MinVersion = "2.0.0"
+
+-- [[ BRANDING ]] -------------------------------------------------------------
+function ns.GetAddonName()
+    return "Night|cffBE89E9v|cffBB86E7e|cffB883E5i|cffB580E3l|r"
+end
 
 -- [[ CLASS BRANDING COLORS ]] ------------------------------------------------
 -- Custom curated colors for class-specific UI elements

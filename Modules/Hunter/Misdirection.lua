@@ -103,18 +103,15 @@ function ns.Modules.Misdirection.DisableAndRemoveMacro()
     if not ns.db then return end
     ns.db.misdirEnabled = false
 
-    local newName = "Nightveil"
-    local oldName = "Nightveil - Tricks"
-    local idxNew = GetMacroIndexByName(newName)
-    local idxOld = GetMacroIndexByName(oldName)
+    local macroName = "Nightveil"
+    local idx = GetMacroIndexByName(macroName)
 
     if not InCombatLockdown() then
-        if idxNew > 0 then DeleteMacro(idxNew) end
-        if idxOld > 0 then DeleteMacro(idxOld) end
+        if idx > 0 then DeleteMacro(idx) end
         ns.misdirLastTargetID = nil
         ns.misdirLastMacroBody = nil
     else
-        print(ns.GetAddonName() .. ": " .. (ns.L and ns.L.DebugCombatLock or "This action cannot be used in combat."))
+        print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroCombatLock or "This action cannot be used in combat."))
         ns.misdirUpdateQueued = true
     end
 end
@@ -143,8 +140,8 @@ function ns.Modules.Misdirection.UpdateMacro(force)
 
     if not ns.IsHunter or not learned then
         local warningMsg = not ns.IsHunter
-            and (ns.L and ns.L.WarningNotHunter or "You are not a Hunter.")
-            or  (ns.L and ns.L.MisdirNotLearned  or "You have not learned Misdirection yet.")
+            and (ns.L and ns.L.ErrorNotHunter or "You are not a Hunter.")
+            or  (ns.L and ns.L.ErrorMisdirNotLearned  or "You have not learned Misdirection yet.")
         local addonPrefix = ns.Shared.GetAddonName()
         local printLine = "/run print(\"" .. addonPrefix .. ": |cffff9933" .. warningMsg .. "|r\")"
         table.insert(lines, printLine)
@@ -196,18 +193,16 @@ function ns.Modules.Misdirection.UpdateMacro(force)
     end
 
     if index == 0 then
-        -- Only create if macro doesn't exist yet
         local numGlobal, numChar = GetNumMacros()
         if numGlobal < 120 then
             index = CreateMacro(macroName, icon, body, nil)
         elseif numChar < 18 then
             index = CreateMacro(macroName, icon, body, 1)
         else
-            if ns.debugMode then print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.MacroLimitReached or "Macro limit reached.")) end
+            if ns.debugMode then print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroLimitReached or "Macro limit reached.")) end
             return
         end
     else
-        -- Always update in-place — never delete & recreate
         EditMacro(index, macroName, icon, body)
         if ns.debugMode then
             print(ns.Shared.GetAddonName() .. ": |cffce9cff[Debug]|r " .. (ns.L and ns.L.DebugMacroEdited or "Macro content modified and synchronized."))

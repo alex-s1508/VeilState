@@ -24,6 +24,10 @@ function ns.UpdateState(forceVisualRefresh)
         if ns.Modules.Camouflage and ns.Modules.Camouflage.RefreshVisuals then
             ns.Modules.Camouflage.RefreshVisuals(forceVisualRefresh)
         end
+    elseif ns.IsDruid then
+        if ns.Modules.Prowl and ns.Modules.Prowl.RefreshVisuals then
+            ns.Modules.Prowl.RefreshVisuals(forceVisualRefresh)
+        end
     else
         if ns.Modules.StealthState and ns.Modules.StealthState.RefreshVisuals then
             ns.Modules.StealthState.RefreshVisuals(forceVisualRefresh)

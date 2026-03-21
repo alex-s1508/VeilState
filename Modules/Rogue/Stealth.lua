@@ -53,7 +53,7 @@ function ns.Modules.Stealth.RefreshVisuals(force)
         stealthFrame:SetPoint("CENTER", UIParent, "CENTER", db.stealthTextX or 0, db.stealthTextY or 185)
 
         if hasText then
-            local text = db.stealthCustomText or (ns.L and ns.L.DefaultMessage or "STEALTHED")
+            local text = db.stealthCustomText or (ns.L and ns.L.StealthActiveText or "STEALTHED")
             stealthFrame.Text:SetText(text)
             stealthFrame.Text:SetFont(STANDARD_TEXT_FONT, db.stealthTextSize or 28, "OUTLINE")
             local tc = db.stealthTextColor or {r=1, g=1, b=1}

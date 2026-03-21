@@ -70,6 +70,13 @@ function ns.Modules.HighlightSettings.Init(root)
             set = function(v) ns.db.highlightCamouflage = v; Refresh() end,
             desc = ns.L and ns.L.HighlightCamouflageDesc or "",
         })
+    elseif ns.IsDruid then
+        SettingsLib:CreateDropdown(cat, {
+            key = "highlightProwl", name = ns.L and ns.L.HighlightProwl or "In Prowl", values = HL_MAP, order = HL_ORDER, default = D and D.highlightProwl or 2,
+            get = function() return G("highlightProwl", D and D.highlightProwl or 2) end,
+            set = function(v) ns.db.highlightProwl = v; Refresh() end,
+            desc = ns.L and ns.L.HighlightProwlDesc or "",
+        })
     else
         SettingsLib:CreateDropdown(cat, {
             key = "highlightStealthState", name = ns.L and ns.L.HighlightHidden or "In Stealth State", values = HL_MAP, order = HL_ORDER, default = D and D.highlightStealthState or 2,

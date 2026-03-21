@@ -4,109 +4,13 @@
 local addonName, ns = ...
 ns.Shared = ns.Shared or {}
 
--- [[ LEGACY IMPORT KEY MAPPING ]] -------------------------------------------
-local LEGACY_IMPORT_KEY_MAP = {
-    enableText          = "stealthEnableText",
-    customText          = "stealthCustomText",
-    textColor           = "stealthTextColor",
-    textAlpha           = "stealthTextAlpha",
-    textX               = "stealthTextX",
-    textY               = "stealthTextY",
-    textSize            = "stealthTextSize",
-    enableIcon          = "stealthEnableIcon",
-    iconSize            = "stealthIconSize",
-    iconAlpha           = "stealthIconAlpha",
-    iconAnchorToText    = "stealthIconAnchorToText",
-    iconAnchorPoint     = "stealthIconAnchorPoint",
-    iconX               = "stealthIconX",
-    iconY               = "stealthIconY",
-    enableScreenColor   = "stealthEnableScreenColor",
-    screenColor         = "stealthScreenColor",
-    screenAlpha         = "stealthScreenAlpha",
-    screenStrata        = "stealthScreenStrata",
-    enableVignette      = "stealthEnableVignette",
-    vignetteSize        = "stealthVignetteSize",
-    vignetteAlpha       = "stealthVignetteAlpha",
-    vignetteStrata      = "stealthVignetteStrata",
-    enableHighlight     = "stealthEnableHighlight",
-    highlightType       = "stealthHighlightType",
-
-    stealthText         = "stealthCustomText",
-    stealthMessage      = "stealthCustomText",
-    text                = "stealthCustomText",
-    message             = "stealthCustomText",
-    CustomText          = "stealthCustomText",
-    Nightveil_CustomText = "stealthCustomText",
-    Nightveil_TextColor = "stealthTextColor",
-    Nightveil_TextAlpha = "stealthTextAlpha",
-    stealthAlpha        = "stealthTextAlpha",
-    TextAlpha           = "stealthTextAlpha",
-}
-
 -- [[ PROFILE NORMALIZATION & MIGRATION ]] ------------------------------------
 function ns.Shared.NormalizeProfile(profile)
-    if not profile or type(profile) ~= "table" then return "ERROR" end
-    
-    local defaults = ns.Defaults or {}
-    local currentVer = ns.Version
-    local minVer = ns.MinVersion
-    local profileVer = profile.version or minVer
-    
-    if ns.CompareVersions(profileVer, minVer) == -1 then
-        return "INCOMPATIBLE"
+    if ns.Shared.NormalizeProfileMigrated then
+        return ns.Shared.NormalizeProfileMigrated(profile)
     end
-
-    for k, v in pairs(profile) do
-        if type(k) == "string" and k:sub(1, 10) == "Nightveil_" then
-            local stripped = k:sub(11)
-            if stripped ~= "" and defaults[stripped] ~= nil then
-                if profile[stripped] == nil then profile[stripped] = v end
-                profile[k] = nil
-            end
-        end
-    end
-
-    for key, def in pairs(defaults) do
-        if type(key) == "string" then
-            local upperKey = key:gsub("^%l", string.upper)
-            if upperKey ~= key and profile[upperKey] ~= nil then
-                if profile[key] == nil or profile[key] == def then
-                    profile[key] = profile[upperKey]
-                end
-                profile[upperKey] = nil
-            end
-        end
-    end
-
-    for k, v in pairs(defaults) do
-        if profile[k] == nil then
-            profile[k] = type(v) == "table" and ns.Shared.DeepCopy(v) or v
-        elseif type(v) == "table" and type(profile[k]) == "string" and k:match("Anim$") then
-            local oldStr = profile[k]
-            local spd = tonumber(profile[k.."Speed"]) or 1
-            profile[k] = {
-                blink = (oldStr == "BLINK"), blinkSpeed = spd,
-                fade  = (oldStr == "FADE"),  fadeSpeed  = spd,
-                shake = (oldStr == "SHAKE"), shakeSpeed = spd,
-            }
-        end
-    end
-
-    if profile.tricksLogic == "TARGET" then
-        profile.tricksLogic = "NORMAL"
-    end
-
-    for k in pairs(profile) do
-        if k ~= "version" and defaults[k] == nil then
-            profile[k] = nil
-        end
-    end
-
-    if ns.CompareVersions(profileVer, currentVer) == 1 then
-        print(ns.L and ns.L.WarningOutdatedConfig or "Newer configuration detected!\n\nThe profile you are using was created in a newer version of Nightveil.")
-    end
-
-    profile.version = currentVer
+    -- Fallback/Initial implementation if Migration.lua isn't loaded yet (though it should be)
+    -- This is just to satisfy dependencies within this file
     return "OK"
 end
 
@@ -114,35 +18,9 @@ end
 -- [[ DATABASE VERSIONING ]] --------------------------------------------------
 -- ============================================================================
 function ns.Shared.CheckDatabaseVersion()
-    local currentVer = ns.Version
-    local minVer = ns.MinVersion
-    local savedVer = NightveilDB and NightveilDB.version
-
-    if not NightveilDB or not NightveilDB.profiles then
-        NightveilDB = NightveilDB or {}
-        NightveilDB.version = currentVer
-        NightveilDB.profiles = {}
-        NightveilDB.profileKeys = {}
-        return "FRESH"
+    if ns.Shared.CheckDatabaseVersionMigrated then
+        return ns.Shared.CheckDatabaseVersionMigrated()
     end
-
-    if savedVer == "PENDING_RELOAD" then
-        NightveilDB.version = currentVer
-        return "UPDATED"
-    end
-
-    if ns.CompareVersions(savedVer, minVer) == -1 then
-        wipe(NightveilDB)
-        NightveilDB.version = "PENDING_RELOAD"
-        StaticPopup_Show("NIGHTVEIL_HARD_RESET")
-        return "WAITING"
-    end
-
-    if ns.CompareVersions(currentVer, savedVer) == 1 then
-        NightveilDB.version = currentVer
-        return "UPDATED"
-    end
-
     return "OK"
 end
 

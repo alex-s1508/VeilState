@@ -20,11 +20,11 @@ ns.tricksLastEventTime = 0
 -- ============================================================================
 -- [[ TARGETING LOGIC ]] ------------------------------------------------------
 -- ============================================================================
-function ns.Modules.Tricks.FindBestTargetID()
+
+local function IsValidTricksTarget(unit)
     if not unit or not UnitExists(unit) then return false end
     if UnitIsUnit("player", unit) or UnitIsDeadOrGhost(unit) then return false end
     
-    -- Check if the unit is a Delve Companion (Brann or Valeera)
     local guid = UnitGUID(unit)
     local npcID = guid and select(6, strsplit("-", guid))
     if DELVE_COMPANIONS[npcID] then return true end
@@ -106,17 +106,14 @@ function ns.Modules.Tricks.DisableAndRemoveMacro()
     if not ns.db then return end
     ns.db.tricksEnabled = false
     
-    local newName = "Nightveil"
-    local oldName = "Nightveil - Tricks"
-    local idx = GetMacroIndexByName("Nightveil")
-    local oldIdx = GetMacroIndexByName("Nightveil - Tricks")
+    local macroName = "Nightveil"
+    local idx = GetMacroIndexByName(macroName)
     if not InCombatLockdown() then
         if idx > 0 then DeleteMacro(idx) end
-        if oldIdx > 0 then DeleteMacro(oldIdx) end
         ns.tricksLastTargetID = nil
         ns.tricksLastMacroBody = nil
     else
-        print(ns.GetAddonName() .. ": " .. (ns.L and ns.L.DebugCombatLock or "This action cannot be used in combat."))
+        print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroCombatLock or "This action cannot be used in combat."))
         ns.tricksUpdateQueued = true
     end
 end
@@ -145,7 +142,7 @@ function ns.Modules.Tricks.UpdateMacro(force)
     local body = ""
 
     if not ns.IsRogue or not learned then
-        local warningMsg = not ns.IsRogue and (ns.L and ns.L.WarningNotRogue or "You are not a Rogue.") or (ns.L and ns.L.TricksNotLearned or "You have not learned Tricks of the Trade yet.")
+        local warningMsg = not ns.IsRogue and (ns.L and ns.L.ErrorNotRogue or "You are not a Rogue.") or (ns.L and ns.L.ErrorTricksNotLearned or "You have not learned Tricks of the Trade yet.")
         local addonPrefix = ns.Shared.GetAddonName()
         local printLine = "/run print(\"" .. addonPrefix .. ": |cffff9933" .. warningMsg .. "|r\")"
         table.insert(lines, printLine)
@@ -184,15 +181,8 @@ function ns.Modules.Tricks.UpdateMacro(force)
     
     -- [[ Macro Registration & Management ]] -------------------------------------
     local macroName = "Nightveil"
-    local oldName = "Nightveil - Tricks"
     local icon = 236283 -- Ability_Rogue_TricksOftheTrade
     
-    -- Clean up and rename legacy macros from older versions
-    local oldIdx = GetMacroIndexByName(oldName)
-    if oldIdx > 0 then
-        EditMacro(oldIdx, macroName, icon, body)
-    end
-
     local index = GetMacroIndexByName(macroName)
     local actualBody = index > 0 and GetMacroBody(index) or ""
 
@@ -207,7 +197,7 @@ function ns.Modules.Tricks.UpdateMacro(force)
         elseif numChar < 18 then
             index = CreateMacro(macroName, icon, body, 1)
         else
-            if ns.debugMode then print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.MacroLimitReached or "Macro limit reached.")) end
+            if ns.debugMode then print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroLimitReached or "Macro limit reached.")) end
             return
         end
     else

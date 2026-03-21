@@ -136,7 +136,7 @@ ns.Modules.Settings.Init = function()
         ns._pendingExportString = nil; ns._pendingImportString = nil
 
         StaticPopupDialogs["NIGHTVEIL_DELETE_RESTRICTED"] = {
-            text = (ns.Shared and ns.Shared.GetAddonName and ns.Shared.GetAddonName() or "Nightveil") .. "\n\n|cffff2020" .. (ns.L and ns.L.ErrorDeleteRestricted or "You cannot delete the Default profile.") .. "|r",
+            text = (ns.Shared and ns.Shared.GetAddonName and ns.Shared.GetAddonName() or "Nightveil") .. "\n\n|cffff2020" .. (ns.L and ns.L.ErrorProfileDeleteRestricted or "You cannot delete the Default profile.") .. "|r",
             button1 = "OK",
             timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3,
         }
@@ -232,19 +232,6 @@ ns.Modules.Settings.Init = function()
             EditBoxOnEscapePressed = function(self) ns._pendingImportString = nil; self:GetParent():Hide() end,
             timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3,
         }
-
-        StaticPopupDialogs["NIGHTVEIL_HARD_RESET"] = {
-            text = (ns.L and ns.L.HardResetWarning or "Old or incompatible version detected.\n\nSettings will be reset to ensure stability."),
-            button1 = "OK",
-            OnAccept = function() ReloadUI() end,
-            timeout = 0, whileDead = true, hideOnEscape = false, preferredIndex = 3,
-        }
-
-        StaticPopupDialogs["NIGHTVEIL_OUTDATED_CONFIG"] = {
-            text = (ns.L and ns.L.WarningOutdatedConfig or "Newer configuration detected!\n\nThe profile you are using was created in a newer version of Nightveil."),
-            button1 = "OK",
-            timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3,
-        }
     end
 
     EnsureProfilePopups()
@@ -264,6 +251,10 @@ ns.Modules.Settings.Init = function()
     elseif ns.IsHunter then
         if ns.Modules.HunterSettings and ns.Modules.HunterSettings.Init then
             ns.Modules.HunterSettings.Init(root)
+        end
+    elseif ns.IsDruid then
+        if ns.Modules.DruidSettings and ns.Modules.DruidSettings.Init then
+            ns.Modules.DruidSettings.Init(root)
         end
     else
         -- Generic Stealth State tab (for all other classes)

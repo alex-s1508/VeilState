@@ -30,6 +30,9 @@ ns.frame:SetScript("OnEvent", function(self, event, arg1, ...)
         local _, _, classId = UnitClass("player")
         ns.IsRogue  = (classId == 4)
         ns.IsHunter = (classId == 3)
+        ns.IsDruid  = (classId == 11)
+
+        if ns.Shared.MigrateLegacyMacros then ns.Shared.MigrateLegacyMacros() end
 
         ns.KnowsTricks = IsPlayerSpell and IsPlayerSpell(57934) or (GetSpellInfo and GetSpellInfo(57934) ~= nil)
         ns.KnowsMisdir = IsPlayerSpell and IsPlayerSpell(34477) or (GetSpellInfo and GetSpellInfo(34477) ~= nil)
@@ -67,6 +70,8 @@ ns.frame:SetScript("OnEvent", function(self, event, arg1, ...)
             if ns.Modules.Stealth and ns.Modules.Stealth.RefreshVisuals then ns.Modules.Stealth.RefreshVisuals(true) end
         elseif ns.IsHunter then
             if ns.Modules.Camouflage and ns.Modules.Camouflage.RefreshVisuals then ns.Modules.Camouflage.RefreshVisuals(true) end
+        elseif ns.IsDruid then
+            if ns.Modules.Prowl and ns.Modules.Prowl.RefreshVisuals then ns.Modules.Prowl.RefreshVisuals(true) end
         else
             if ns.Modules.StealthState and ns.Modules.StealthState.RefreshVisuals then ns.Modules.StealthState.RefreshVisuals(true) end
         end
@@ -76,14 +81,23 @@ ns.frame:SetScript("OnEvent", function(self, event, arg1, ...)
         if ns.Modules.Poisons and ns.Modules.Poisons.RefreshVisuals then ns.Modules.Poisons.RefreshVisuals() end
 
         if ns.IsRogue then
-            if ns.tricksUpdateQueued and ns.Modules.Tricks and ns.Modules.Tricks.UpdateMacro then
+            if ns.Modules.Tricks and ns.Modules.Tricks.UpdateMacro then
                 ns.Modules.Tricks.UpdateMacro()
             end
         elseif ns.IsHunter then
-            if ns.misdirUpdateQueued and ns.Modules.Misdirection and ns.Modules.Misdirection.UpdateMacro then
+            if ns.Modules.Misdirection and ns.Modules.Misdirection.UpdateMacro then
                 ns.Modules.Misdirection.UpdateMacro()
             end
         end
+
+        -- Delayed update to catch server-side data synchronization (roles, group info)
+        C_Timer.After(2, function()
+            if ns.IsRogue then
+                if ns.Modules.Tricks and ns.Modules.Tricks.UpdateMacro then ns.Modules.Tricks.UpdateMacro() end
+            elseif ns.IsHunter then
+                if ns.Modules.Misdirection and ns.Modules.Misdirection.UpdateMacro then ns.Modules.Misdirection.UpdateMacro() end
+            end
+        end)
     elseif event == "GROUP_ROSTER_UPDATE" or event == "PLAYER_ROLES_ASSIGNED" or event == "PLAYER_FOCUS_CHANGED" or event == "PLAYER_TARGET_CHANGED" or (event == "UNIT_TARGET" and arg1 and (arg1:find("party") or arg1:find("raid") or arg1 == "focus")) then
         if ns.IsRogue then
             local now = GetTime()

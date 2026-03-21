@@ -4,7 +4,6 @@ local addonName, ns = ...
 -- [[ NIGHTVEIL — DEFAULT SETTINGS ]] -----------------------------------------
 -- ============================================================================
 ns.Defaults = {
-    version = ns.Version,
 
     -- ========================================================================
     -- [[ 3. SHARED MODULES (ALL CLASSES) ]] -----------------------------------
@@ -17,6 +16,7 @@ ns.Defaults = {
     highlightStealth             = 2,
     highlightShroud              = 2,
     highlightCamouflage          = 2,
+    highlightProwl               = 2,
 
     -- [[ Global Stealth Detection ]] -----------------------------------------
     useStateDetection            = false,
@@ -62,7 +62,7 @@ ns.Defaults = {
     stealthDisableInDungeons  = false,
     stealthDisableInRaids     = false,
     stealthEnableText         = false,
-    stealthCustomText         = ns.L and ns.L.StealthActiveText or "STEALTED",
+    stealthCustomText         = ns.L and ns.L.StealthActiveText or "STEALTHED",
     stealthTextColor          = {r = 0.420, g = 0.518, b = 0.647},
     stealthTextAlpha          = 1,
     stealthTextX              = 0,
@@ -198,6 +198,38 @@ ns.Defaults = {
     misdirCustomName       = "",
     misdirDelveCompanion   = true,
     misdirMute             = false,
+
+    -- ========================================================================
+    -- [[ 6. CLASS MODULES — DRUID ]] -----------------------------------------
+    -- ========================================================================
+
+    -- [[ Druid: Prowl Module ]] -----------------------------------------------
+    prowlEnabled            = true,
+    prowlOnlyInstances      = false,
+    prowlDisableInDungeons  = false,
+    prowlDisableInRaids     = false,
+    prowlEnableText         = false,
+    prowlCustomText         = ns.L and ns.L.ProwlActiveText or "PROWLED",
+    prowlTextColor          = {r = 0.055, g = 0.027, b = 0.749},
+    prowlTextAlpha          = 1,
+    prowlTextX              = 0,
+    prowlTextY              = 185,
+    prowlTextSize           = 32,
+    prowlEnableIcon         = false,
+    prowlIconSize           = 64,
+    prowlIconAlpha          = 1,
+    prowlIconAnchorToText   = false,
+    prowlIconAnchorPoint    = "LEFT",
+    prowlIconX              = 0,
+    prowlIconY              = 0,
+    prowlEnableScreenColor  = false,
+    prowlScreenColor        = {r = 0.055, g = 0.027, b = 0.749},
+    prowlScreenAlpha        = 0.1,
+    prowlScreenStrata       = "BACKGROUND",
+    prowlEnableVignette     = true,
+    prowlVignetteSize       = 250,
+    prowlVignetteAlpha      = 0.6,
+    prowlVignetteStrata     = "BACKGROUND",
 
 }
 

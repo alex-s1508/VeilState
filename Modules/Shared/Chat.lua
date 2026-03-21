@@ -7,6 +7,7 @@ ns.Shared = ns.Shared or {}
 -- [[ THROTTLE & RATE LIMITING ]] ---------------------------------------------
 local warnedSayRange = false
 local channelDenyUntil = {}
+local errorDenyUntil = {}
 
 function ns.Shared.CanAnnounceGlobal(key, seconds)
     local now = GetTime()
@@ -27,7 +28,7 @@ function ns.Shared.GetChannelLabel(channel)
     return channel
 end
 
-function ns.Shared.ColorRed(text) return "\|cff6a39a2" .. tostring(text or "") .. "|r" end
+function ns.Shared.ColorRed(text) return "|cffff2020" .. tostring(text or "") .. "|r" end
 
 -- ============================================================================
 -- [[ CHANNEL VALIDATION ]] ---------------------------------------------------
@@ -46,43 +47,43 @@ function ns.Shared.GetChannelStatus(channel)
     local isRaid = IsInRaid()
     local channelName = ns.Shared.GetChannelLabel(channel) or channel
 
-    local players, _, others = ns.Shared.GetGroupComposition()
-
     local function denyChannel(reason, text)
         channelDenyUntil[channel] = now + 8
         return false, reason, text
     end
 
     if channel == "SAY" or channel == "YELL" then
-        if inInstance then return true end
-        if channel == "SAY" or channel == "YELL" then
-            return denyChannel("ANTISPAM", string.format(ns.L and ns.L.ErrorBlizzardAntiSpam or "|cffff2020Blizzard anti-spam restrictions prevent using channel|r |cffffcc00%s|r |cffff2020outside instances.|r", channelName))
+        if not inInstance then
+            return denyChannel("ANTISPAM", string.format(ns.L and ns.L.ErrorChannelAntiSpam or "|cffff2020Blizzard anti-spam restrictions prevent using channel|r |cffffcc00%s|r |cffff2020outside instances.|r", channelName))
         end
+        return true
     end
 
     if channel == "INSTANCE_CHAT" then
         if not IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
-            return denyChannel("NOT_IN_INSTANCE", string.format(ns.L and ns.L.ErrorErrorShroudInstanceOnly or "|cffff2020You are not inside an instance. Channel|r |cffffcc00%s|r |cffff2020unavailable.|r", channelName))
+            return denyChannel("NOT_IN_INSTANCE", string.format(ns.L and ns.L.ErrorChannelInstanceOnly or "|cffff2020Channel|r |cffffcc00%s|r |cffff2020unavailable outside instances.|r", channelName))
         end
         return true
     end
 
     if channel == "PARTY" then
         if not inGroup or isRaid then
-            return denyChannel("NOT_IN_GROUP", string.format(ns.L and ns.L.ErrorNotInGroup or "|cffff2020You are not in a group. Channel|r |cffffcc00%s|r |cffff2020unavailable.|r", channelName))
+            return denyChannel("NOT_IN_GROUP", string.format(ns.L and ns.L.ErrorChannelNoGroup or "|cffff2020You are not in a group. Channel|r |cffffcc00%s|r |cffff2020unavailable.|r", channelName))
         end
-        if players <= 1 and others > 0 then
-            return denyChannel("INVALID_GROUP", string.format(ns.L and ns.L.ErrorFollowersDungeonGroup or "|cffff2020You are alone or in an invalid group. Channel|r |cffffcc00%s|r |cffff2020unavailable.|r", channelName))
+        local players, _, others = ns.Shared.GetGroupComposition()
+        if (players or 0) <= 1 and (others or 0) > 0 then
+            return denyChannel("INVALID_GROUP", string.format(ns.L and ns.L.ErrorChannelInvalidGroup or "|cffff2020You are in an invalid group. Channel|r |cffffcc00%s|r |cffff2020unavailable.|r", channelName))
         end
         return true
     end
 
     if channel == "RAID" then
         if not isRaid then
-            return denyChannel("NOT_IN_RAID", string.format(ns.L and ns.L.ErrorNotInRaid or "|cffff2020You are not in a raid. Channel|r |cffffcc00%s|r |cffff2020unavailable.|r", channelName))
+            return denyChannel("NOT_IN_RAID", string.format(ns.L and ns.L.ErrorChannelNoRaid or "|cffff2020You are not in a raid. Channel|r |cffffcc00%s|r |cffff2020unavailable.|r", channelName))
         end
-        if players <= 1 and others > 0 then
-            return denyChannel("INVALID_GROUP", string.format(ns.L and ns.L.ErrorFollowersDungeonGroup or "|cffff2020You are alone or in an invalid group. Channel|r |cffffcc00%s|r |cffff2020unavailable.|r", channelName))
+        local players, _, others = ns.Shared.GetGroupComposition()
+        if (players or 0) <= 1 and (others or 0) > 0 then
+            return denyChannel("INVALID_GROUP", string.format(ns.L and ns.L.ErrorChannelInvalidGroup or "|cffff2020You are in an invalid group. Channel|r |cffffcc00%s|r |cffff2020unavailable.|r", channelName))
         end
         return true
     end
@@ -108,12 +109,12 @@ function ns.Shared.SendChat(channel, msg, silent)
             if not text:find(prefix) then text = prefix .. text end
             
             if reason == "ANTISPAM" then
-                if not warnedSayRange and (ThrottleError and ThrottleError("ANTISPAM", 8) or ns.Shared.CanAnnounceGlobal("ANTISPAM", 8)) then
+                if not warnedSayRange and (ns.Shared.CanAnnounceGlobal("ANTISPAM", 8)) then
                     warnedSayRange = true
                     print(text)
                 end
             else
-                if (ThrottleError and ThrottleError(reason .. ":" .. tostring(channel), 5) or ns.Shared.CanAnnounceGlobal(reason .. ":" .. tostring(channel), 5)) then
+                if (ns.Shared.CanAnnounceGlobal(reason .. ":" .. tostring(channel), 5)) then
                     print(text)
                 end
             end
@@ -162,7 +163,7 @@ function ns.Shared.SendChatOrPrint(msg, isSynthetic)
     if not muteErrors then
         if not ns.shroudErrorsDisplayed["NO_CHANNEL"] then
             ns.shroudErrorsDisplayed["NO_CHANNEL"] = true
-            local errorMsg = ns.L and ns.L.ErrorNoValidChannel or "|cffff2020No valid chat channel available.|r"
+            local errorMsg = ns.L and ns.L.ErrorChannelNoValid or "|cffff2020No valid chat channel available.|r"
             local prefix = ns.Shared.GetAddonName() .. ": "
             if not errorMsg:find(prefix) then errorMsg = prefix .. errorMsg end
             print(errorMsg)
