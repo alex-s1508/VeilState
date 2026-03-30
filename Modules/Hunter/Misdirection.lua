@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — HUNTER: MISDIRECTION ]] -------------------------------------
+-- [[ HUNTER: MISDIRECTION ]] -------------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 ns.Modules = ns.Modules or {}
@@ -111,7 +111,7 @@ function ns.Modules.Misdirection.DisableAndRemoveMacro()
         ns.misdirLastTargetID = nil
         ns.misdirLastMacroBody = nil
     else
-        print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroCombatLock or "This action cannot be used in combat."))
+        print(ns.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroCombatLock or "This action cannot be used in combat."))
         ns.misdirUpdateQueued = true
     end
 end
@@ -142,7 +142,7 @@ function ns.Modules.Misdirection.UpdateMacro(force)
         local warningMsg = not ns.IsHunter
             and (ns.L and ns.L.ErrorNotHunter or "You are not a Hunter.")
             or  (ns.L and ns.L.ErrorMisdirNotLearned  or "You have not learned Misdirection yet.")
-        local addonPrefix = ns.Shared.GetAddonName()
+        local addonPrefix = ns.GetAddonName()
         local printLine = "/run print(\"" .. addonPrefix .. ": |cffff9933" .. warningMsg .. "|r\")"
         table.insert(lines, printLine)
         body = table.concat(lines, "\n")
@@ -199,13 +199,13 @@ function ns.Modules.Misdirection.UpdateMacro(force)
         elseif numChar < 18 then
             index = CreateMacro(macroName, icon, body, 1)
         else
-            if ns.debugMode then print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroLimitReached or "Macro limit reached.")) end
+            if ns.debugMode then print(ns.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroLimitReached or "Macro limit reached.")) end
             return
         end
     else
         EditMacro(index, macroName, icon, body)
         if ns.debugMode then
-            print(ns.Shared.GetAddonName() .. ": |cffce9cff[Debug]|r " .. (ns.L and ns.L.DebugMacroEdited or "Macro content modified and synchronized."))
+            print(ns.GetAddonName() .. ": |cffce9cff[Debug]|r " .. (ns.L and ns.L.DebugMacroEdited or "Macro content modified and synchronized."))
         end
     end
 
@@ -226,7 +226,7 @@ function ns.Modules.Misdirection.UpdateMacro(force)
     end
 
     if force and ns.debugMode then
-        print(string.format(ns.Shared.GetAddonName() .. ": |cffbe89e9[Debug]|r " .. (ns.L and ns.L.DebugMacroUpdated or "Macro updated: %s"), targetName or "nil"))
+        print(string.format(ns.GetAddonName() .. ": |cffbe89e9[Debug]|r " .. (ns.L and ns.L.DebugMacroUpdated or "Macro updated: %s"), targetName or "nil"))
     end
 
     if ns.IsHunter and learned and ns.db.misdirEnabled and not ns.db.misdirMute then
@@ -234,7 +234,7 @@ function ns.Modules.Misdirection.UpdateMacro(force)
         local exists = tankUnit and (tankUnit == "targettarget" or tankUnit == "pet" or UnitExists(tankUnit))
 
         if changed and exists then
-            print(string.format(ns.Shared.GetAddonName() .. ": |cffbe89e9%s|r → %s",
+            print(string.format(ns.GetAddonName() .. ": |cffbe89e9%s|r → %s",
                 ns.L and ns.L.MisdirTargetLog or "Misdirection Target", targetName or "unknown"))
         end
     end

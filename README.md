@@ -1,58 +1,46 @@
-<img src="https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/banners/banner3.png" width="1920" alt="Nightveil Header">
+![Nightveil Header](https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/banners/banner3.png)
 
-**Nightveil** is a lightweight and modular **multiclass utility addon** focused on providing clear and actionable information without cluttering your UI.
+**Nightveil** is a lightweight, modular multiclass utility addon focused on providing clear, actionable information without UI clutter.
 
-Originally created to solve personal needs for the Rogue class, Nightveil has evolved into a multiclass addon with shared systems and class-specific modules.
+Originally created to solve personal needs for the Rogue class, Nightveil has evolved into a polished multiclass addon with a unified core and class-specific modules.
 
-### Current Class Support
-
-* **Rogue**
-  * **Stealth** tracking
-  * **Poison** tracking system  
-  * **Shroud of Concealment** communication system  
-  * **Tricks of the Trade** automation system  
-* **Hunter**
-  * **Camouflage** tracking
-  * **Misdirection** automation system  
-* **All Classes**
-  * **Stealth State** system
-  * **Highlight system** with condition support
+_Type `/veil` to open settings or `/veil help` for all commands._
 
 ***
 
-## Core Features
+## Features
 
-* **Minimal & Lightweight:** Built for performance — no unnecessary overhead.
-* **Fully Modular:** Enable only the systems you need.
-* **Multiclass Structure:** Shared core with expandable class modules.
-* **Highly Customizable:** Configure visuals, positioning, and behavior.
-* **Context Filters:** Control visibility based on player state.
-* **Instance Exclusion:** Disable systems in specific instance types.
-* **Profile Management:** Create, reset, and manage profiles safely.
-* **Localization:** Supports all official WoW languages.
+### <img src="https://wow.zamimg.com/images/wow/icons/large/ability_stealth.jpg" width="18" style="vertical-align: -3px;"> Hidden State
 
-***
+Monitors all hidden states through independent aura detection. Includes specific support for Rogue, Hunter, Druid, Mage, and racial abilities.
 
-## How It Works
+![Stealthed Highlight](https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/screenshots/stealthedHighlight.png)
 
-Nightveil is built on a small set of reusable components that work together:
+*   **Sticky Aura Logic:** Prevents visual flickering by maintaining effects for 3 seconds during aura transitions.
+*   **Customization:** Independent toggles for floating text, icons, screen tints, vignettes, and sound alerts per aura.
+*   **Instance Filtering:** Automatically disables visual effects inside Dungeons or Raids.
 
-* **State & Condition Handling:** Detects player states using aura and logic-based checks, allowing support for multiple sources of the same effect.
-* **Tracking & Alerts:** Monitors buffs, states, and conditions with independent configuration, custom text/icons, and optional alerts.
-* **Visual Output:** Displays information through icons, text, and highlights, with full control over positioning and behavior.
-* **Automation:** Handles dynamic macros and targeting logic with priority rules (mouseover, focus, etc.).
+### Class Utilities
 
-_Type `/veil` to open settings or `/veil help` for commands._
+#### <img src="https://wow.zamimg.com/images/wow/icons/large/trade_brewpoison.jpg" width="18" style="vertical-align: -3px;"> Poison Tracker (Rogue)
+Visual and auditory alerts for missing Lethal or Non-Lethal poisons. 
 
-***
+![Poison Tracker](https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/screenshots/poisons.png)
 
-## Feedback
+#### <img src="https://wow.zamimg.com/images/wow/icons/large/ability_rogue_shroudofconcealment.jpg" width="18" style="vertical-align: -3px;"> [Shroud of Concealment](https://www.wowhead.com/spell=471143/shroud-of-concealment) (Rogue)
+Configurable chat countdown with support for wow channels and interval mode.
 
-Feel free to use the comment section to report bugs or issues you encounter. Your feedback and ideas for future updates are always welcome!
+> **Quick Tip:** Use `%time` in message templates (example: `Shroud: %time remaining!`) for live countdown output. 
 
-`Note: Some older bug report comments were removed to keep the page cleaner and make new issues easier to find. All reports and fixes are credited in the changelogs, and anyone who reports a bug that gets fixed will also be credited there.`
+![Shroud Countdown](https://raw.githubusercontent.com/alex-s1508/Nightveil/refs/heads/main/.resources/images/screenshots/shroudCountdown.gif)
 
-Thank you for the feedback and support. I hope Nightveil continues to be useful for anyone who needs it. :)
+#### <img src="https://wow.zamimg.com/images/wow/icons/large/trade_engineering.jpg" width="18" style="vertical-align: -3px;"> Targeting Macros
+Automated macro system for **<img src="https://wow.zamimg.com/images/wow/icons/large/ability_rogue_tricksofthetrade.jpg" width="18" style="vertical-align: -3px;"> [Tricks of the Trade](https://www.wowhead.com/spell=221630/tricks-of-the-trade) (Rogue)** and **<img src="https://wow.zamimg.com/images/wow/icons/large/ability_hunter_misdirection.jpg" width="18" style="vertical-align: -3px;"> [Misdirection](https://www.wowhead.com/spell=34477/misdirection) (Hunter)**.
+
+### Character Highlights
+
+*   **Visual Styles:** Uses the native Blizzard highlight options.
+*   **Triggers:** Configurable for conditional activation.
 
 ***
 
@@ -60,15 +48,15 @@ Thank you for the feedback and support. I hope Nightveil continues to be useful 
 
 This addon uses the following libraries:
 
-* **[LibEQOL](https://www.curseforge.com/wow/addons/libeqol)** by [R41Z0R](https://www.curseforge.com/members/r41z0r/projects)  
-* **[ChatThrottleLib](https://www.curseforge.com/wow/addons/chatthrottlelib)** by [NevCairiel](https://www.curseforge.com/members/nevcairiel/projects) and [Forge_User_96189362](https://www.curseforge.com/members/forge_user_96189362/projects)
+*   [LibEQOL](https://www.curseforge.com/wow/addons/libeqol) by R41Z0R
+*   [ChatThrottleLib](https://www.curseforge.com/wow/addons/chatthrottlelib) by NevCairiel
 
 ***
 
 ## Buy me a coffee? ☕
 
-If you want to support my work, feel free to buy me a coffee. It’s completely optional, but always appreciated. 
+If you'd like to support my work, a coffee is always appreciated — completely optional.
 
-You can also find my other works on my Ko-fi page.
+You can also find my other projects on my Ko-fi page.
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/ilovip4g)

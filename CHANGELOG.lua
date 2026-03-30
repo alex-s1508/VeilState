@@ -1,7 +1,19 @@
+-- ============================================================================
+-- [[ RELEASE NOTES & CHANGELOG ]] -------------------------------------------
+-- ============================================================================
 local addonName, ns = ...
 
 ns.ReleaseNotes = {
     notes = {
+        ["v2.3.0"] = {
+            "|cff00d1ff[New]|r Introduced unified |cffffd100Hidden State|r system for all stealth-related logic.",
+            "|cff00d1ff[New]|r Added Mage support with invisibility-based stealth detection.",
+            "|cff00d1ff[New]|r Added Druid support with |cffffd100Prowl|r integration.",
+            "|cff00ff00[Improved]|r All settings now include detailed descriptions with contextual notes.",
+            "|cff00ff00[Improved]|r Tricks/Misdirection now updates faster on login.",
+            "|cff00ff00[Fixed]|r Restored version popups with correct visuals.",
+            "|cff00ff00[Fixed]|r Fixed stealth issues with talents like |cffffd100Subterfuge|r. |cff808080(Reported by user_gf8w7ztrfabn5i6i)|r",
+        },
         ["v2.2.1"] = {
             "|cff00ff00[Fixed]|r Shroud now only tracks your own aura to avoid spam. |cff808080(Reported by xrandomassassin)|r",
         },

@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — SETTINGS UI CORE ]] ----------------------------------------
+-- [[ SETTINGS UI CORE ]] -----------------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 local SettingsLib = LibStub("LibEQOLSettingsMode-1.0")
@@ -22,48 +22,6 @@ function ns.Modules.Settings.GetColor(key, dr, dg, db)
 end
 
 -- [[ DATA TABLES & ENUMERATIONS ]] -------------------------------------------
-ns.UI_LAYERS = {
-    { value = "BACKGROUND", label = (ns.L and ns.L.LayerBackground) or "Background" },
-    { value = "LOW",        label = (ns.L and ns.L.LayerLow) or "Low" },
-    { value = "MEDIUM",     label = (ns.L and ns.L.LayerMedium) or "Medium" },
-    { value = "HIGH",       label = (ns.L and ns.L.LayerHigh) or "High" },
-    { value = "DIALOG",     label = (ns.L and ns.L.LayerDialog) or "Dialog" },
-    { value = "FULLSCREEN", label = (ns.L and ns.L.LayerFullscreen) or "Fullscreen" },
-}
-ns.UI_LAYER_ORDER = { "BACKGROUND", "LOW", "MEDIUM", "HIGH", "DIALOG", "FULLSCREEN" }
-ns.UI_LAYER_MAP = {}
-for _, e in ipairs(ns.UI_LAYERS) do ns.UI_LAYER_MAP[e.value] = e.label end
-
-ns.UI_ANCHOR_ORDER = { "TOPLEFT","TOP","TOPRIGHT","LEFT","CENTER","RIGHT","BOTTOMLEFT","BOTTOM","BOTTOMRIGHT" }
-
-ns.UI_ANCHOR_MAP = {
-    TOPLEFT     = (ns.L and ns.L.AnchorTopLeft) or "Top Left",
-    TOP         = (ns.L and ns.L.AnchorTop) or "Top",
-    TOPRIGHT    = (ns.L and ns.L.AnchorTopRight) or "Top Right",
-    LEFT        = (ns.L and ns.L.AnchorLeft) or "Left",
-    CENTER      = (ns.L and ns.L.AnchorCenter) or "Center",
-    RIGHT       = (ns.L and ns.L.AnchorRight) or "Right",
-    BOTTOMLEFT  = (ns.L and ns.L.AnchorBottomLeft) or "Bottom Left",
-    BOTTOM      = (ns.L and ns.L.AnchorBottom) or "Bottom",
-    BOTTOMRIGHT = (ns.L and ns.L.AnchorBottomRight) or "Bottom Right",
-}
-
-ns.UI_CHANNELS = {
-    ["SAY"]           = (ns.L and ns.L.ChannelSay) or "Say",
-    ["YELL"]          = (ns.L and ns.L.ChannelYell) or "Yell",
-    ["PARTY"]         = (ns.L and ns.L.ChannelParty) or "Party",
-    ["RAID"]          = (ns.L and ns.L.ChannelRaid) or "Raid",
-    ["INSTANCE_CHAT"] = (ns.L and ns.L.ChannelInstance) or "Instance",
-}
-ns.UI_CHANNEL_ORDER = { "NONE", "SAY", "YELL", "PARTY", "RAID", "INSTANCE_CHAT" }
-
-ns.UI_TRICKS_LOGIC_OPTIONS = {
-    ["TANK"]         = ns.L and ns.L.Tank or "Tank",
-    ["NORMAL"]       = ns.L and ns.L.TricksNormal or "Normal",
-    ["TARGETTARGET"] = ns.L and ns.L.TargetTarget or "Target of Target",
-    ["CUSTOM"]       = ns.L and ns.L.TricksCustom or "Custom",
-}
-ns.UI_TRICKS_LOGIC_ORDER = { "NORMAL", "TANK", "TARGETTARGET", "CUSTOM" }
 
 -- ============================================================================
 -- [[ CHANGELOG BUILDER ]] ----------------------------------------------------
@@ -136,7 +94,7 @@ ns.Modules.Settings.Init = function()
         ns._pendingExportString = nil; ns._pendingImportString = nil
 
         StaticPopupDialogs["NIGHTVEIL_DELETE_RESTRICTED"] = {
-            text = (ns.Shared and ns.Shared.GetAddonName and ns.Shared.GetAddonName() or "Nightveil") .. "\n\n|cffff2020" .. (ns.L and ns.L.ErrorProfileDeleteRestricted or "You cannot delete the Default profile.") .. "|r",
+            text = ns.GetAddonName() .. "\n\n|cffff2020" .. (ns.L and ns.L.ErrorProfileDeleteRestricted or "You cannot delete the Default profile.") .. "|r",
             button1 = "OK",
             timeout = 0, whileDead = true, hideOnEscape = true, preferredIndex = 3,
         }
@@ -238,29 +196,22 @@ ns.Modules.Settings.Init = function()
     if ns.settingsInitialized then return end
     ns.settingsInitialized = true
 
-    ns.MainCategory = SettingsLib:CreateRootCategory(ns.Shared and ns.Shared.GetAddonName and ns.Shared.GetAddonName() or "Nightveil", false)
+    ns.MainCategory = SettingsLib:CreateRootCategory(ns.GetAddonName(), false)
     local root = ns.MainCategory
 
     BuildChangelog(root)
 
-    -- Rogue-exclusive tab
-    if ns.IsRogue then
-        if ns.Modules.RogueSettings and ns.Modules.RogueSettings.Init then
-            ns.Modules.RogueSettings.Init(root)
-        end
-    elseif ns.IsHunter then
-        if ns.Modules.HunterSettings and ns.Modules.HunterSettings.Init then
-            ns.Modules.HunterSettings.Init(root)
-        end
-    elseif ns.IsDruid then
-        if ns.Modules.DruidSettings and ns.Modules.DruidSettings.Init then
-            ns.Modules.DruidSettings.Init(root)
-        end
-    else
-        -- Generic Stealth State tab (for all other classes)
-        if ns.Modules.StealthStateSettings and ns.Modules.StealthStateSettings.Init then
-            ns.Modules.StealthStateSettings.Init(root)
-        end
+    -- Generic Hidden State tab (for all classes)
+    if ns.Modules.HiddenStateSettings and ns.Modules.HiddenStateSettings.Init then
+        ns.Modules.HiddenStateSettings.Init(root)
+    end
+
+    -- Class-exclusive tabs
+    if ns.IsRogue and ns.Modules.RogueSettings and ns.Modules.RogueSettings.Init then
+        ns.Modules.RogueSettings.Init(root)
+    end
+    if ns.IsHunter and ns.Modules.HunterSettings and ns.Modules.HunterSettings.Init then
+        ns.Modules.HunterSettings.Init(root)
     end
 
     -- Highlights tab (Shared for all classes)
@@ -285,10 +236,10 @@ ns.Modules.Settings.Init = function()
             end
             return list
         end,
-        desc = ns.L and ns.L.ActiveProfileDesc or "",
+        desc = ns.L and ns.L.ActiveProfileDesc or "Select which profile to use for this character.",
     })
-    SettingsLib:CreateButton(profilesCat, { text = ns.L and ns.L.CreateProfile or "Create Profile", func = function() StaticPopup_Show("NIGHTVEIL_CREATE_PROFILE") end, desc = ns.L and ns.L.CreateProfileDesc or "" })
-    SettingsLib:CreateButton(profilesCat, { text = ns.L and ns.L.DuplicateProfile or "Duplicate Profile", func = function() StaticPopup_Show("NIGHTVEIL_DUPLICATE_PROFILE") end, desc = ns.L and ns.L.DuplicateProfileDesc or "" })
+    SettingsLib:CreateButton(profilesCat, { text = ns.L and ns.L.CreateProfile or "Create Profile", func = function() StaticPopup_Show("NIGHTVEIL_CREATE_PROFILE") end, desc = ns.L and ns.L.CreateProfileDesc or "Create a new profile with default settings." })
+    SettingsLib:CreateButton(profilesCat, { text = ns.L and ns.L.DuplicateProfile or "Duplicate Profile", func = function() StaticPopup_Show("NIGHTVEIL_DUPLICATE_PROFILE") end, desc = ns.L and ns.L.DuplicateProfileDesc or "Create a copy of the current profile." })
     SettingsLib:CreateButton(profilesCat, {
         text = ns.L and ns.L.DeleteProfile or "Delete Profile",
         func = function()
@@ -299,7 +250,7 @@ ns.Modules.Settings.Init = function()
                 StaticPopup_Show("NIGHTVEIL_DELETE_RESTRICTED", active)
             end
         end,
-        desc = ns.L and ns.L.DeleteProfileDesc or "",
+        desc = ns.L and ns.L.DeleteProfileDesc or "Remove the selected profile. Cannot delete the Default profile.",
     })
     SettingsLib:CreateButton(profilesCat, {
         text = "|cffff0000" .. (ns.L and ns.L.FactoryResetBtn or "Factory Reset") .. "|r",
@@ -312,8 +263,8 @@ ns.Modules.Settings.Init = function()
     SettingsLib:CreateButton(profilesCat, {
         text = ns.L and ns.L.ExportProfile or "Export Profile",
         func = function() ns._pendingExportString = ns.Shared.ExportProfileString(); StaticPopup_Show("NIGHTVEIL_EXPORT_PROFILE", ns.Shared.GetActiveProfileName()) end,
-        desc = ns.L and ns.L.ExportProfileDesc or "",
+        desc = ns.L and ns.L.ExportProfileDesc or "Generate a shareable string for this profile.",
     })
-    SettingsLib:CreateButton(profilesCat, { text = ns.L and ns.L.ImportProfile or "Import Profile", func = function() StaticPopup_Show("NIGHTVEIL_IMPORT_PROFILE_STRING") end, desc = ns.L and ns.L.ImportProfileDesc or "" })
+    SettingsLib:CreateButton(profilesCat, { text = ns.L and ns.L.ImportProfile or "Import Profile", func = function() StaticPopup_Show("NIGHTVEIL_IMPORT_PROFILE_STRING") end, desc = ns.L and ns.L.ImportProfileDesc or "Import a profile from a shared string." })
 end
 

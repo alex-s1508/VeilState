@@ -1,321 +1,359 @@
+-- ============================================================================
+-- [[ LOCALIZATION: zhCN ]] ---------------------------------------------------
+-- ============================================================================
 local addonName, ns = ...
-local locale = GetLocale()
-if locale ~= "zhCN" then return end
+if GetLocale() ~= "zhCN" then return end
 
-ns.L = {
-    -- ========================================================================
-    -- [[ SYSTEM / GENERAL UI ]] -----------------------------------------
-    -- ========================================================================
-    Enable                  = "启用",
-    Management              = "管理",
-    ReleaseNotes            = "发行说明",
-    WelcomeMessage          = "%s |cffffcc00v%s|r 已加载。输入 |cffffcc00/veil|r 打开设置。",
-    UpdateMessage           = "%s 已更新至 |cffffcc00v%s|r! 输入 |cffffcc00/veil|r 查看更新内容。",
-    FloatingText            = "浮动文本",
+ns.L = ns.L or {}
+local L = ns.L
 
-    -- ========================================================================
-    -- [[ INTERFACE — Elements & Styles ]] -------------------------------
-    -- ========================================================================
-    Color                   = "颜色",
-    Size                    = "尺寸",
-    Opacity                 = "透明度",
-    Thickness               = "厚度",
-    Style                   = "样式",
-    Layer                   = "层级",
-    LayerBackground         = "背景",
-    LayerLow                = "低",
-    LayerMedium             = "中",
-    LayerHigh               = "高",
-    LayerDialog             = "对话框",
-    LayerFullscreen         = "全屏",
-    ScreenColor             = "屏幕颜色",
-    Vignette                = "渐晕",
+    -- [[ SYSTEM / GENERAL UI ]] ----------------------------------------------
+    L.Enable = "启用"
+    L.EnableDesc = "启用或禁用此功能。"
+    L.Management = "管理"
+    L.ReleaseNotes = "版本说明"
+    L.OnlyInCombat = "仅在战斗中启用"
+    L.OnlyInCombatDesc = "仅在战斗中显示警告。"
+    L.OnlyInInstances = "仅在副本中启用"
+    L.OnlyInInstancesDesc = "仅在副本内显示警告。"
+    L.Color = "颜色"
+    L.ColorOfSkill = "%s 颜色"
+    L.Size = "大小"
+    L.SizeDesc = "更改元素大小。"
+    L.Opacity = "不透明度"
+    L.OpacityDesc = "更改元素透明度。"
+    L.OffsetX = "X 偏移"
+    L.OffsetXDesc = "水平移动元素。"
+    L.OffsetY = "Y 偏移"
+    L.OffsetYDesc = "垂直移动元素。"
+    L.Layer = "图层"
+    L.LayerDesc = "绘制层级。\n\n|cffbe89e9注意：|r 数值越高显示越靠前。"
+    L.LayerBackground = "背景"
+    L.LayerLow = "低"
+    L.LayerMedium = "中"
+    L.LayerHigh = "高"
+    L.LayerDialog = "对话框"
+    L.LayerFullscreen = "全屏"
+    L.CustomText = "文本"
+    L.CustomTextDesc = "要显示的自定义消息文本。"
+    L.IconTexture = "图标"
+    L.IconTextureDesc = "自定义图标路径或FileID。\n\n|cffbe89e9注意：|r 支持 |cffffcc00Interface\\Icons\\...|r 路径或数字FileID。"
+    L.TextOfSkill = "%s 文本"
+    L.IconOfSkill = "%s 图标"
+    L.IndicatorIcon = "指示图标"
+    L.EnableIconDesc = "在文本旁边显示指示图标。"
+    L.AnchorToText = "锚定到文本"
+    L.AnchorToTextDesc = "将图标锚定到文本元素位置。"
+    L.AnchorPoint = "锚点"
+    L.AnchorPointDesc = "用作锚定参考的文本侧边。"
+    L.AnchorTopLeft = "左上"
+    L.AnchorTop = "上"
+    L.AnchorTopRight = "右上"
+    L.AnchorLeft = "左"
+    L.AnchorCenter = "中"
+    L.AnchorRight = "右"
+    L.AnchorBottomLeft = "左下"
+    L.AnchorBottom = "下"
+    L.AnchorBottomRight = "右下"
+    L.Sound = "声音"
+    L.SoundDesc = "激活时播放声音提示。"
+    L.SoundKitId = "SoundKit ID"
+    L.SoundKitIdDesc = "要播放的SoundKit ID。\n\n|cffbe89e9注意：|r 仅限数字ID。"
+    L.TestSound = "测试声音"
+    L.TestSoundDesc = "立即播放所选声音。"
+    L.ScreenColor = "屏幕颜色"
+    L.ScreenColorOfSkill = "%s 颜色"
+    L.Vignette = "暗角"
+    L.Thickness = "厚度"
+    L.ThicknessDesc = "控制暗角边框厚度。"
+    L.FloatingText = "浮动文字"
+    L.Messages = "消息"
+    L.Share = "分享"
+    L.MuteChanges = "静音状态变更通知"
+    L.MuteChangesDesc = "当宏更改目标时隐藏聊天通知。"
+    L.Next = "下一步"
+    L.Import = "导入"
+    L.InstanceFilters = "副本过滤器"
+    L.DisableInDungeons = "在地下城中禁用"
+    L.DisableInDungeonsDesc = "在地下城内停用该功能。\n\n|cffbe89e9注意：|r 覆盖全局启用条件。"
+    L.DisableInRaids = "在团队副本中禁用"
+    L.DisableInRaidsDesc = "在团队副本内停用该功能。\n\n|cffbe89e9注意：|r 覆盖全局启用条件。"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Positioning & Anchors ]] ---------------------------
-    -- ========================================================================
-    AnchorPoint             = "锚点",
-    AnchorToText            = "依附于文本",
-    OffsetX                 = "横向偏移",
-    OffsetY                 = "纵向偏移",
-    AnchorTopLeft           = "左上",
-    AnchorTop               = "顶部",
-    AnchorTopRight          = "右上",
-    AnchorLeft              = "左侧",
-    AnchorCenter            = "中心",
-    AnchorRight             = "右侧",
-    AnchorBottomLeft        = "左下",
-    AnchorBottom            = "底部",
-    AnchorBottomRight       = "右下",
+    -- [[ SYSTEM — COMMANDS HELP ]] -------------------------------------------
+    L.HelpSettings = "打开设置"
+    L.HelpTricks = "江湖手法状态"
+    L.HelpMisdir = "误导状态"
+    L.HelpMisdirPet = "宠物模式"
+    L.HelpInfo = "诊断信息"
+    L.HelpForceRefresh = "强制刷新宏"
+    L.HelpShroudTest = "测试隐蔽幕帘倒计时"
+    L.HelpDebugToggle = "切换调试模式"
+    L.HelpModeList = "按索引列出和设置"
+    L.HelpModeNormal = "普通模式"
+    L.HelpModeTank = "坦克模式"
+    L.HelpModeTT = "目标的目标模式"
+    L.HelpModeSet = "按名称设置"
+    L.HelpModeCustom = "自定义模式"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Icons & Multimedia ]] ------------------------------
-    -- ========================================================================
-    IndicatorIcon           = "指示图标",
-    IconTexture             = "图标材质",
-    Sound                   = "声音",
-    SoundKitId              = "SoundKit ID",
-    TestSound               = "测试声音",
+    -- [[ SHARED — HIDDEN STATE ]] --------------------------------------------
+    L.HiddenStateName = "隐藏状态"
+    L.EnableOnHiddenState = "通过隐藏状态启用"
+    L.EnableOnHiddenStateDesc = "启用或禁用大多数隐身和潜行状态的视觉警告。"
+    L.HiddenStateActiveText = "已隐藏"
+    L.AuraDetections = "光环检测"
+    L.HiddenStateEnableTextDesc = "隐藏状态激活时显示动态文本元素。"
+    L.HiddenStateCustomTextDesc = "当没有特定光环替换时显示的备用文本。"
+    L.HiddenStateAuraTextDesc = "当 %s 处于激活状态时显示的特定文本。\n\n|cffbe89e9注意：|r 留空以忽略。"
+    L.HiddenStateAuraTextColorDesc = "%s激活时的文本颜色。"
+    L.HiddenStateAuraIconDesc = "%s激活时显示的图标纹理路径或FileID。"
+    L.HiddenStateAuraScreenColorDesc = "%s激活时应用的屏幕色调。"
+    L.HiddenStateAuraTrackDesc = "检测并跟踪特定的%s光环。"
+    L.HiddenStateEnableIconDesc = "在浮动文本旁显示纹理图标。"
+    L.HiddenStateIconTextureDesc = "当没有光环特定图标时使用的通用图标路径。\n\n|cffbe89e9注意：|r 未设置特定光环图标时使用。"
+    L.HiddenStateIconAnchorDesc = "自动将图标附加到浮动文本旁。"
+    L.HiddenStateIconAnchorPointDesc = "图标相对于文本的锚点位置。"
+    L.HiddenStateTextAlphaDesc = "控制浮动文本的透明度。"
+    L.HiddenStateTextXDesc = "浮动文本在屏幕上的水平位置。"
+    L.HiddenStateTextYDesc = "浮动文本在屏幕上的垂直位置。"
+    L.HiddenStateTextSizeDesc = "浮动文本的字体大小。"
+    L.HiddenStateIconXDesc = "指示图标的水平偏移。"
+    L.HiddenStateIconYDesc = "指示图标的垂直偏移。"
+    L.HiddenStateIconSizeDesc = "指示图标的显示大小。"
+    L.HiddenStateIconAlphaDesc = "指示图标的透明度。"
+    L.HiddenStateScreenEnableDesc = "隐藏状态激活时展示全屏颜色色调。"
+    L.HiddenStateScreenAlphaDesc = "屏幕色调的最大透明度强度。"
+    L.HiddenStateVignetteEnableDesc = "在屏幕边缘显示沉浸式暗角渐变效果。"
+    L.HiddenStateVignetteSizeDesc = "控制暗角边框的内呻范围。"
+    L.HiddenStateVignetteAlphaDesc = "暗角叠加层的最大透明度强度。"
+    L.HiddenStateDisableInDungeonsDesc = "在地下城内不显示视觉跟踪。"
+    L.HiddenStateDisableInRaidsDesc = "在团队副本内不显示视觉跟踪。"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Logic & Filters ]] ---------------------------------
-    -- ========================================================================
-    OnlyInInstances         = "仅在副本中",
-    OnlyInCombat            = "仅在战斗中",
-    DisableInDungeons       = "在地下城中禁用",
-    DisableInRaids          = "在团队副本中禁用",
-    InstanceFilters         = "副本过滤器",
+    -- [[ ROGUE — STEALTH & VANISH ]] -----------------------------------------
+    L.StealthActiveText = "潜行中"
+    L.SkillStealth = "潜行"
+    L.SkillVanish = "消失"
+    L.SkillShadowDance = "暗影之舞"
+    L.SkillSubterfuge = "证诈"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Message Customization ]] ---------------------------
-    -- ========================================================================
-    CustomText              = "自定义文本",
-    Messages                = "信息",
+    -- [[ ROGUE — POISON TRACKER ]] -------------------------------------------
+    L.PoisonTracker = "毒素追踪"
+    L.LethalPoisons = "致命毒素"
+    L.LethalPoisonsDesc = "致命毒素缺失时显示警告。"
+    L.NonLethalPoisons = "非致命毒素"
+    L.NonLethalPoisonsDesc = "非致命毒素缺失时显示警告。"
+    L.LethalPoisonMissing = "缺少致命毒素"
+    L.NonLethalPoisonMissing = "缺少非致命毒素"
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Highlights ]] ---------------------------------
-    -- ========================================================================
-    Highlights              = "高亮设置",
-    Highlight               = "高亮",
-    HighlightGlobalDesc     = "|cffffa500在整个游戏事件中动态配置角色高亮。|r",
-    HighlightCombat         = "战斗中",
-    HighlightCombatDesc     = "Highlight style when entering combat.",
-    HighlightInstance       = "在副本中",
-    HighlightInstanceDesc   = "Highlight style when inside a dungeon or raid.",
-    HighlightHidden         = "处于隐藏状态",
-    HighlightHiddenDesc     = "Highlight style when in a custom stealth state.",
-    HighlightStealth        = "In Stealth",
-    HighlightStealthDesc    = "Highlight style when stealthed.",
-    HighlightShroud         = "In Shroud of Concealment",
-    HighlightShroudDesc     = "Highlight style when inside Shroud of Concealment.",
-    HighlightCamouflage     = "In Camouflage",
-    HighlightCamouflageDesc = "Highlight style when camouflaged.",
-    HighlightProwl          = "In Prowl",
-    HighlightProwlDesc      = "Highlight style when prowling.",
-    HighlightOptNone        = "无",
-    HighlightOptCircle      = "圆圈",
-    HighlightOptOutline     = "轮廓",
-    HighlightOptIcon        = "图标",
-    HighlightOptCircleOutline = "圆圈和轮廓",
-    HighlightOptCircleIcon  = "圆圈和图标",
-    HighlightOptOutlineIcon = "轮廓和图标",
-    HighlightOptCircleOutlineIcon = "圆圈、轮廓和图标",
+    -- [[ ROGUE — TRICKS OF THE TRADE ]] --------------------------------------
+    L.TricksOfTheTrade = "江湖手法"
+    L.TricksTargetSelectorDesc = "定义自动目标选择的主要逻辑。"
+    L.TricksEnabledDesc = "通过宏启用江湖手法的自动目标选择。"
+    L.TricksMouseoverDesc = "启用鼠标悬停目标选择.\n\n|cffbe89e9注意：|r除|cffffcc00探索伙伴|r外，优先于其他方法。"
+    L.TricksFocusDesc = "通过焦点目标启用自动目标选择.\n\n|cffbe89e9注意：|r优先于目标选择器，但被鼠标悬停或|cffffcc00探索伙伴|r忽略。"
+    L.TricksMuteDesc = "当宏更改目标时隐藏聊天通知。"
+    L.TricksDelveCompanionDesc = "在|cffffcc00探索|r中自动选择|cffaad372布莱恩·铜须|r或|cffFFF468瓦送里拉·桌血奴尔|r等伙伴。\n\n|cffbe89e9注意：|r 在|cffffcc00探索|r中具有独占优先权。"
+    L.TricksTargetLog = "江湖手法目标"
+    L.TricksNormal = "普通"
+    L.TricksCustom = "自定义"
+    L.TricksCustomNameDesc = "输入要目标选择的玩家的确切名称。\n\n|cffbe89e9注意：|r 必须完全匹配游戏内的角色名称。"
+    L.TricksMsgEnabled = "江湖手法系统已激活，宏已同步。"
+    L.TricksMsgDisabled = "江湖手法系统已停用，宏已删除。"
+    L.TricksAlreadyEnabled = "江湖手法系统已激活。"
+    L.TricksAlreadyDisabled = "江湖手法系统已停用。"
+    L.TargetingModeSet = "目标选择模式已设置：%s"
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Stealth State ]] ------------------------------
-    -- ========================================================================
-    StealthStateName        = "隐藏状态",
-    StealthStateActiveText  = "隐藏状态 active",
-    EnableOnStealthState    = "隐藏状态时启用",
+    -- [[ ROGUE — SHROUD OF CONCEALMENT ]] ------------------------------------
+    L.ShroudOfConcealment = "隐蔽幕帘"
+    L.EnableShroudCountdown = "启用聊天倒计时"
+    L.EnableShroudCountdownDesc = "在聊天中发送隐蔽幕帘倒计时消息。"
+    L.ShroudOnlyInstancesDesc = "仅在副本内发送幕帘消息.\n\n|cffbe89e9注意：|r暴雪反垃圾邮件限制可能会在副本外阻止某些频道。"
+    L.ShroudMuteErrors = "静音错误"
+    L.ShroudMuteErrorsDesc = "禁用聊天中的幕帘错误消息。"
+    L.ChatChannel = "聊天频道"
+    L.ChatChannelDesc = "用于幕帘消息的主要聊天频道。\n\n|cffbe89e9注意：|r 可用性取决于队伍和副本类型。"
+    L.ChatChannelFallbackDesc = "主要频道不可用时的备用频道。\n\n|cffbe89e9注意：|r 可用性取决于队伍和副本类型。"
+    L.ShroudMessage = "倒计时消息"
+    L.ShroudMessageDesc = "倒计时期间使用的消息模板。\n\n|cffbe89e9注意：|r 使用 |cffffcc00%time|r 显示剩余时间。"
+    L.ShroudOnStart = "开始消息"
+    L.ShroudOnStartDesc = "幕帘开始时发送的消息。\n\n|cffbe89e9注意：|r 使用 |cffffcc00%time|r 显示剩余时间。"
+    L.ShroudOnEnd = "结束消息"
+    L.ShroudOnEndDesc = "幕帘结束时发送的消息。\n\n|cffbe89e9注意：|r 使用 |cffffcc00%time|r 显示剩余时间。"
+    L.ShroudInterval = "间隔模式"
+    L.ShroudIntervalDesc = "开始、中间和最后5秒发送倒计时。"
+    L.TestShroud = "测试幕帘"
+    L.TestShroudDesc = "模拟本地5秒倒计时.\n\n|cffbe89e9注意：|r消息仅对您可见。"
+    L.ChannelSay = "说"
+    L.ChannelParty = "小队"
+    L.ChannelRaid = "团队"
+    L.ChannelInstance = "副本"
+    L.ChannelYell = "呼喊"
+    L.ChannelNone = "无"
+    L.ShroudAlreadyActive = "幕帘倒计时已激活。"
+    L.ShroudDisabled = "幕帘倒计时在设置中已禁用。"
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Macro System ]] -------------------------------
-    -- ========================================================================
-    MacroTargetHeader       = "目标",
-    MacroTargetSelector     = "目标选择器",
-    MacroAutoUpdateWarning  = "|cffffa500Nightveil 会自动更新此宏。|r",
-    MacroDelveCompanion     = "地下堡伙伴",
-    MacroCustomName         = "自定义目标",
-    MacroCustomSet          = "自定义目标已设为: %s",
-    MacroGroupMembers       = "小组内成员:",
-    MacroInvalidIndex       = "无效的队伍索引。",
-    MacroNoSelf             = "你不能以自己为目标。",
-    MacroBtnEnable          = "激活并同步宏",
-    MacroBtnDisable         = "禁用并移除宏",
-    Mouseover               = "鼠标悬停",
-    Focus                   = "焦点",
-    Tank                    = "坦克",
-    TargetTarget            = "目标的目标",
-    TargetingModeSet        = "目标设置模式设为: %s",
-    Pet                     = "宠物",
-    MuteChanges             = "Mute status changes",
+    -- [[ HUNTER — CAMOUFLAGE ]] ----------------------------------------------
+    L.SkillCamouflage = "伪装"
+    L.CamouflageActiveText = "伪装中"
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — ROGUE ]] ---------------------------------------
-    -- ========================================================================
+    -- [[ HUNTER — MISDIRECTION ]] --------------------------------------------
+    L.Misdirection = "误导"
+    L.MisdirectionMsgEnabled = "误导系统已激活，宏已同步。"
+    L.MisdirectionMsgDisabled = "误导系统已停用，宏已删除。"
+    L.MisdirectionAlreadyEnabled = "误导系统已激活。"
+    L.MisdirectionAlreadyDisabled = "误导系统已停用。"
+    L.MisdirTargetLog = "误导目标"
+    L.ErrorMisdirNotLearned = "您尚未学习误导。"
+    L.ErrorNotHunter = "您不是猎人。此命令仅限猎人使用。"
 
-    -- [[ Stealth ]] -------------------------------------------
-    Stealth                 = "潜行",
-    EnableOnStealth         = "潜行时启用",
-    StealthUseState         = "使用状态检测",
-    StealthActiveText       = "已潜行",
+    -- [[ DRUID — PROWL ]] ----------------------------------------------------
+    L.SkillProwl = "潜行"
+    L.ProwlActiveText = "潜行中"
 
-    -- [[ Poison Tracker ]] ------------------------------------
-    PoisonTracker           = "毒药监控",
-    LethalPoisons           = "致命毒药",
-    NonLethalPoisons        = "非致命毒药",
-    LethalPoisonMissing     = "缺失致命毒药",
-    NonLethalPoisonMissing  = "缺失非致命毒药",
+    -- [[ MAGE — INVISIBILITY ]] ----------------------------------------------
+    L.SkillInvisibility = "隐形术"
+    L.SkillMassInvis = "群体隐形"
+    L.SkillGreaterInvis = "强化隐形术"
+    L.InvisibilityActiveText = "隐形中"
 
-    -- [[ Tricks of the Trade ]] -------------------------------
-    TricksOfTheTrade        = "嫁祸诀窍",
-    TricksTargetLog         = "嫁祸目标",
-    TricksNormal            = "普通",
-    TricksCustom            = "自定义",
-    TricksMsgEnabled        = "嫁祸系统已激活，宏已同步。",
-    TricksMsgDisabled       = "嫁祸系统已禁用，宏已移除。",
-    TricksAlreadyEnabled    = "嫁祸诀窍系统已经启用。",
-    TricksAlreadyDisabled   = "嫁祸诀窍系统已经禁用。",
+    -- [[ NIGHT ELF — SHADOWMELD ]] -------------------------------------------
+    L.SkillShadowmeld = "影遁"
 
-    -- [[ Shroud of Concealment ]] -----------------------------
-    ShroudOfConcealment     = "帷幕",
-    EnableShroudCountdown   = "启用聊天倒计时",
-    ShroudMuteErrors        = "静音错误",
-    ChatChannel             = "聊天频道",
-    ShroudMessage           = "倒计时消息",
-    ShroudOnStart           = "开始消息",
-    ShroudOnEnd             = "结束消息",
-    ShroudInterval          = "间隔模式",
-    TestShroud              = "测试帷幕",
-    ShroudAlreadyActive     = "帷幕倒计时已激活。",
-    ShroudDisabled          = "设置中已禁用帷幕倒计时。",
+    -- [[ MACRO / TARGET SYSTEM ]] --------------------------------------------
+    L.Focus = "焦点"
+    L.FocusDesc = "通过焦点目标激活自动目标选择。"
+    L.Mouseover = "鼠标悬停"
+    L.MouseoverDesc = "激活对鼠标光标下单位的目标选择。"
+    L.MacroBtnDisable = "停用并删除宏"
+    L.MacroBtnEnable = "启用并同步宏"
+    L.MacroBtnEnableDesc = "激活自动瞄准并创建宏。\n\n|cffbe89e9注意：|r Nightveil 会自动更新此宏。 手动编辑可能会被覆盖。"
+    L.MacroBtnDisableDesc = "禁用自动瞄准并完全删除宏。"
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — HUNTER ]] --------------------------------------
-    -- ========================================================================
+    L.MacroCustomName = "自定义目标"
+    L.MacroCustomSet = "自定义目标已设置：%s"
+    L.MacroDelveCompanion = "探索伙伴"
+    L.MacroGroupMembers = "小队成员："
+    L.MacroInvalidIndex = "无效的小队索引。"
+    L.MacroNoSelf = "无法以自身为目标。"
+    L.MacroTargetHeader = "目标"
+    L.MacroTargetSelector = "目标选择器"
+    L.Pet = "宠物"
+    L.Tank = "坦克"
+    L.TargetTarget = "目标的目标"
 
-    -- [[ Camouflage ]] ----------------------------------------
-    Camouflage              = "伪装",
-    EnableOnCamouflage      = "伪装时弃用",
-    CamouflageActiveText    = "伪装中",
+    -- [[ HIGHLIGHTS ]] -------------------------------------------------------
+    L.Highlights = "高亮"
+    L.HighlightGlobalDesc = "在游戏事件期间动态配置角色高亮显示。"
+    L.HighlightCombat = "战斗中"
+    L.HighlightCombatDesc = "进入战斗时的高亮样式。"
+    L.HighlightInstance = "副本中"
+    L.HighlightInstanceDesc = "地下城或团队副本中的高亮样式。"
+    L.HighlightHiddenState = "隐藏状态中"
+    L.HighlightHiddenStateDesc = "任何通用潜行或隐形状态激活时的高亮样式。"
+    L.HighlightStealth = "潜行中"
+    L.HighlightStealthDesc = "潜行激活时的高亮样式。\n\n|cffbe89e9注意：|r |cffFFF468盗贼|r技能。"
+    L.HighlightShadowDance = "在暗影之舞中"
+    L.HighlightShadowDanceDesc = "暗影之舞激活时的高亮样式。\n\n|cffbe89e9注意：|r |cffFFF468盗贼|r技能。"
+    L.HighlightSubterfuge = "在诡诈中"
+    L.HighlightSubterfugeDesc = "诡诈激活时的高亮样式。\n\n|cffbe89e9注意：|r |cffFFF468盗贼|r技能。"
+    L.HighlightProwl = "潜行中（德鲁伊）"
+    L.HighlightProwlDesc = "潜行激活时的高亮样式。\n\n|cffbe89e9注意：|r |cffFF7C0A塔林老人|r技能。"
+    L.HighlightCamouflage = "伪装中"
+    L.HighlightCamouflageDesc = "伪装激活时的高亮样式。\n\n|cffbe89e9注意：|r |cffAAD372猎人|r技能。"
+    L.HighlightInvisibility = "隐形中"
+    L.HighlightInvisibilityDesc = "隐形术激活时的高亮样式。\n\n|cffbe89e9注意：|r |cff3FC7EB法师|r技能。"
+    L.HighlightShadowmeld = "影遁中"
+    L.HighlightShadowmeldDesc = "影遝激活时的高亮样式。\n\n|cffbe89e9注意：|r |cffC3A0FF暮色精灵|r种族技能。"
+    L.HighlightShroud = "隐蔽幕帘中"
+    L.HighlightShroudDesc = "隐蔽幕帘内的高亮样式。\n\n|cffbe89e9注意：|r |cffFFF468盗贼|r技能。"
+    L.HighlightOptNone = "无"
+    L.HighlightOptCircle = "圆圈"
+    L.HighlightOptOutline = "轮廓"
+    L.HighlightOptIcon = "图标"
+    L.HighlightOptCircleOutline = "圆圈和轮廓"
+    L.HighlightOptCircleIcon = "圆圈和图标"
+    L.HighlightOptOutlineIcon = "轮廓和图标"
+    L.HighlightOptCircleOutlineIcon = "圆圈、轮廓和图标"
 
-    -- [[ Misdirection ]] --------------------------------------
-    Misdirection            = "误导",
-    MisdirTargetLog         = "误导目标",
-    MisdirectionNotLearned  = "您尚未学会误导。",
-    MisdirectionMsgEnabled  = "误导系统已激活并同步宏。",
-    MisdirectionMsgDisabled = "误导系统已停用并移除了宏。",
-    MisdirectionAlreadyEnabled = "误导系统已启用。",
-    MisdirectionAlreadyDisabled = "误导系统已停用。",
+    -- [[ PROFILES / MANAGEMENT ]] --------------------------------------------
+    L.Profiles = "配置文件"
+    L.ActiveProfile = "当前配置文件"
+    L.ActiveProfileDesc = "选择此角色使用的配置文件。"
+    L.CreateProfile = "创建配置文件"
+    L.CreateProfileDesc = "使用默认设置创建新的配置文件。"
+    L.DuplicateProfile = "复制配置文件"
+    L.DuplicateProfileDesc = "创建当前配置文件的副本。"
+    L.DeleteProfile = "删除配置文件"
+    L.DeleteProfileDesc = "删除所选配置文件。\n\n|cffbe89e9注意：|r |cffffcc00默认|r配置文件无法删除。"
+    L.ExportProfile = "导出配置文件"
+    L.ExportProfileDesc = "生成可共享此配置文件的字符串。"
+    L.ImportProfile = "导入配置文件"
+    L.ImportProfileDesc = "从共享字符串导入配置文件。\n\n|cffbe89e9注意：|r 这将覆盖当前设置。"
+    L.CreateProfilePrompt = "输入新配置文件名称："
+    L.DuplicateProfilePrompt = "输入复制配置文件名称："
+    L.FactoryResetBtn = "恢复出厂设置"
+    L.FactoryResetBtnDesc = "删除所有插件数据和宏，恢复到初始安装状态。界面将重新加载。\n\n|cffbe89e9注意：|r |cffff2020此操作无法撤销。|r"
+    L.FactoryResetConfirm = "|cffff0000警告：|r 这将删除您 |cffff0000所有|r 的设置和配置文件。\n\n此操作 |cffff0000无法撤销|r。您确定吗？"
+    L.DeleteProfileConfirm = "删除配置文件：\n\n|cffff0000%s|r\n\n无法撤销。"
+    L.ExportProfilePrompt = "复制此导出字符串（Ctrl+C）：\n\n配置文件：|cff00ff00%s|r"
+    L.ImportProfilePrompt = "在下方粘贴配置文件导出字符串："
+    L.ImportProfileNamePrompt = "输入导入配置文件名称："
+    L.ErrorProfileDeleteRestricted = "无法删除默认配置文件。"
+    L.DefaultProfileLabel = "默认"
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — DRUID ]] ---------------------------------------
-    -- ========================================================================
+    -- [[ SYSTEM — MESSAGES & WARNINGS ]] -------------------------------------
+    L.WelcomeMessage = "%s |cffffcc00v%s|r 已加载。输入 |cffffcc00/veil|r 打开设置。"
+    L.UpdateMessage = "%s 已更新至 |cffffcc00v%s|r！输入 |cffffcc00/veil|r 查看新内容。"
+    L.WarningOutdatedConfig = "|cffffcc00检测到更新的配置！|r\n\n建议 |cffbe89e9更新|r 插件或重置配置文件。"
+    L.ErrorShroudOnlyInstances = "|cffff2020幕帘消息仅在副本内有效。|r"
+    L.ErrorMacroCombatLock = "此操作不能在战斗中使用。"
+    L.ErrorMacroLimitReached = "已达到宏的上限。"
+    L.ErrorUnknownCmd = "未知命令：|cffffcc00%s|r。使用 |cffffcc00/veil help|r。"
+    L.ErrorUnknownSubCmd = "未知子命令：|cffffcc00%s|r。使用 |cffffcc00/veil help|r。"
+    L.ErrorHardReset = "|cffff2020检测到旧版本或不兼容版本。|r\n\n设置将被 |cffffcc00重置|r 以确保稳定性。"
+    L.ErrorChannelNoValid = "|cffff2020没有可用的有效聊天频道。|r"
+    L.ErrorChannelAntiSpam = "|cffff2020暴雪反垃圾邮件限制阻止在副本外使用频道|r |cffffcc00%s|r。"
+    L.ErrorChannelNoGroup = "|cffff2020您不在小队中。频道|r |cffffcc00%s|r |cffff2020不可用。|r"
+    L.ErrorChannelNoRaid = "|cffff2020您不在团队中。频道|r |cffffcc00%s|r |cffff2020不可用。|r"
+    L.ErrorChannelInstanceOnly = "|cffff2020频道|r |cffffcc00%s|r |cffff2020在副本外不可用。|r"
+    L.ErrorChannelInvalidGroup = "|cffff2020无效小队。频道|r |cffffcc00%s|r |cffff2020不可用。|r"
+    L.ErrorCombatBlocked = "战斗中无法打开设置。"
+    L.ErrorTricksNotLearned = "您尚未学习江湖手法。"
+    L.ErrorNotRogue = "您不是盗贼。此命令仅限盗贼使用。"
 
-    -- [[ Prowl ]] ---------------------------------------------
-    Prowl                   = "潜行",
-    EnableOnProwl           = "潜行时启用",
-    ProwlActiveText         = "潜行中",
+    -- [[ SYSTEM — DEBUG INFO ]] ----------------------------------------------
+    L.DebugModeActivated = "调试模式已启用"
+    L.DebugModeDeactivated = "调试模式已禁用"
+    L.DebugModeRequired = "此命令需要调试模式。输入 |cffffcc00/veil debug|r 启用。"
+    L.DebugHeader = "%s 诊断："
+    L.DebugCombat = "- 战斗：%s"
+    L.DebugStealth = "- 潜行/消失：%s"
+    L.DebugInstance = "- 副本：%s（类型：%s）"
+    L.DebugGroup = "- 小队：%s（团队：%s，总计：%d）"
+    L.DebugComposition = "- 构成：%d 玩家，%d 宠物，%d 其他"
+    L.DebugInvalidGroup = "- 无效小队：%s"
+    L.DebugPlayer = "玩家"
+    L.DebugPet = "宠物"
+    L.DebugOther = "其他"
+    L.DebugYes = "是"
+    L.DebugNo = "否"
+    L.DebugNone = "无"
+    L.DebugUnknown = "未知"
+    L.DebugFallback1 = "- 备选1：%s（可用：%s）"
+    L.DebugFallback2 = "- 备选2：%s（可用：%s）"
+    L.DebugShroudUsage = "用法：|cffffcc00/veil shroud [1-20]|r"
+    L.DebugTricksForcing = "正在强制更新江湖手法..."
+    L.DebugMacroUpdated = "宏已更新：%s"
+    L.DebugMacroStatus = "宏：%s"
+    L.DebugMacroEdited = "宏内容已修改并同步。"
+    L.DebugCombatLock = "此操作不能在战斗中使用。"
+    L.DebugTricksKnown = "- 已知江湖手法：%s"
+    L.DebugTricksMacro = "- 江湖手法宏：%s"
+    L.DebugTricksTarget = "- 江湖手法目标：%s (%s)"
+    L.DebugMacroSuccess = "宏刷新成功。"
+    L.DebugMisdirForcing = "正在强制更新误导..."
+    L.DebugCommands = "[调试命令]"
 
-    -- ========================================================================
-    -- [[ PROFILE MANAGEMENT ]] ------------------------------------------
-    -- ========================================================================
-    Profiles                = "配置文件",
-    ActiveProfile           = "当前配置文件",
-    ActiveProfileDesc       = "Select which profile to use for this character.",
-    CreateProfile           = "创建配置文件",
-    CreateProfileDesc       = "Create a new profile with default settings.",
-    DuplicateProfile        = "复制配置文件",
-    DuplicateProfileDesc    = "Create a copy of the current profile.",
-    DeleteProfile           = "删除配置文件",
-    DeleteProfileDesc       = "Remove the selected profile (cannot delete Default).",
-    ExportProfile           = "导出配置文件",
-    ExportProfileDesc       = "Generate a string to share this profile with others.",
-    ImportProfile           = "导入配置文件",
-    ImportProfileDesc       = "Import a profile from a shared string.",
-    DefaultProfileLabel     = "默认",
-    CreateProfilePrompt     = "输入新配置文件的名称:",
-    DuplicateProfilePrompt  = "输入复制出的配置文件名称:",
-    ExportProfilePrompt     = "复制此导出字符串 (Ctrl+C):\n\n配置文件: |cff00ff00%s|r",
-    ImportProfilePrompt     = "在下方粘贴配置文件的导出字符串:",
-    ImportProfileNamePrompt = "输入导入配置文件的名称:",
-    DeleteProfileConfirm    = "删除配置文件:\n\n|cffff0000%s|r\n\n此操作不可撤销。",
-    FactoryResetBtn         = "恢复出厂设置",
-    FactoryResetBtnDesc     = "Deletes all addon data and macros, restoring to a clean installation. UI will reload.",
-    FactoryResetConfirm     = "|cffff0000警告:|r 这将删除 |cffff0000所有|r Nightveil 设置和项目，并移除插件创建的宏。\n\n此操作 |cffff0000不可逆|r。\n\n你确定要继续吗？",
-    ErrorProfileDeleteRestricted = "你不能删除默认配置文件。",
-    Import                  = "导入",
-    Share                   = "分享",
-    Next                    = "Next",
+    -- [[ NPC / GAME TERMS ]] -------------------------------------------------
+    L.BrannBronzebeard = "布莱恩·铜须"
+    L.ValeeraSanguinar = "瓦莉拉·萨古纳尔"
 
-    -- ========================================================================
-    -- [[ CHAT CHANNELS ]] -----------------------------------------------
-    -- ========================================================================
-    ChannelSay              = "说",
-    ChannelParty            = "小队",
-    ChannelRaid             = "团队",
-    ChannelInstance         = "副本",
-    ChannelYell             = "大喊",
-
-    -- ========================================================================
-    -- [[ SYSTEM NOTIFICATIONS & ERRORS ]] -------------------------------
-    -- ========================================================================
-    ErrorHardReset          = "|cffff2020检测到旧版本或不兼容版本。|r\n\n设置将被 |cffffcc00重置|r 以确保稳定性。",
-    WarningOutdatedConfig   = "|cffffcc00检测到较新的配置！|r\n\n建议 |cffbe89e9更新|r 插件或重置配置文件。",
-    ErrorChannelNoValid     = "|cffff2020无可用的聊天频道。|r",
-    ErrorChannelAntiSpam    = "|cffff2020由于暴雪反垃圾邮件限制，无法在副本外使用频道|r |cffffcc00%s|r|cffff2020。|r",
-    ErrorChannelNoGroup     = "|cffff2020你不在队伍中。频道 |cffffcc00%s|r |cffff2020不可用。|r",
-    ErrorChannelNoRaid      = "|cffff2020你不在团队中。频道 |cffffcc00%s|r |cffff2020不可用。|r",
-    ErrorChannelInvalidGroup = "|cffff2020你独自一人或处于无效队伍中。频道 |cffffcc00%s|r |cffff2020不可用。|r",
-    ErrorChannelInstanceOnly = "|cffff2020Channel|r |cffffcc00%s|r |cffff2020unavailable outside instances.|r",
-    ErrorNotRogue           = "你不是潜行者，此命令仅限潜行者使用。",
-    ErrorNotHunter          = "You are not a Hunter. This command is Hunter-only.",
-    ErrorTricksNotLearned   = "你尚未学会嫁祸诀窍。",
-    ErrorMisdirNotLearned   = "You have not learned Misdirection yet.",
-    ErrorShroudOnlyInstances = "|cffff2020帷幕消息仅在副本内有效。",
-    ErrorCombatBlocked      = "战斗中无法打开设置。",
-    ErrorMacroLimitReached  = "宏数量已达上限。",
-    ErrorMacroCombatLock    = "This action cannot be used in combat.",
-    ErrorUnknownCmd         = "未知命令: |cffffcc00%s|r。使用 |cffffcc00/veil help|r。",
-    ErrorUnknownSubCmd      = "未知子命令: |cffffcc00%s|r。使用 |cffffcc00/veil help|r。",
-    DebugCombatLock         = "This action cannot be used in combat.",
-
-    -- ========================================================================
-    -- [[ COMMANDS HELP ]] -----------------------------------------------
-    -- ========================================================================
-    HelpSettings            = "设置",
-    HelpTricks              = "嫁祸目标",
-    HelpMisdir              = "误导目标",
-    HelpMisdirPet           = "Pet mode",
-    HelpInfo                = "诊断信息",
-    HelpShroudTest          = "测试帷幕倒计时",
-    HelpDebugToggle         = "切换调试模式",
-    HelpForceRefresh        = "强制刷新宏",
-    HelpModeNormal          = "普通模式",
-    HelpModeTank            = "坦克模式",
-    HelpModeTT              = "目标的目标模式",
-    HelpModeCustom          = "自定义模式",
-    HelpModeList            = "列出并按索引设置",
-    HelpModeSet             = "按名称设置",
-
-    -- ========================================================================
-    -- [[ DEBUG & DIAGNOSTICS ]] -----------------------------------------
-    -- ========================================================================
-    DebugModeActivated      = "调试模式已激活",
-    DebugModeDeactivated    = "调试模式已停用",
-    DebugModeRequired       = "此命令需要调试模式。输入 |cffffcc00/veil debug|r 开启。",
-    DebugCommands           = "[调试命令]",
-    DebugHeader             = "%s 诊断:",
-    DebugCombat             = "- 战斗中: %s",
-    DebugStealth            = "- 潜行/消失: %s",
-    DebugInstance           = "- 副本: %s (类型: %s)",
-    DebugGroup              = "- 队伍: %s (团队: %s, 共 %d 人)",
-    DebugComposition        = "- 构成: %d 玩家, %d 宠物, %d 其他",
-    DebugTricksKnown        = "- 已学嫁祸: %s",
-    DebugTricksTarget       = "- 嫁祸目标: %s (%s)",
-    DebugTricksMacro        = "- 嫁祸宏: %s",
-    DebugInvalidGroup       = "- 无效队伍: %s",
-    DebugPlayer             = "玩家",
-    DebugPet                = "宠物",
-    DebugOther              = "其他",
-    DebugYes                = "是",
-    DebugNo                 = "否",
-    DebugNone               = "无",
-    DebugUnknown            = "未知",
-    DebugFallback1          = "- 备选 1: %s (可用: %s)",
-    DebugFallback2          = "- 备选 2: %s (可用: %s)",
-    DebugShroudUsage        = "用法: |cffffcc00/veil shroud [1-20]|r",
-    DebugTricksForcing      = "强制更新嫁祸...",
-    DebugMisdirForcing      = "Forcing Misdirection update...",
-    DebugMacroSuccess       = "宏刷新成功。",
-    DebugMacroUpdated       = "宏已更新: %s",
-    DebugMacroStatus        = "宏: %s",
-    DebugMacroEdited        = "宏内容已修改并同步。",
-
-    -- ========================================================================
-    -- [[ NPC / GAME TERMS ]] --------------------------------------------
-    -- ========================================================================
-    BrannBronzebeard        = "布兰·铜须",
-    ValeeraSanguinar        = "瓦莉拉·萨古纳尔",
-
-}

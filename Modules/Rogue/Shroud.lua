@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — ROGUE: SHROUD COUNTDOWN ]] ---------------------------------
+-- [[ ROGUE: SHROUD COUNTDOWN ]] ----------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 ns.Modules = ns.Modules or {}
@@ -222,17 +222,17 @@ end
 
 function ns.Modules.Shroud.RunTest(duration)
     if not ns.debugMode then
-        print(string.format(ns.L and ns.L.DebugModeRequired or (ns.Shared.GetAddonName() .. ": |cffbe89e9This command requires Debug Mode.|r Type |cffffcc00/veil debug|r to enable."), ns.Shared.GetAddonName()))
+        print(string.format(ns.L and ns.L.DebugModeRequired or (ns.GetAddonName() .. ": |cffbe89e9This command requires Debug Mode.|r Type |cffffcc00/veil debug|r to enable."), ns.GetAddonName()))
         return
     end
     if shroudActive then
-        print(ns.Shared.GetAddonName() .. ": \|cff6a39a2" .. (ns.L and ns.L.ShroudAlreadyActive or "Shroud countdown is already active.") .. "|r")
+        print(ns.GetAddonName() .. ": \|cff6a39a2" .. (ns.L and ns.L.ShroudAlreadyActive or "Shroud countdown is already active.") .. "|r")
         return
     end
 
     local db = ns.db
     if not db or not db.shroudCountdown then
-        print(ns.Shared.GetAddonName() .. ": \|cff6a39a2" .. (ns.L and ns.L.ShroudDisabled or "Shroud countdown is disabled in settings.") .. "|r")
+        print(ns.GetAddonName() .. ": \|cff6a39a2" .. (ns.L and ns.L.ShroudDisabled or "Shroud countdown is disabled in settings.") .. "|r")
         return
     end
 

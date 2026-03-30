@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — UTILITY SUITE ]] -------------------------------------------
+-- [[ UTILITY SUITE ]] --------------------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 ns.Shared = ns.Shared or {}
@@ -25,9 +25,7 @@ function ns.CompareVersions(v1, v2)
     return 0
 end
 
--- ============================================================================
--- [[ GENERAL UTILITIES ]] ----------------------------------------------------
--- ============================================================================
+-- [[ SHARED UTILITIES ]] ----------------------------------------------------
 
 function ns.Shared.DeepCopy(t)
     if type(t) ~= "table" then return t end
@@ -38,12 +36,6 @@ function ns.Shared.DeepCopy(t)
     return res
 end
 
-function ns.Shared.GetAddonName()
-    return "Night|cffBE89E9v|cffBB86E7e|cffB883E5i|cffB580E3l|r"
-end
-
--- Fallback for legacy code
-ns.GetAddonName = ns.Shared.GetAddonName
 
 function ns.Shared.GetClassColor(classFilename)
     local hex = ns.Shared.CLASS_COLORS and ns.Shared.CLASS_COLORS[classFilename]
@@ -125,7 +117,7 @@ function ns.Shared.DebugState()
         return val and ("\|cffbe89e9" .. (ns.L and ns.L.DebugYes or "YES") .. "|r") or ("|cffff0000" .. (ns.L and ns.L.DebugNo or "NO") .. "|r")
     end
 
-    print(ns.L and ns.L.DebugHeader and string.format(ns.L.DebugHeader, ns.Shared.GetAddonName()) or (ns.Shared.GetAddonName() .. " Debug:"))
+    print(ns.L and ns.L.DebugHeader and string.format(ns.L.DebugHeader, ns.GetAddonName()) or (ns.GetAddonName() .. " Debug:"))
     print(string.format(ns.L and ns.L.DebugCombat or " - Combat: %s", GetYesNo(combat)))
     print(string.format(ns.L and ns.L.DebugStealth or " - Stealth: %s", GetYesNo(stealthed)))
     print(string.format(ns.L and ns.L.DebugInstance or " - Instance: %s (Type: %s)", GetYesNo(inInstance), instanceType or (ns.L and ns.L.DebugNone or "none")))

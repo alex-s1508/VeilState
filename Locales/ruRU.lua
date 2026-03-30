@@ -1,321 +1,360 @@
+-- ============================================================================
+-- [[ LOCALIZATION: ruRU ]] ---------------------------------------------------
+-- ============================================================================
 local addonName, ns = ...
-local locale = GetLocale()
-if locale ~= "ruRU" then return end
+if GetLocale() ~= "ruRU" then return end
 
-ns.L = {
-    -- ========================================================================
-    -- [[ SYSTEM / GENERAL UI ]] -----------------------------------------
-    -- ========================================================================
-    Enable                  = "Включить",
-    Management              = "Управление",
-    ReleaseNotes            = "Заметки к выпуску",
-    WelcomeMessage          = "%s |cffffcc00v%s|r загружен. Введите |cffffcc00/veil|r, чтобы открыть настройки.",
-    UpdateMessage           = "%s обновлен до |cffffcc00v%s|r! Введите |cffffcc00/veil|r, чтобы узнать, что нового.",
-    FloatingText            = "Всплывающий текст",
+ns.L = ns.L or {}
+local L = ns.L
 
-    -- ========================================================================
-    -- [[ INTERFACE — Elements & Styles ]] -------------------------------
-    -- ========================================================================
-    Color                   = "Цвет",
-    Size                    = "Размер",
-    Opacity                 = "Непрозрачность",
-    Thickness               = "Толщина",
-    Style                   = "Стиль",
-    Layer                   = "Слой",
-    LayerBackground         = "Фон",
-    LayerLow                = "Низкий",
-    LayerMedium             = "Средний",
-    LayerHigh               = "Высокий",
-    LayerDialog             = "Диалог",
-    LayerFullscreen         = "Весь экран",
-    ScreenColor             = "Цвет экрана",
-    Vignette                = "Виньетка",
+    -- [[ SYSTEM / GENERAL UI ]] ----------------------------------------------
+    L.Enable = "Включить"
+    L.EnableDesc = "Включает или отключает эту функцию."
+    L.Management = "Управление"
+    L.ReleaseNotes = "Примечания к версии"
+    L.OnlyInCombat = "Только в бою"
+    L.OnlyInCombatDesc = "Показывать предупреждения только во время боя."
+    L.OnlyInInstances = "Только в подземельях"
+    L.OnlyInInstancesDesc = "Показывать предупреждения только внутри подземелий."
+    L.Color = "Цвет"
+    L.ColorOfSkill = "Цвет для %s"
+    L.Size = "Размер"
+    L.SizeDesc = "Изменяет размер элемента."
+    L.Opacity = "Прозрачность"
+    L.OpacityDesc = "Изменяет уровень прозрачности элемента."
+    L.OffsetX = "Смещение X"
+    L.OffsetXDesc = "Перемещает элемент горизонтально."
+    L.OffsetY = "Смещение Y"
+    L.OffsetYDesc = "Перемещает элемент вертикально."
+    L.Layer = "Слой"
+    L.LayerDesc = "Слой отрисовки.\n\n|cffbe89e9Примечание:|r Более высокие значения отображаются выше."
+    L.LayerBackground = "Фон"
+    L.LayerLow = "Низкий"
+    L.LayerMedium = "Средний"
+    L.LayerHigh = "Высокий"
+    L.LayerDialog = "Диалог"
+    L.LayerFullscreen = "Весь экран"
+    L.CustomText = "Текст"
+    L.CustomTextDesc = "Пользовательский текст сообщения для отображения."
+    L.IconTexture = "Иконка"
+    L.IconTextureDesc = "Путь текстуры или FileID иконки.\n\n|cffbe89e9Примечание:|r Принимает пути |cffffcc00Interface\\Icons\\...|r или числовой FileID."
+    L.TextOfSkill = "Текст %s"
+    L.IconOfSkill = "Значок %s"
+    L.IndicatorIcon = "Иконка-индикатор"
+    L.EnableIconDesc = "Показывает иконку-индикатор рядом с текстом."
+    L.AnchorToText = "Привязать к тексту"
+    L.AnchorToTextDesc = "Привязывает иконку к позиции текстового элемента."
+    L.AnchorPoint = "Точка привязки"
+    L.AnchorPointDesc = "Сторона текста, используемая как точка привязки."
+    L.AnchorTopLeft = "Вверху слева"
+    L.AnchorTop = "Вверху"
+    L.AnchorTopRight = "Вверху справа"
+    L.AnchorLeft = "Слева"
+    L.AnchorCenter = "По центру"
+    L.AnchorRight = "Справа"
+    L.AnchorBottomLeft = "Внизу слева"
+    L.AnchorBottom = "Внизу"
+    L.AnchorBottomRight = "Внизу справа"
+    L.Sound = "Звук"
+    L.SoundDesc = "Воспроизводит звуковой сигнал при активации."
+    L.SoundKitId = "ID SoundKit"
+    L.SoundKitIdDesc = "ID SoundKit для воспроизведения.\n\n|cffbe89e9Примечание:|r Используйте только числовые ID."
+    L.TestSound = "Проверить звук"
+    L.TestSoundDesc = "Немедленно воспроизводит выбранный звук."
+    L.ScreenColor = "Цвет экрана"
+    L.ScreenColorOfSkill = "Цвет для %s"
+    L.Vignette = "Виньетка"
+    L.Thickness = "Толщина"
+    L.ThicknessDesc = "Управляет толщиной границы виньетки."
+    L.FloatingText = "Плавающий текст"
+    L.Messages = "Сообщения"
+    L.Share = "Поделиться"
+    L.MuteChanges = "Отключить уведомления о смене"
+    L.MuteChangesDesc = "Скрывает уведомления в чате при смене цели макросом."
+    L.Next = "Далее"
+    L.Import = "Импорт"
+    L.InstanceFilters = "Фильтры подземелий"
+    L.DisableInDungeons = "Отключить в подземельях"
+    L.DisableInDungeonsDesc = "Отключает функцию внутри подземелий.\n\n|cffbe89e9Примечание:|r Переопределяет глобальные условия включения."
+    L.DisableInRaids = "Отключить в рейдах"
+    L.DisableInRaidsDesc = "Отключает функцию внутри рейдов.\n\n|cffbe89e9Примечание:|r Переопределяет глобальные условия включения."
 
-    -- ========================================================================
-    -- [[ INTERFACE — Positioning & Anchors ]] ---------------------------
-    -- ========================================================================
-    AnchorPoint             = "Точка привязки",
-    AnchorToText            = "Привязать к тексту",
-    OffsetX                 = "Смещение X",
-    OffsetY                 = "Смещение Y",
-    AnchorTopLeft           = "Сверху слева",
-    AnchorTop               = "Сверху",
-    AnchorTopRight          = "Сверху справа",
-    AnchorLeft              = "Слева",
-    AnchorCenter            = "Центр",
-    AnchorRight             = "Справа",
-    AnchorBottomLeft        = "Снизу слева",
-    AnchorBottom            = "Снизу",
-    AnchorBottomRight       = "Снизу справа",
+    -- [[ SYSTEM — COMMANDS HELP ]] -------------------------------------------
+    L.HelpSettings = "Открыть настройки"
+    L.HelpTricks = "Статус Хитрости"
+    L.HelpMisdir = "Статус Перенаправления"
+    L.HelpMisdirPet = "Режим питомца"
+    L.HelpInfo = "Диагностика"
+    L.HelpForceRefresh = "Принудительно обновить макрос"
+    L.HelpShroudTest = "Проверить обратный отсчёт Покрова"
+    L.HelpDebugToggle = "Переключить режим отладки"
+    L.HelpModeList = "Список и выбор по индексу"
+    L.HelpModeNormal = "Нормальный режим"
+    L.HelpModeTank = "Режим Танка"
+    L.HelpModeTT = "Режим Цели цели"
+    L.HelpModeSet = "Задать по имени"
+    L.HelpModeCustom = "Пользовательский режим"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Icons & Multimedia ]] ------------------------------
-    -- ========================================================================
-    IndicatorIcon           = "Иконка-индикатор",
-    IconTexture             = "Текстура иконки",
-    Sound                   = "Звук",
-    SoundKitId              = "ID SoundKit",
-    TestSound               = "Проверить звук",
+    -- [[ SHARED — HIDDEN STATE ]] --------------------------------------------
+    L.HiddenStateName = "Скрытое состояние"
+    L.EnableOnHiddenState = "Активировать для скрытого состояния"
+    L.EnableOnHiddenStateDesc = "Включает или отключает визуальные оповещения для большинства состояний невидимости и скрытности."
+    L.HiddenStateActiveText = "СКРЫТ"
+    L.AuraDetections = "Обнаружение Аур"
+    L.HiddenStateEnableTextDesc = "Отображает анимированный текст при активации скрытого состояния."
+    L.HiddenStateCustomTextDesc = "Текст по умолчанию, если ни одна аура его не заменяет."
+    L.HiddenStateAuraTextDesc = "Особый текст, отображаемый при активности %s.\n\n|cffbe89e9Примечание:|r Оставьте пустым для игнорирования."
+    L.HiddenStateAuraTextColorDesc = "Цвет текста при активном %s."
+    L.HiddenStateAuraIconDesc = "Путь к текстуре или FileID иконки при активном %s."
+    L.HiddenStateAuraScreenColorDesc = "Цвет экрана при активном %s."
+    L.HiddenStateAuraTrackDesc = "Обнаруживает и отслеживает конкретно ауру %s."
+    L.HiddenStateEnableIconDesc = "Показывает иконку-текстуру рядом с плавающим текстом."
+    L.HiddenStateIconTextureDesc = "Генерический путь к иконке, если отдельная аура не задаёт иконку.\n\n|cffbe89e9Примечание:|r Используется, когда не задана конкретная иконка ауры."
+    L.HiddenStateIconAnchorDesc = "Автоматически привязывает иконку рядом с плавающим текстом."
+    L.HiddenStateIconAnchorPointDesc = "Сторона привязки иконки относительно текста."
+    L.HiddenStateTextAlphaDesc = "Управляет прозрачностью плавающего текста."
+    L.HiddenStateTextXDesc = "Горизонтальная позиция плавающего текста на экране."
+    L.HiddenStateTextYDesc = "Вертикальная позиция плавающего текста на экране."
+    L.HiddenStateTextSizeDesc = "Размер шрифта плавающего текста."
+    L.HiddenStateIconXDesc = "Горизонтальное смещение иконки-индикатора."
+    L.HiddenStateIconYDesc = "Вертикальное смещение иконки-индикатора."
+    L.HiddenStateIconSizeDesc = "Размер иконки-индикатора."
+    L.HiddenStateIconAlphaDesc = "Прозрачность иконки-индикатора."
+    L.HiddenStateScreenEnableDesc = "Накладывает цветовой тинт на весь экран при скрытом состоянии."
+    L.HiddenStateScreenAlphaDesc = "Максимальная интенсивность цветового тинта."
+    L.HiddenStateVignetteEnableDesc = "Отображает тёмную тень по краям экрана."
+    L.HiddenStateVignetteSizeDesc = "Управляет шириной виньетки внутрь."
+    L.HiddenStateVignetteAlphaDesc = "Максимальная прозрачность наложения виньетки."
+    L.HiddenStateDisableInDungeonsDesc = "Не показывает визуальное отслеживание в подземельях."
+    L.HiddenStateDisableInRaidsDesc = "Не показывает визуальное отслеживание в рейдах."
 
-    -- ========================================================================
-    -- [[ INTERFACE — Logic & Filters ]] ---------------------------------
-    -- ========================================================================
-    OnlyInInstances         = "Только в подземельях",
-    OnlyInCombat            = "Только в бою",
-    DisableInDungeons       = "Отключить в подземельях",
-    DisableInRaids          = "Отключить в рейдах",
-    InstanceFilters         = "Фильтры подземелий",
+    -- [[ ROGUE — STEALTH & VANISH ]] -----------------------------------------
+    L.StealthActiveText = "В ТЕНИ"
+    L.SkillStealth = "Крадущийся зверь"
+    L.SkillVanish = "Исчезновение"
+    L.SkillShadowDance = "Танец теней"
+    L.SkillSubterfuge = "Увертка"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Message Customization ]] ---------------------------
-    -- ========================================================================
-    CustomText              = "Пользовательский текст",
-    Messages                = "Сообщения",
+    -- [[ ROGUE — POISON TRACKER ]] -------------------------------------------
+    L.PoisonTracker = "Отслеживание ядов"
+    L.LethalPoisons = "Смертельный яд"
+    L.LethalPoisonsDesc = "Показывает предупреждение, если смертельный яд отсутствует."
+    L.NonLethalPoisons = "Несмертельный яд"
+    L.NonLethalPoisonsDesc = "Показывает предупреждение, если несмертельный яд отсутствует."
+    L.LethalPoisonMissing = "НЕТ СМЕРТЕЛЬНОГО ЯДА"
+    L.NonLethalPoisonMissing = "НЕТ НЕСМЕРТЕЛЬНОГО ЯДА"
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Highlights ]] ---------------------------------
-    -- ========================================================================
-    Highlights              = "Подсветки",
-    Highlight               = "Подсветка",
-    HighlightGlobalDesc     = "|cffffa500Динамическая настройка подсветки персонажа во время игровых событий.|r",
-    HighlightCombat         = "В бою",
-    HighlightCombatDesc     = "Highlight style when entering combat.",
-    HighlightInstance       = "В подземелье",
-    HighlightInstanceDesc   = "Highlight style when inside a dungeon or raid.",
-    HighlightHidden         = "В состоянии скрытности",
-    HighlightHiddenDesc     = "Highlight style when in a custom stealth state.",
-    HighlightStealth        = "In Stealth",
-    HighlightStealthDesc    = "Highlight style when stealthed.",
-    HighlightShroud         = "In Shroud of Concealment",
-    HighlightShroudDesc     = "Highlight style when inside Shroud of Concealment.",
-    HighlightCamouflage     = "In Camouflage",
-    HighlightCamouflageDesc = "Highlight style when camouflaged.",
-    HighlightProwl          = "In Prowl",
-    HighlightProwlDesc      = "Highlight style when prowling.",
-    HighlightOptNone        = "Нет",
-    HighlightOptCircle      = "Круг",
-    HighlightOptOutline     = "Контур",
-    HighlightOptIcon        = "Иконка",
-    HighlightOptCircleOutline = "Круг и контур",
-    HighlightOptCircleIcon  = "Круг и иконка",
-    HighlightOptOutlineIcon = "Контур и иконка",
-    HighlightOptCircleOutlineIcon = "Круг, контур и иконка",
+    -- [[ ROGUE — TRICKS OF THE TRADE ]] --------------------------------------
+    L.TricksOfTheTrade = "Хитрость"
+    L.TricksTargetSelectorDesc = "Определяет основную логику автоматического выбора цели."
+    L.TricksEnabledDesc = "Включает автоматическое нацеливание Хитрости через макрос."
+    L.TricksMouseoverDesc = "Включить нацеливание через наведение мыши.\n\n|cffbe89e9Примечание:|r Приоритет над другими методами, кроме |cffffcc00Спутника|r."
+    L.TricksFocusDesc = "Включает автоматическое нацеливание через фокус.\n\n|cffbe89e9Примечание:|r Приоритет над выбором цели, но игнорируется наведением мыши или |cffffcc00Спутником|r."
+    L.TricksMuteDesc = "Скрывает уведомления в чате при смене цели макросом."
+    L.TricksDelveCompanionDesc = "Автоматически нацеливается на спутников вроде |cffaad372Бранна Бронзобород|r или |cffFFF468Валиры Сангвинар|r в |cffffcc00Рейдах|r.\n\n|cffbe89e9Примечание:|r Исключительный приоритет внутри |cffffcc00Рейдов|r."
+    L.TricksTargetLog = "Цель Хитрости"
+    L.TricksNormal = "Обычный"
+    L.TricksCustom = "Пользовательский"
+    L.TricksCustomNameDesc = "Введите точное имя игрока для нацеливания.\n\n|cffbe89e9Примечание:|r Должно точно совпадать с именем персонажа в игре."
+    L.TricksMsgEnabled = "Система Хитрости активирована и макрос синхронизирован."
+    L.TricksMsgDisabled = "Система Хитрости отключена и макрос удалён."
+    L.TricksAlreadyEnabled = "Система Хитрости уже активирована."
+    L.TricksAlreadyDisabled = "Система Хитрости уже отключена."
+    L.TargetingModeSet = "Режим нацеливания задан: %s"
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Stealth State ]] ------------------------------
-    -- ========================================================================
-    StealthStateName        = "Состояние скрытности",
-    StealthStateActiveText  = "СКРЫТНОСТЬ",
-    EnableOnStealthState    = "Включить в скрытности",
+    -- [[ ROGUE — SHROUD OF CONCEALMENT ]] ------------------------------------
+    L.ShroudOfConcealment = "Покров Сокрытия"
+    L.EnableShroudCountdown = "Включить обратный отсчёт в чате"
+    L.EnableShroudCountdownDesc = "Отправляет сообщения обратного отсчёта Покрова в чат."
+    L.ShroudOnlyInstancesDesc = "Отправляет сообщения Покрова только в подземельях.\n\n|cffbe89e9Примечание:|r некоторые каналы блокируются вне подземелий системой Blizzard."
+    L.ShroudMuteErrors = "Отключить ошибки"
+    L.ShroudMuteErrorsDesc = "Отключает сообщения об ошибках Покрова в чате."
+    L.ChatChannel = "Канал чата"
+    L.ChatChannelDesc = "Основной канал чата для сообщений Покрова.\n\n|cffbe89e9Примечание:|r Доступность зависит от группы и типа подземелья."
+    L.ChatChannelFallbackDesc = "Резервный канал, если основной недоступен.\n\n|cffbe89e9Примечание:|r Доступность зависит от группы и типа подземелья."
+    L.ShroudMessage = "Сообщение обратного отсчёта"
+    L.ShroudMessageDesc = "Шаблон сообщения во время обратного отсчёта.\n\n|cffbe89e9Примечание:|r Используйте |cffffcc00%time|r для отображения оставшегося времени."
+    L.ShroudOnStart = "Начальное сообщение"
+    L.ShroudOnStartDesc = "Сообщение, отправляемое в начале Покрова.\n\n|cffbe89e9Примечание:|r Используйте |cffffcc00%time|r для отображения оставшегося времени."
+    L.ShroudOnEnd = "Конечное сообщение"
+    L.ShroudOnEndDesc = "Сообщение, отправляемое по окончании Покрова.\n\n|cffbe89e9Примечание:|r Используйте |cffffcc00%time|r для отображения оставшегося времени."
+    L.ShroudInterval = "Режим интервала"
+    L.ShroudIntervalDesc = "Начало, середина и последние 5 секунд."
+    L.TestShroud = "Проверить Покров"
+    L.TestShroudDesc = "Имитирует локальный 5-секундный обратный отсчёт.\n\n|cffbe89e9Примечание:|r Сообщения видны только вам."
+    L.ChannelSay = "Сказать"
+    L.ChannelParty = "Группа"
+    L.ChannelRaid = "Рейд"
+    L.ChannelInstance = "Подземелье"
+    L.ChannelYell = "Кричать"
+    L.ChannelNone = "Нет"
+    L.ShroudAlreadyActive = "Обратный отсчёт Покрова уже активен."
+    L.ShroudDisabled = "Обратный отсчёт Покрова отключён в настройках."
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Macro System ]] -------------------------------
-    -- ========================================================================
-    MacroTargetHeader       = "Цель",
-    MacroTargetSelector     = "Выбор цели",
-    MacroAutoUpdateWarning  = "|cffffa500Nightveil автоматически обновляет этот макрос.|r",
-    MacroDelveCompanion     = "Спутник вылазок",
-    MacroCustomName         = "Своя цель",
-    MacroCustomSet          = "Установлена своя цель: %s",
-    MacroGroupMembers       = "Участники группы:",
-    MacroInvalidIndex       = "Неверный индекс группы.",
-    MacroNoSelf             = "Вы не можете выбрать целью самого себя.",
-    MacroBtnEnable          = "Активировать и синхр. макрос",
-    MacroBtnDisable         = "Деактивировать и удалить макрос",
-    Mouseover               = "Мышь",
-    Focus                   = "Фокус",
-    Tank                    = "Танк",
-    TargetTarget            = "Цель цели",
-    TargetingModeSet        = "Режим выбора цели: %s",
-    Pet                     = "Питомец",
-    MuteChanges             = "Mute status changes",
+    -- [[ HUNTER — CAMOUFLAGE ]] ----------------------------------------------
+    L.SkillCamouflage = "Маскировка"
+    L.CamouflageActiveText = "ЗАМАСКИРОВАН"
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — ROGUE ]] ---------------------------------------
-    -- ========================================================================
+    -- [[ HUNTER — MISDIRECTION ]] --------------------------------------------
+    L.Misdirection = "Перенаправление"
+    L.MisdirectionMsgEnabled = "Система Перенаправления активирована и макрос синхронизирован."
+    L.MisdirectionMsgDisabled = "Система Перенаправления отключена и макрос удалён."
+    L.MisdirectionAlreadyEnabled = "Система Перенаправления уже активирована."
+    L.MisdirectionAlreadyDisabled = "Система Перенаправления уже отключена."
+    L.MisdirTargetLog = "Цель Перенаправления"
+    L.ErrorMisdirNotLearned = "Вы ещё не изучили Перенаправление."
+    L.ErrorNotHunter = "Вы не Охотник. Эта команда доступна только Охотникам."
 
-    -- [[ Stealth ]] -------------------------------------------
-    Stealth                 = "Незаметность",
-    EnableOnStealth         = "Включить при незаметности",
-    StealthUseState         = "Использовать обнаружение состояний",
-    StealthActiveText       = "В СКРЫТНОСТИ",
+    -- [[ DRUID — PROWL ]] ----------------------------------------------------
+    L.SkillProwl = "Крадущийся зверь"
+    L.ProwlActiveText = "КРАДЁТСЯ"
 
-    -- [[ Poison Tracker ]] ------------------------------------
-    PoisonTracker           = "Отслеживание ядов",
-    LethalPoisons           = "Смертельный яд",
-    NonLethalPoisons        = "Смертоносный яд",
-    LethalPoisonMissing     = "НЕТ СМЕРТЕЛЬНОГО ЯДА",
-    NonLethalPoisonMissing  = "НЕТ СМЕРТОНОСНОГО ЯДА",
+    -- [[ MAGE — INVISIBILITY ]] ----------------------------------------------
+    L.SkillInvisibility = "Невидимость"
+    L.SkillMassInvis = "Массовая невидимость"
+    L.SkillGreaterInvis = "Великая невидимость"
+    L.InvisibilityActiveText = "НЕВИДИМ"
 
-    -- [[ Tricks of the Trade ]] -------------------------------
-    TricksOfTheTrade        = "Маленькие хитрости",
-    TricksTargetLog         = "Цель хитростей",
-    TricksNormal            = "Обычный",
-    TricksCustom            = "Свой",
-    TricksMsgEnabled        = "Система Хитростей активирована, макрос синхронизирован.",
-    TricksMsgDisabled       = "Система Хитростей деактивирована, макрос удален.",
-    TricksAlreadyEnabled    = "Система Маленьких хитростей уже включена.",
-    TricksAlreadyDisabled   = "Система Маленьких хитростей уже выключена.",
+    -- [[ NIGHT ELF — SHADOWMELD ]] -------------------------------------------
+    L.SkillShadowmeld = "Слиться с тенью"
 
-    -- [[ Shroud of Concealment ]] -----------------------------
-    ShroudOfConcealment     = "Покров незаметности",
-    EnableShroudCountdown   = "Включить отсчет в чате",
-    ShroudMuteErrors        = "Скрыть ошибки",
-    ChatChannel             = "Канал чата",
-    ShroudMessage           = "Сообщение отсчета",
-    ShroudOnStart           = "Сообщение о начале",
-    ShroudOnEnd             = "Сообщение о конце",
-    ShroudInterval          = "Интервальный режим",
-    TestShroud              = "Тест Покрова",
-    ShroudAlreadyActive     = "Отсчет Покрова уже идет.",
-    ShroudDisabled          = "Отсчет Покрова отключен в настройках.",
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — HUNTER ]] --------------------------------------
-    -- ========================================================================
+    -- [[ MACRO / TARGET SYSTEM ]] --------------------------------------------
+    L.Focus = "Фокус"
+    L.FocusDesc = "Активирует автоматическое нацеливание через цель фокуса."
+    L.Mouseover = "Наведение мыши"
+    L.MouseoverDesc = "Активирует нацеливание на юнита под курсором мыши."
+    L.MacroBtnDisable = "Отключить и удалить макрос"
+    L.MacroBtnEnable = "Включить и синхронизировать макрос"
+    L.MacroBtnEnableDesc = "Активирует автоматическое прицеливание и создает макрос.\n\n|cffbe89e9Примечание:|r Nightveil автоматически обновляет этот макрос. Ручные изменения могут быть перезаписаны."
+    L.MacroBtnDisableDesc = "Отключает автоматическое прицеливание и полностью удаляет макрос."
 
-    -- [[ Camouflage ]] ----------------------------------------
-    Camouflage              = "Камуфляж",
-    EnableOnCamouflage      = "Включить при камуфляже",
-    CamouflageActiveText    = "В КАМУФЛЯЖЕ",
+    L.MacroCustomName = "Выбранная цель"
+    L.MacroCustomSet = "Цель задана: %s"
+    L.MacroDelveCompanion = "Спутник рейда"
+    L.MacroGroupMembers = "Члены группы:"
+    L.MacroInvalidIndex = "Недопустимый индекс группы."
+    L.MacroNoSelf = "Нельзя нацеливаться на себя."
+    L.MacroTargetHeader = "Цель"
+    L.MacroTargetSelector = "Выбор цели"
+    L.Pet = "Питомец"
+    L.Tank = "Танк"
+    L.TargetTarget = "Цель цели"
 
-    -- [[ Misdirection ]] --------------------------------------
-    Misdirection            = "Перенаправление",
-    MisdirTargetLog         = "Цель перенаправления",
-    MisdirectionNotLearned  = "Вы еще не изучили Перенаправление.",
-    MisdirectionMsgEnabled  = "Система перенаправления активирована, макрос синхронизирован.",
-    MisdirectionMsgDisabled = "Система перенаправления деактивирована, макрос удален.",
-    MisdirectionAlreadyEnabled = "Система перенаправления уже активирована.",
-    MisdirectionAlreadyDisabled = "Система перенаправления уже деактивирована.",
+    -- [[ HIGHLIGHTS ]] -------------------------------------------------------
+    L.Highlights = "Подсветка"
+    L.HighlightGlobalDesc = "Настраивает подсветку персонажа динамически во время игровых событий."
+    L.HighlightCombat = "В бою"
+    L.HighlightCombatDesc = "Стиль подсветки при входе в бой."
+    L.HighlightInstance = "В подземелье"
+    L.HighlightInstanceDesc = "Стиль подсветки внутри подземелья или рейда."
+    L.HighlightHiddenState = "В скрытом состоянии"
+    L.HighlightHiddenStateDesc = "Стиль подсветки при активном общем состоянии скрытности или невидимости."
+    L.HighlightStealth = "В Крадущемся звере"
+    L.HighlightStealthDesc = "Стиль подсветки при активной скрытности.\n\n|cffbe89e9Примечание:|r Способность |cffFFF468Разбойника|r."
+    L.HighlightShadowDance = "В Танце теней"
+    L.HighlightShadowDanceDesc = "Стиль подсветки при активном Танце теней.\n\n|cffbe89e9Примечание:|r Способность |cffFFF468Разбойника|r."
+    L.HighlightSubterfuge = "В Увертке"
+    L.HighlightSubterfugeDesc = "Стиль подсветки при активной Увертке.\n\n|cffbe89e9Примечание:|r Способность |cffFFF468Разбойника|r."
+    L.HighlightProwl = "В Крадущемся звере (Друид)"
+    L.HighlightProwlDesc = "Стиль подсветки при активном Крадущемся звере.\n\n|cffbe89e9Примечание:|r Способность |cffFF7C0AДруида|r."
+    L.HighlightCamouflage = "В Маскировке"
+    L.HighlightCamouflageDesc = "Стиль подсветки при активной Маскировке.\n\n|cffbe89e9Примечание:|r Способность |cffAAD372Охотника|r."
+    L.HighlightInvisibility = "В Невидимости"
+    L.HighlightInvisibilityDesc = "Стиль подсветки при активной Невидимости.\n\n|cffbe89e9Примечание:|r Способность |cff3FC7EBМага|r."
+    L.HighlightShadowmeld = "В Слиянии с тенью"
+    L.HighlightShadowmeldDesc = "Стиль подсветки при активном Слиянии с тенью.\n\n|cffbe89e9Примечание:|r Расовая способность |cffC3A0FFНочного эльфа|r."
+    L.HighlightShroud = "В Покрове Сокрытия"
+    L.HighlightShroudDesc = "Стиль внутри Покрова Сокрытия.\n\n|cffbe89e9Примечание:|r Способность |cffFFF468Разбойника|r."
+    L.HighlightOptNone = "Нет"
+    L.HighlightOptCircle = "Круг"
+    L.HighlightOptOutline = "Контур"
+    L.HighlightOptIcon = "Иконка"
+    L.HighlightOptCircleOutline = "Круг и контур"
+    L.HighlightOptCircleIcon = "Круг и иконка"
+    L.HighlightOptOutlineIcon = "Контур и иконка"
+    L.HighlightOptCircleOutlineIcon = "Круг, контур и иконка"
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — DRUID ]] ---------------------------------------
-    -- ========================================================================
+    -- [[ PROFILES / MANAGEMENT ]] --------------------------------------------
+    L.Profiles = "Профили"
+    L.ActiveProfile = "Активный профиль"
+    L.ActiveProfileDesc = "Выберите профиль для этого персонажа."
+    L.CreateProfile = "Создать профиль"
+    L.CreateProfileDesc = "Создаёт новый профиль с настройками по умолчанию."
+    L.DuplicateProfile = "Дублировать профиль"
+    L.DuplicateProfileDesc = "Создаёт копию текущего профиля."
+    L.DeleteProfile = "Удалить профиль"
+    L.DeleteProfileDesc = "Удаляет выбранный профиль.\n\n|cffbe89e9Примечание:|r Профиль |cffffcc00По умолчанию|r нельзя удалить."
+    L.ExportProfile = "Экспорт профиля"
+    L.ExportProfileDesc = "Создаёт строку для обмена профилем."
+    L.ImportProfile = "Импорт профиля"
+    L.ImportProfileDesc = "Импортирует профиль из строки обмена.\n\n|cffbe89e9Примечание:|r Это перезапишет текущие настройки."
+    L.CreateProfilePrompt = "Введите имя для нового профиля:"
+    L.DuplicateProfilePrompt = "Введите имя для дублированного профиля:"
+    L.FactoryResetBtn = "Сброс данных"
+    L.FactoryResetBtnDesc = "Удаляет все данные и макросы аддона, восстанавливая чистую установку. Интерфейс будет перезагружен.\n\n|cffbe89e9Примечание:|r |cffff2020Это действие необратимо.|r"
+    L.FactoryResetConfirm = "|cffff0000ВНИМАНИЕ:|r Это удалит |cffff0000ВСЕ|r ваши настройки и профили.\n\nЭто действие |cffff0000НЕОБРАТИМО|r. Вы уверены?"
+    L.DeleteProfileConfirm = "Удалить профиль:\n\n|cffff0000%s|r\n\nОтменить невозможно."
+    L.ExportProfilePrompt = "Скопируйте эту строку (Ctrl+C):\n\nПрофиль: |cff00ff00%s|r"
+    L.ImportProfilePrompt = "Вставьте строку экспорта профиля ниже:"
+    L.ImportProfileNamePrompt = "Введите имя для импортируемого профиля:"
+    L.ErrorProfileDeleteRestricted = "Нельзя удалить профиль по умолчанию."
+    L.DefaultProfileLabel = "По умолчанию"
 
-    -- [[ Prowl ]] ---------------------------------------------
-    Prowl                   = "Крадущийся зверь",
-    EnableOnProwl           = "Включить при подкрадывании",
-    ProwlActiveText         = "КРАДЕТСЯ",
+    -- [[ SYSTEM — MESSAGES & WARNINGS ]] -------------------------------------
+    L.WelcomeMessage = "%s |cffffcc00v%s|r загружен. Введите |cffffcc00/veil|r для настроек."
+    L.UpdateMessage = "%s обновлён до |cffffcc00v%s|r! Введите |cffffcc00/veil|r для просмотра изменений."
+    L.WarningOutdatedConfig = "|cffffcc00Обнаружена новая конфигурация!|r\n\nРекомендуется |cffbe89e9обновить|r аддон или сбросить профиль."
+    L.ErrorShroudOnlyInstances = "|cffff2020Сообщения Покрова работают только в подземельях.|r"
+    L.ErrorMacroCombatLock = "Это действие нельзя использовать в бою."
+    L.ErrorMacroLimitReached = "Достигнут лимит макросов."
+    L.ErrorUnknownCmd = "Неизвестная команда: |cffffcc00%s|r. Используйте |cffffcc00/veil help|r."
+    L.ErrorUnknownSubCmd = "Неизвестная подкоманда: |cffffcc00%s|r. Используйте |cffffcc00/veil help|r."
+    L.ErrorHardReset = "|cffff2020Обнаружена старая или несовместимая версия.|r\n\nНастройки будут |cffffcc00сброшены|r."
+    L.ErrorChannelNoValid = "|cffff2020Нет доступных каналов чата.|r"
+    L.ErrorChannelAntiSpam = "|cffff2020Ограничения Blizzard блокируют канал|r |cffffcc00%s|r |cffff2020вне подземелий.|r"
+    L.ErrorChannelNoGroup = "|cffff2020Вы не в группе. Канал|r |cffffcc00%s|r |cffff2020недоступен.|r"
+    L.ErrorChannelNoRaid = "|cffff2020Вы не в рейде. Канал|r |cffffcc00%s|r |cffff2020недоступен.|r"
+    L.ErrorChannelInstanceOnly = "|cffff2020Канал|r |cffffcc00%s|r |cffff2020недоступен вне подземелий.|r"
+    L.ErrorChannelInvalidGroup = "|cffff2020Недопустимая группа. Канал|r |cffffcc00%s|r |cffff2020недоступен.|r"
+    L.ErrorCombatBlocked = "Нельзя открыть настройки во время боя."
+    L.ErrorTricksNotLearned = "Вы ещё не изучили Хитрость."
+    L.ErrorNotRogue = "Вы не Разбойник. Эта команда доступна только Разбойникам."
 
-    -- ========================================================================
-    -- [[ PROFILE MANAGEMENT ]] ------------------------------------------
-    -- ========================================================================
-    Profiles                = "Профили",
-    ActiveProfile           = "Активный профиль",
-    ActiveProfileDesc       = "Select which profile to use for this character.",
-    CreateProfile           = "Создать профиль",
-    CreateProfileDesc       = "Create a new profile with default settings.",
-    DuplicateProfile        = "Дублировать профиль",
-    DuplicateProfileDesc    = "Create a copy of the current profile.",
-    DeleteProfile           = "Удалить профиль",
-    DeleteProfileDesc       = "Remove the selected profile (cannot delete Default).",
-    ExportProfile           = "Экспорт профиля",
-    ExportProfileDesc       = "Generate a string to share this profile with others.",
-    ImportProfile           = "Импорт профиля",
-    ImportProfileDesc       = "Import a profile from a shared string.",
-    DefaultProfileLabel     = "По умолчанию",
-    CreateProfilePrompt     = "Введите имя для нового профиля:",
-    DuplicateProfilePrompt  = "Введите имя для дубликата профиля:",
-    ExportProfilePrompt     = "Скопируйте строку экспорта (Ctrl+C):\n\nПрофиль: |cff00ff00%s|r",
-    ImportProfilePrompt     = "Вставьте строку экспорта профиля ниже:",
-    ImportProfileNamePrompt = "Введите имя для импортированного профиля:",
-    DeleteProfileConfirm    = "Удалить профиль:\n\n|cffff0000%s|r\n\nЭто действие нельзя отменить.",
-    FactoryResetBtn         = "Сброс настроек",
-    FactoryResetBtnDesc     = "Deletes all addon data and macros, restoring to a clean installation. UI will reload.",
-    FactoryResetConfirm     = "|cffff0000ВНИМАНИЕ:|r Это удалит |cffff0000ВСЕ|r ваши настройки и профили Nightveil, а также макросы, созданные аддоном.\n\nЭто действие |cffff0000НЕОБРАТИМО|r.\n\nВы уверены, что хотите продолжить?",
-    ErrorProfileDeleteRestricted = "Вы не можете удалить стандартный профиль.",
-    Import                  = "Импорт",
-    Share                   = "Поделиться",
-    Next                    = "Next",
+    -- [[ SYSTEM — DEBUG INFO ]] ----------------------------------------------
+    L.DebugModeActivated = "Режим отладки ВКЛЮЧЁН"
+    L.DebugModeDeactivated = "Режим отладки ОТКЛЮЧЁН"
+    L.DebugModeRequired = "Для этой команды нужен режим отладки. Введите |cffffcc00/veil debug|r."
+    L.DebugHeader = "%s Диагностика:"
+    L.DebugCombat = "- Бой: %s"
+    L.DebugStealth = "- Крадущийся зверь/Исчезновение: %s"
+    L.DebugInstance = "- Подземелье: %s (Тип: %s)"
+    L.DebugGroup = "- Группа: %s (Рейд: %s, Всего: %d)"
+    L.DebugComposition = "- Состав: %d Игроков, %d Питомцев, %d Других"
+    L.DebugInvalidGroup = "- Недопустимая группа: %s"
+    L.DebugPlayer = "ИГРОК"
+    L.DebugPet = "ПИТОМЕЦ"
+    L.DebugOther = "ДРУГОЙ"
+    L.DebugYes = "ДА"
+    L.DebugNo = "НЕТ"
+    L.DebugNone = "нет"
+    L.DebugUnknown = "Неизвестно"
+    L.DebugFallback1 = "- Запасной 1: %s (Доступен: %s)"
+    L.DebugFallback2 = "- Запасной 2: %s (Доступен: %s)"
+    L.DebugShroudUsage = "Использование: |cffffcc00/veil shroud [1-20]|r"
+    L.DebugTricksForcing = "Принудительное обновление Хитрости..."
+    L.DebugMacroUpdated = "Макрос обновлён: %s"
+    L.DebugMacroStatus = "Макрос: %s"
+    L.DebugMacroEdited = "Содержимое макроса изменено и синхронизировано."
+    L.DebugCombatLock = "Это действие нельзя использовать в бою."
+    L.DebugTricksKnown = "- Хитрость известна: %s"
+    L.DebugTricksMacro = "- Макрос Хитрости: %s"
+    L.DebugTricksTarget = "- Цель Хитрости: %s (%s)"
+    L.DebugMacroSuccess = "Обновление макроса ВЫПОЛНЕНО."
+    L.DebugMisdirForcing = "Принудительное обновление Перенаправления..."
+    L.DebugCommands = "[Команды отладки]"
 
-    -- ========================================================================
-    -- [[ CHAT CHANNELS ]] -----------------------------------------------
-    -- ========================================================================
-    ChannelSay              = "Сказать",
-    ChannelParty            = "Группа",
-    ChannelRaid             = "Рейд",
-    ChannelInstance         = "Подземелье",
-    ChannelYell             = "Крик",
+    -- [[ NPC / GAME TERMS ]] -------------------------------------------------
+    L.BrannBronzebeard = "Бранн Бронзобород"
+    L.ValeeraSanguinar = "Валира Сангвинар"
 
-    -- ========================================================================
-    -- [[ SYSTEM NOTIFICATIONS & ERRORS ]] -------------------------------
-    -- ========================================================================
-    ErrorHardReset          = "|cffff2020Обнаружена старая или несовместимая версия.|r\n\nНастройки будут |cffffcc00сброшены|r для обеспечения стабильности.",
-    WarningOutdatedConfig   = "|cffffcc00Обнаружена более новая конфигурация!|r\n\nРекомендуется |cffbe89e9обновить|r аддон или сбросить профиль.",
-    ErrorChannelNoValid     = "|cffff2020Нет доступного канала чата.|r",
-    ErrorChannelAntiSpam    = "|cffff2020Ограничения Blizzard запрещают использование канала|r |cffffcc00%s|r |cffff2020вне подземелий.|r",
-    ErrorChannelNoGroup     = "|cffff2020Вы не в группе. Канал|r |cffffcc00%s|r |cffff2020недоступен.|r",
-    ErrorChannelNoRaid      = "|cffff2020Вы не в рейде. Канал|r |cffffcc00%s|r |cffff2020недоступен.|r",
-    ErrorChannelInvalidGroup = "|cffff2020Вы одни или в неподходящей группе. Канал|r |cffffcc00%s|r |cffff2020недоступен.|r",
-    ErrorChannelInstanceOnly = "|cffff2020Channel|r |cffffcc00%s|r |cffff2020unavailable outside instances.|r",
-    ErrorNotRogue           = "Вы не Разбойник. Эта команда только для Разбойников.",
-    ErrorNotHunter          = "You are not a Hunter. This command is Hunter-only.",
-    ErrorTricksNotLearned   = "Вы еще не выучили Маленькие хитрости.",
-    ErrorMisdirNotLearned   = "You have not learned Misdirection yet.",
-    ErrorShroudOnlyInstances = "|cffff2020Сообщения Покрова работают только внутри подземелий.",
-    ErrorCombatBlocked      = "Невозможно открыть настройки во время боя.",
-    ErrorMacroLimitReached  = "Достигнут лимит макросов.",
-    ErrorMacroCombatLock    = "This action cannot be used in combat.",
-    ErrorUnknownCmd         = "Неизвестная команда: |cffffcc00%s|r. Используйте |cffffcc00/veil help|r.",
-    ErrorUnknownSubCmd      = "Неизвестная подкоманда: |cffffcc00%s|r. Используйте |cffffcc00/veil help|r.",
-    DebugCombatLock         = "This action cannot be used in combat.",
-
-    -- ========================================================================
-    -- [[ COMMANDS HELP ]] -----------------------------------------------
-    -- ========================================================================
-    HelpSettings            = "Настройки",
-    HelpTricks              = "Цель хитростей",
-    HelpMisdir              = "Цель перенаправления",
-    HelpMisdirPet           = "Pet mode",
-    HelpInfo                = "Диагностика",
-    HelpShroudTest          = "Тест отсчета Покрова",
-    HelpDebugToggle         = "Переключить режим отладки",
-    HelpForceRefresh        = "Принудительное обновление макроса",
-    HelpModeNormal          = "Обычный режим",
-    HelpModeTank            = "Режим Танка",
-    HelpModeTT              = "Режим Цель-цели",
-    HelpModeCustom          = "Свой режим",
-    HelpModeList            = "Список и установка по индексу",
-    HelpModeSet             = "Установить по имени",
-
-    -- ========================================================================
-    -- [[ DEBUG & DIAGNOSTICS ]] -----------------------------------------
-    -- ========================================================================
-    DebugModeActivated      = "Режим отладки ВКЛЮЧЕН",
-    DebugModeDeactivated    = "Режим отладки ВЫКЛЮЧЕН",
-    DebugModeRequired       = "Эта команда требует режима отладки. Введите |cffffcc00/veil debug|r для включения.",
-    DebugCommands           = "[Команды отладки]",
-    DebugHeader             = "Диагностика %s:",
-    DebugCombat             = "- Бой: %s",
-    DebugStealth            = "- Скрытность/Исчезновение: %s",
-    DebugInstance           = "- Подземелье: %s (Тип: %s)",
-    DebugGroup              = "- Группа: %s (Рейд: %s, Всего: %d)",
-    DebugComposition        = "- Состав: %d Игроков, %d Питомцев, %d Других",
-    DebugTricksKnown        = "- Хитрости выучены: %s",
-    DebugTricksTarget       = "- Цель хитростей: %s (%s)",
-    DebugTricksMacro        = "- Макрос хитростей: %s",
-    DebugInvalidGroup       = "- Ошибка группы: %s",
-    DebugPlayer             = "ИГРОК",
-    DebugPet                = "ПИТОМЕЦ",
-    DebugOther              = "ДРУГОЙ",
-    DebugYes                = "ДА",
-    DebugNo                 = "НЕТ",
-    DebugNone               = "нет",
-    DebugUnknown            = "Неизвестно",
-    DebugFallback1          = "- Запас 1: %s (Доступно: %s)",
-    DebugFallback2          = "- Запас 2: %s (Доступно: %s)",
-    DebugShroudUsage        = "Использование: |cffffcc00/veil shroud [1-20]|r",
-    DebugTricksForcing      = "Принудительное обновление Хитростей...",
-    DebugMisdirForcing      = "Forcing Misdirection update...",
-    DebugMacroSuccess       = "Обновление макроса УСПЕШНО.",
-    DebugMacroUpdated       = "Макрос обновлен: %s",
-    DebugMacroStatus        = "Макрос: %s",
-    DebugMacroEdited        = "Содержимое макроса изменено и синхронизировано.",
-
-    -- ========================================================================
-    -- [[ NPC / GAME TERMS ]] --------------------------------------------
-    -- ========================================================================
-    BrannBronzebeard        = "Бранн Бронзобород",
-    ValeeraSanguinar        = "Валира Сангвинар",
-
-}

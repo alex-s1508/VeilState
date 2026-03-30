@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — HIGHLIGHT SETTINGS ]] --------------------------------------
+-- [[ HIGHLIGHT SETTINGS ]] ---------------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 local SettingsLib = LibStub("LibEQOLSettingsMode-1.0")
@@ -29,7 +29,7 @@ function ns.Modules.HighlightSettings.Init(root)
     
     SettingsLib:CreateHeader(cat, { name = ns.L and ns.L.Management or "Management" })
     SettingsLib:CreateText(cat, {
-        text = ns.L.HighlightGlobalDesc or "|cffffa500Configure character highlighting dynamically throughout gameplay events.|r",
+        text = "|cffffa500" .. (ns.L and ns.L.HighlightGlobalDesc or "Configure character highlighting dynamically throughout gameplay events.") .. "|r",
         small = true,
     })
     
@@ -41,13 +41,20 @@ function ns.Modules.HighlightSettings.Init(root)
         key = "highlightCombat", name = ns.L and ns.L.HighlightCombat or "Combat", values = HL_MAP, order = HL_ORDER, default = D and D.highlightCombat or 0,
         get = function() return G("highlightCombat", D and D.highlightCombat or 0) end,
         set = function(v) ns.db.highlightCombat = v; Refresh() end,
-        desc = ns.L and ns.L.HighlightCombatDesc or "",
+        desc = ns.L and ns.L.HighlightCombatDesc or "Highlight style applied when entering combat.",
     })
     SettingsLib:CreateDropdown(cat, {
         key = "highlightInstance", name = ns.L and ns.L.HighlightInstance or "Instance", values = HL_MAP, order = HL_ORDER, default = D and D.highlightInstance or 0,
         get = function() return G("highlightInstance", D and D.highlightInstance or 0) end,
         set = function(v) ns.db.highlightInstance = v; Refresh() end,
-        desc = ns.L and ns.L.HighlightInstanceDesc or "",
+        desc = ns.L and ns.L.HighlightInstanceDesc or "Highlight style applied when inside a dungeon or raid.",
+    })
+
+    SettingsLib:CreateDropdown(cat, {
+        key = "highlightHiddenState", name = ns.L and ns.L.HighlightHiddenState or "In Hidden State", values = HL_MAP, order = HL_ORDER, default = D and D.highlightHiddenState or 2,
+        get = function() return G("highlightHiddenState", D and D.highlightHiddenState or 2) end,
+        set = function(v) ns.db.highlightHiddenState = v; Refresh() end,
+        desc = ns.L and ns.L.HighlightHiddenStateDesc or "Highlight style applied when any generic stealth or invisibility is active.",
     })
 
     if ns.IsRogue then
@@ -55,34 +62,57 @@ function ns.Modules.HighlightSettings.Init(root)
             key = "highlightStealth", name = ns.L and ns.L.HighlightStealth or "In Stealth", values = HL_MAP, order = HL_ORDER, default = D and D.highlightStealth or 2,
             get = function() return G("highlightStealth", D and D.highlightStealth or 2) end,
             set = function(v) ns.db.highlightStealth = v; Refresh() end,
-            desc = ns.L and ns.L.HighlightStealthDesc or "",
+            desc = ns.L and ns.L.HighlightStealthDesc or "Highlight style when Stealth is active (Rogue only).",
+        })
+        SettingsLib:CreateDropdown(cat, {
+            key = "highlightShadowDance", name = ns.L and ns.L.HighlightShadowDance or "In Shadow Dance", values = HL_MAP, order = HL_ORDER, default = D and D.highlightShadowDance or 2,
+            get = function() return G("highlightShadowDance", D and D.highlightShadowDance or 2) end,
+            set = function(v) ns.db.highlightShadowDance = v; Refresh() end,
+            desc = ns.L and ns.L.HighlightShadowDanceDesc or "Highlight style when Shadow Dance is active (Rogue only).",
+        })
+        SettingsLib:CreateDropdown(cat, {
+            key = "highlightSubterfuge", name = ns.L and ns.L.HighlightSubterfuge or "In Subterfuge", values = HL_MAP, order = HL_ORDER, default = D and D.highlightSubterfuge or 2,
+            get = function() return G("highlightSubterfuge", D and D.highlightSubterfuge or 2) end,
+            set = function(v) ns.db.highlightSubterfuge = v; Refresh() end,
+            desc = ns.L and ns.L.HighlightSubterfugeDesc or "Highlight style when Subterfuge is active (Rogue only).",
         })
         SettingsLib:CreateDropdown(cat, {
             key = "highlightShroud", name = ns.L and ns.L.HighlightShroud or "In Shroud of Concealment", values = HL_MAP, order = HL_ORDER, default = D and D.highlightShroud or 2,
             get = function() return G("highlightShroud", D and D.highlightShroud or 2) end,
             set = function(v) ns.db.highlightShroud = v; Refresh() end,
-            desc = ns.L and ns.L.HighlightShroudDesc or "",
+            desc = ns.L and ns.L.HighlightShroudDesc or "Highlight style when inside Shroud of Concealment (Rogue only).",
         })
-    elseif ns.IsHunter then
+    end
+    if ns.IsHunter then
         SettingsLib:CreateDropdown(cat, {
             key = "highlightCamouflage", name = ns.L and ns.L.HighlightCamouflage or "In Camouflage", values = HL_MAP, order = HL_ORDER, default = D and D.highlightCamouflage or 2,
             get = function() return G("highlightCamouflage", D and D.highlightCamouflage or 2) end,
             set = function(v) ns.db.highlightCamouflage = v; Refresh() end,
-            desc = ns.L and ns.L.HighlightCamouflageDesc or "",
+            desc = ns.L and ns.L.HighlightCamouflageDesc or "Highlight style when Camouflage is active (Hunter only).",
         })
-    elseif ns.IsDruid then
+    end
+    if ns.IsDruid then
         SettingsLib:CreateDropdown(cat, {
             key = "highlightProwl", name = ns.L and ns.L.HighlightProwl or "In Prowl", values = HL_MAP, order = HL_ORDER, default = D and D.highlightProwl or 2,
             get = function() return G("highlightProwl", D and D.highlightProwl or 2) end,
             set = function(v) ns.db.highlightProwl = v; Refresh() end,
-            desc = ns.L and ns.L.HighlightProwlDesc or "",
+            desc = ns.L and ns.L.HighlightProwlDesc or "Highlight style when Prowl is active (Druid only).",
         })
-    else
+    end
+    if ns.IsMage then
         SettingsLib:CreateDropdown(cat, {
-            key = "highlightStealthState", name = ns.L and ns.L.HighlightHidden or "In Stealth State", values = HL_MAP, order = HL_ORDER, default = D and D.highlightStealthState or 2,
-            get = function() return G("highlightStealthState", D and D.highlightStealthState or 2) end,
-            set = function(v) ns.db.highlightStealthState = v; Refresh() end,
-            desc = ns.L and ns.L.HighlightHiddenDesc or "",
+            key = "highlightInvisibility", name = ns.L and ns.L.HighlightInvisibility or "In Invisibility", values = HL_MAP, order = HL_ORDER, default = D and D.highlightInvisibility or 2,
+            get = function() return G("highlightInvisibility", D and D.highlightInvisibility or 2) end,
+            set = function(v) ns.db.highlightInvisibility = v; Refresh() end,
+            desc = ns.L and ns.L.HighlightInvisibilityDesc or "Highlight style when Mage invisibility is active.",
+        })
+    end
+    if ns.HasShadowmeld then
+        SettingsLib:CreateDropdown(cat, {
+            key = "highlightShadowmeld", name = ns.L and ns.L.HighlightShadowmeld or "In Shadowmeld", values = HL_MAP, order = HL_ORDER, default = D and D.highlightShadowmeld or 2,
+            get = function() return G("highlightShadowmeld", D and D.highlightShadowmeld or 2) end,
+            set = function(v) ns.db.highlightShadowmeld = v; Refresh() end,
+            desc = ns.L and ns.L.HighlightShadowmeldDesc or "Highlight style when Shadowmeld is active (Night Elf only).",
         })
     end
 end

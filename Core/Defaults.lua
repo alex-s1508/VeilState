@@ -6,83 +6,114 @@ local addonName, ns = ...
 ns.Defaults = {
 
     -- ========================================================================
-    -- [[ 3. SHARED MODULES (ALL CLASSES) ]] -----------------------------------
+    -- [[ SHARED MODULES ]] ---------------------------------------------------
     -- ========================================================================
 
     -- [[ Highlight Options ]] ------------------------------------------------
     highlightCombat              = 0,
     highlightInstance            = 0,
-    highlightStealthState        = 2,
+    highlightHiddenState         = 2,
     highlightStealth             = 2,
     highlightShroud              = 2,
     highlightCamouflage          = 2,
     highlightProwl               = 2,
-
-    -- [[ Global Stealth Detection ]] -----------------------------------------
-    useStateDetection            = false,
-
-    -- [[ Stealth State Module ]] ---------------------------------------------
-    stealthStateEnabled          = true,
-    stealthStateEnableText       = false,
-    stealthStateCustomText       = ns.L and ns.L.StealthStateActiveText or "STEALTH STATE",
-    stealthStateTextColor        = {r = 0.420, g = 0.518, b = 0.647},
-    stealthStateTextAlpha        = 1,
-    stealthStateTextX            = 0,
-    stealthStateTextY            = 185,
-    stealthStateTextSize         = 28,
-    stealthStateEnableIcon       = false,
-    stealthStateIconTexture      = "Interface\\Icons\\Ability_Stealth",
-    stealthStateIconSize         = 36,
-    stealthStateIconAlpha        = 1,
-    stealthStateIconAnchorToText = true,
-    stealthStateIconAnchorPoint  = "LEFT",
-    stealthStateIconX            = -5,
-    stealthStateIconY            = 0,
-    stealthStateEnableScreenColor = false,
-    stealthStateScreenColor      = {r = 0.420, g = 0.518, b = 0.647},
-    stealthStateScreenAlpha      = 0.1,
-    stealthStateScreenStrata     = "BACKGROUND",
-    stealthStateEnableVignette   = true,
-    stealthStateVignetteSize     = 250,
-    stealthStateVignetteAlpha    = 0.6,
-    stealthStateVignetteStrata   = "BACKGROUND",
-    stealthStateOnlyInstances    = false,
-    stealthStateDisableInDungeons = false,
-    stealthStateDisableInRaids    = false,
-    stealthStateEnableSound      = true,
-    stealthStateSoundKit         = (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959,
+    highlightInvisibility        = 2,
+    highlightShadowmeld          = 2,
+    highlightShadowDance         = 2,
+    highlightSubterfuge          = 2,
 
     -- ========================================================================
-    -- [[ 4. CLASS MODULES — ROGUE ]] -----------------------------------------
+    -- [[ GLOBAL MODULES ]] ---------------------------------------------------
     -- ========================================================================
 
-    -- [[ Rogue: Stealth Module ]] --------------------------------------------
-    stealthEnabled            = true,
-    stealthOnlyInstances      = false,
-    stealthDisableInDungeons  = false,
-    stealthDisableInRaids     = false,
-    stealthEnableText         = false,
-    stealthCustomText         = ns.L and ns.L.StealthActiveText or "STEALTHED",
-    stealthTextColor          = {r = 0.420, g = 0.518, b = 0.647},
-    stealthTextAlpha          = 1,
-    stealthTextX              = 0,
-    stealthTextY              = 185,
-    stealthTextSize           = 32,
-    stealthEnableIcon         = false,
-    stealthIconSize           = 64,
-    stealthIconAlpha          = 1,
-    stealthIconAnchorToText   = false,
-    stealthIconAnchorPoint    = "LEFT",
-    stealthIconX              = 0,
-    stealthIconY              = 0,
-    stealthEnableScreenColor  = false,
-    stealthScreenColor        = {r = 0.420, g = 0.518, b = 0.647},
-    stealthScreenAlpha        = 0.1,
-    stealthScreenStrata       = "BACKGROUND",
-    stealthEnableVignette     = true,
-    stealthVignetteSize       = 250,
-    stealthVignetteAlpha      = 0.6,
-    stealthVignetteStrata     = "BACKGROUND",
+    -- [[ Hidden State Module ]] ----------------------------------------------
+    -- Global Settings
+    hiddenStateEnabled           = true,
+    hiddenStateOnlyInstances     = false,
+    hiddenStateDisableInDungeons = false,
+    hiddenStateDisableInRaids    = false,
+    hiddenStateEnableText        = true,
+    hiddenStateCustomText        = ns.L and ns.L.HiddenStateActiveText or "HIDDEN",
+    hiddenStateTextColor         = {r = 0.420, g = 0.518, b = 0.647},
+    hiddenStateTextAlpha         = 1,
+    hiddenStateTextX             = 0,
+    hiddenStateTextY             = 185,
+    hiddenStateTextSize          = 28,
+    hiddenStateEnableIcon        = true,
+    hiddenStateIconTexture       = "Interface\\Icons\\Ability_Stealth",
+    hiddenStateIconSize          = 36,
+    hiddenStateIconAlpha         = 1,
+    hiddenStateIconAnchorToText  = true,
+    hiddenStateIconAnchorPoint   = "LEFT",
+    hiddenStateIconX             = -5,
+    hiddenStateIconY             = 0,
+    hiddenStateEnableScreenColor = true,
+    hiddenStateScreenColor       = {r = 0.420, g = 0.518, b = 0.647},
+    hiddenStateScreenAlpha       = 0.1,
+    hiddenStateScreenStrata      = "BACKGROUND", -- Drawing Layer
+    hiddenStateEnableVignette    = true,
+    hiddenStateVignetteSize      = 250,
+    hiddenStateVignetteAlpha     = 0.6,
+    hiddenStateVignetteStrata    = "BACKGROUND", -- Drawing Layer
+    hiddenStateEnableSound       = true,
+    hiddenStateSoundKit          = (SOUNDKIT and SOUNDKIT.RAID_WARNING) or 8959,
+
+    -- Rogue
+    hiddenStateRogueUseClassAura      = false,
+    hiddenStateRogueCustomText        = ns.L and ns.L.StealthActiveText or "STEALTHED",
+    hiddenStateRogueVanishText        = ns.L and ns.L.StealthActiveText or "STEALTHED",
+    hiddenStateRogueEnableIconStealth = true,
+    hiddenStateRogueEnableIconVanish  = true,
+    hiddenStateRogueStealthIcon       = "Interface\\Icons\\Ability_Stealth",
+    hiddenStateRogueVanishIcon        = "Interface\\Icons\\Ability_Vanish",
+    hiddenStateRogueTextColor         = {r = 0.420, g = 0.518, b = 0.647},
+    hiddenStateRogueScreenColor       = {r = 0.420, g = 0.518, b = 0.647},
+
+    -- Hunter
+    hiddenStateHunterUseClassAura         = false,
+    hiddenStateHunterCustomText           = ns.L and ns.L.CamouflageActiveText or "CAMOUFLAGED",
+    hiddenStateHunterEnableIconCamouflage = true,
+    hiddenStateHunterCamouflageIcon       = "Interface\\Icons\\Ability_Hunter_Camouflage",
+    hiddenStateHunterTextColor             = {r = 0.478, g = 0.878, b = 0.267},
+    hiddenStateHunterScreenColor           = {r = 0.478, g = 0.878, b = 0.267},
+
+    -- Druid
+    hiddenStateDruidUseClassAura      = false,
+    hiddenStateDruidCustomText        = ns.L and ns.L.ProwlActiveText or "PROWLED",
+    hiddenStateDruidEnableIconProwl   = true,
+    hiddenStateDruidProwlIcon          = "Interface\\Icons\\Ability_Druid_Prowl",
+    hiddenStateDruidTextColor         = {r = 0.055, g = 0.027, b = 0.749},
+    hiddenStateDruidScreenColor       = {r = 0.055, g = 0.027, b = 0.749},
+
+    -- Mage
+    hiddenStateMageUseClassAura       = false,
+    hiddenStateMageCustomText         = ns.L and ns.L.InvisibilityActiveText or "INVISIBILITY",
+    hiddenStateMageEnableIconInvis    = true,
+    hiddenStateMageEnableIconGreater  = true,
+    hiddenStateMageEnableIconMass     = true,
+    hiddenStateMageInvisIcon          = "Interface\\Icons\\Ability_Mage_Invisibility",
+    hiddenStateMageGreaterInvisIcon   = "Interface\\Icons\\Ability_Mage_GreaterInvisibility",
+    hiddenStateMageMassInvisIcon      = "Interface\\Icons\\Ability_Mage_MassInvisibility",
+    hiddenStateMageTextColor          = {r = 0.620, g = 1.0, b = 1.0},
+    hiddenStateMageScreenColor        = {r = 0.620, g = 1.0, b = 1.0},
+
+    -- Mage Specific Aura Defaults
+    hiddenStateAuraGreaterInvisibilityTextColor   = {r = 0.635, g = 0.725, b = 0.976},
+    hiddenStateAuraGreaterInvisibilityScreenColor = {r = 0.635, g = 0.725, b = 0.976},
+    hiddenStateAuraMassInvisibilityTextColor      = {r = 0.898, g = 0.722, b = 1.0},
+    hiddenStateAuraMassInvisibilityScreenColor    = {r = 0.898, g = 0.722, b = 1.0},
+
+    -- Shadowmeld
+    hiddenStateShadowmeldUseClassAura = false,
+    hiddenStateShadowmeldCustomText   = ns.L and ns.L.HiddenStateActiveText or "HIDDEN",
+    hiddenStateShadowmeldEnableIcon   = true,
+    hiddenStateShadowmeldIcon         = "Interface\\Icons\\Ability_Ambush",
+    hiddenStateShadowmeldTextColor    = {r = 0.427, g = 0.251, b = 0.616},
+    hiddenStateShadowmeldScreenColor  = {r = 0.427, g = 0.251, b = 0.616},
+
+    -- ========================================================================
+    -- [[ CLASS MODULES — ROGUE ]] --------------------------------------------
+    -- ========================================================================
 
     -- [[ Rogue: Poison Tracker ]] --------------------------------------------
     -- Lethal Section
@@ -142,7 +173,7 @@ ns.Defaults = {
     shroudDisableInRaids    = false,
     shroudMuteErrors        = false,
     shroudChannel           = "SAY",
-    shroudChannelFallback1  = "PARTY",
+    shroudChannelFallback1  = "NONE",
     shroudChannelFallback2  = "NONE",
     shroudMessage           = "%time",
     shroudInterval          = false,
@@ -159,36 +190,8 @@ ns.Defaults = {
     tricksMute             = false,
 
     -- ========================================================================
-    -- [[ 5. CLASS MODULES — HUNTER ]] ----------------------------------------
+    -- [[ CLASS MODULES — HUNTER ]] -------------------------------------------
     -- ========================================================================
-
-    -- [[ Hunter: Camouflage Module ]] -----------------------------------------
-    camouflageEnabled            = true,
-    camouflageOnlyInstances      = false,
-    camouflageDisableInDungeons  = false,
-    camouflageDisableInRaids     = false,
-    camouflageEnableText         = false,
-    camouflageCustomText         = ns.L and ns.L.CamouflageActiveText or "CAMOUFLAGED",
-    camouflageTextColor          = {r = 0.478, g = 0.878, b = 0.267},
-    camouflageTextAlpha          = 1,
-    camouflageTextX              = 0,
-    camouflageTextY              = 185,
-    camouflageTextSize           = 32,
-    camouflageEnableIcon         = false,
-    camouflageIconSize           = 64,
-    camouflageIconAlpha          = 1,
-    camouflageIconAnchorToText   = false,
-    camouflageIconAnchorPoint    = "LEFT",
-    camouflageIconX              = 0,
-    camouflageIconY              = 0,
-    camouflageEnableScreenColor  = false,
-    camouflageScreenColor        = {r = 0.478, g = 0.878, b = 0.267},
-    camouflageScreenAlpha        = 0.1,
-    camouflageScreenStrata       = "BACKGROUND",
-    camouflageEnableVignette     = true,
-    camouflageVignetteSize       = 250,
-    camouflageVignetteAlpha      = 0.6,
-    camouflageVignetteStrata     = "BACKGROUND",
 
     -- [[ Hunter: Misdirection ]] ----------------------------------------------
     misdirEnabled          = false,
@@ -200,36 +203,8 @@ ns.Defaults = {
     misdirMute             = false,
 
     -- ========================================================================
-    -- [[ 6. CLASS MODULES — DRUID ]] -----------------------------------------
+    -- [[ CLASS MODULES — DRUID ]] --------------------------------------------
     -- ========================================================================
-
-    -- [[ Druid: Prowl Module ]] -----------------------------------------------
-    prowlEnabled            = true,
-    prowlOnlyInstances      = false,
-    prowlDisableInDungeons  = false,
-    prowlDisableInRaids     = false,
-    prowlEnableText         = false,
-    prowlCustomText         = ns.L and ns.L.ProwlActiveText or "PROWLED",
-    prowlTextColor          = {r = 0.055, g = 0.027, b = 0.749},
-    prowlTextAlpha          = 1,
-    prowlTextX              = 0,
-    prowlTextY              = 185,
-    prowlTextSize           = 32,
-    prowlEnableIcon         = false,
-    prowlIconSize           = 64,
-    prowlIconAlpha          = 1,
-    prowlIconAnchorToText   = false,
-    prowlIconAnchorPoint    = "LEFT",
-    prowlIconX              = 0,
-    prowlIconY              = 0,
-    prowlEnableScreenColor  = false,
-    prowlScreenColor        = {r = 0.055, g = 0.027, b = 0.749},
-    prowlScreenAlpha        = 0.1,
-    prowlScreenStrata       = "BACKGROUND",
-    prowlEnableVignette     = true,
-    prowlVignetteSize       = 250,
-    prowlVignetteAlpha      = 0.6,
-    prowlVignetteStrata     = "BACKGROUND",
 
 }
 

@@ -1,321 +1,359 @@
+-- ============================================================================
+-- [[ LOCALIZATION: koKR ]] ---------------------------------------------------
+-- ============================================================================
 local addonName, ns = ...
-local locale = GetLocale()
-if locale ~= "koKR" then return end
+if GetLocale() ~= "koKR" then return end
 
-ns.L = {
-    -- ========================================================================
-    -- [[ SYSTEM / GENERAL UI ]] -----------------------------------------
-    -- ========================================================================
-    Enable                  = "활성화",
-    Management              = "관리",
-    ReleaseNotes            = "릴리스 노트",
-    WelcomeMessage          = "%s |cffffcc00v%s|r 로드됨. 설정을 열려면 |cffffcc00/veil|r을 입력하세요.",
-    UpdateMessage           = "%s가 |cffffcc00v%s|r로 업데이트되었습니다! 변경 사항을 확인하려면 |cffffcc00/veil|r을 입력하세요.",
-    FloatingText            = "유동적 텍스트",
+ns.L = ns.L or {}
+local L = ns.L
 
-    -- ========================================================================
-    -- [[ INTERFACE — Elements & Styles ]] -------------------------------
-    -- ========================================================================
-    Color                   = "색상",
-    Size                    = "크기",
-    Opacity                 = "불투명도",
-    Thickness               = "두께",
-    Style                   = "스타일",
-    Layer                   = "레이어",
-    LayerBackground         = "배경",
-    LayerLow                = "낮음",
-    LayerMedium             = "중간",
-    LayerHigh               = "높음",
-    LayerDialog             = "대화창",
-    LayerFullscreen         = "전체 화면",
-    ScreenColor             = "화면 색상",
-    Vignette                = "비네트",
+    -- [[ SYSTEM / GENERAL UI ]] ----------------------------------------------
+    L.Enable = "활성화"
+    L.EnableDesc = "이 기능을 활성화하거나 비활성화합니다."
+    L.Management = "관리"
+    L.ReleaseNotes = "업데이트 노트"
+    L.OnlyInCombat = "전투 중에만 활성화"
+    L.OnlyInCombatDesc = "전투 중에만 경고를 표시합니다."
+    L.OnlyInInstances = "인스턴스에서만 활성화"
+    L.OnlyInInstancesDesc = "인스턴스 내에서만 경고를 표시합니다."
+    L.Color = "색상"
+    L.ColorOfSkill = "%s 색상"
+    L.Size = "크기"
+    L.SizeDesc = "요소의 크기를 변경합니다."
+    L.Opacity = "불투명도"
+    L.OpacityDesc = "요소의 투명도를 변경합니다."
+    L.OffsetX = "X 오프셋"
+    L.OffsetXDesc = "요소를 수평으로 이동합니다."
+    L.OffsetY = "Y 오프셋"
+    L.OffsetYDesc = "요소를 수직으로 이동합니다."
+    L.Layer = "레이어"
+    L.LayerDesc = "그리기 레이어.\n\n|cffbe89e9참고:|r 값이 클수록 위에 나타납니다."
+    L.LayerBackground = "배경"
+    L.LayerLow = "낮음"
+    L.LayerMedium = "중간"
+    L.LayerHigh = "높음"
+    L.LayerDialog = "대화"
+    L.LayerFullscreen = "전체화면"
+    L.CustomText = "텍스트"
+    L.CustomTextDesc = "표시할 사용자 정의 메시지 텍스트."
+    L.IconTexture = "아이콘"
+    L.IconTextureDesc = "사용자 정의 텍스처경로 또는 FileID.\n\n|cffbe89e9참고:|r |cffffcc00Interface\\Icons\\...|r 경로 또는 숫자 FileID를 허용합니다."
+    L.TextOfSkill = "%s 텍스트"
+    L.IconOfSkill = "%s 아이콘"
+    L.IndicatorIcon = "표시 아이콘"
+    L.EnableIconDesc = "텍스트 옆에 표시 아이콘을 표시합니다."
+    L.AnchorToText = "텍스트에 고정"
+    L.AnchorToTextDesc = "아이콘을 텍스트 위치에 고정합니다."
+    L.AnchorPoint = "고정 포인트"
+    L.AnchorPointDesc = "앵커 참조로 사용될 텍스트의 측면."
+    L.AnchorTopLeft = "왼쪽 상단"
+    L.AnchorTop = "상단"
+    L.AnchorTopRight = "오른쪽 상단"
+    L.AnchorLeft = "왼쪽"
+    L.AnchorCenter = "중앙"
+    L.AnchorRight = "오른쪽"
+    L.AnchorBottomLeft = "왼쪽 하단"
+    L.AnchorBottom = "하단"
+    L.AnchorBottomRight = "오른쪽 하단"
+    L.Sound = "소리"
+    L.SoundDesc = "활성화 시 소리 알림을 재생합니다."
+    L.SoundKitId = "SoundKit ID"
+    L.SoundKitIdDesc = "재생할 SoundKit ID.\n\n|cffbe89e9참고:|r 숫자 ID만 사용하세요."
+    L.TestSound = "소리 테스트"
+    L.TestSoundDesc = "선택한 소리를 즉시 재생합니다."
+    L.ScreenColor = "화면 색상"
+    L.ScreenColorOfSkill = "%s 색상"
+    L.Vignette = "비네트"
+    L.Thickness = "두께"
+    L.ThicknessDesc = "비네트 테두리의 두께를 제어합니다."
+    L.FloatingText = "플로팅 텍스트"
+    L.Messages = "메시지"
+    L.Share = "공유"
+    L.MuteChanges = "상태 변경 알림 음소거"
+    L.MuteChangesDesc = "매크로가 대상을 변경할 때 채팅 알림을 숨깁니다."
+    L.Next = "다음"
+    L.Import = "가져오기"
+    L.InstanceFilters = "인스턴스 필터"
+    L.DisableInDungeons = "던전에서 비활성화"
+    L.DisableInDungeonsDesc = "던전 내부에서 기능을 비활성화합니다.\n\n|cffbe89e9참고:|r 전역 활성화 조건을 무시합니다."
+    L.DisableInRaids = "공격대에서 비활성화"
+    L.DisableInRaidsDesc = "공격대 내부에서 기능을 비활성화합니다.\n\n|cffbe89e9참고:|r 전역 활성화 조건을 무시합니다."
 
-    -- ========================================================================
-    -- [[ INTERFACE — Positioning & Anchors ]] ---------------------------
-    -- ========================================================================
-    AnchorPoint             = "고정 지점",
-    AnchorToText            = "텍스트에 고정",
-    OffsetX                 = "X 오프셋",
-    OffsetY                 = "Y 오프셋",
-    AnchorTopLeft           = "왼쪽 상단",
-    AnchorTop               = "상단",
-    AnchorTopRight          = "오른쪽 상단",
-    AnchorLeft              = "왼쪽",
-    AnchorCenter            = "중앙",
-    AnchorRight             = "오른쪽",
-    AnchorBottomLeft        = "왼쪽 하단",
-    AnchorBottom            = "하단",
-    AnchorBottomRight       = "오른쪽 하단",
+    -- [[ SYSTEM — COMMANDS HELP ]] -------------------------------------------
+    L.HelpSettings = "설정 열기"
+    L.HelpTricks = "교환의 묘수 상태"
+    L.HelpMisdir = "잘못된 방향 상태"
+    L.HelpMisdirPet = "펫 모드"
+    L.HelpInfo = "진단 정보"
+    L.HelpForceRefresh = "매크로 강제 새로고침"
+    L.HelpShroudTest = "은폐의 장막 카운트다운 테스트"
+    L.HelpDebugToggle = "디버그 모드 전환"
+    L.HelpModeList = "인덱스로 목록 및 설정"
+    L.HelpModeNormal = "일반 모드"
+    L.HelpModeTank = "탱커 모드"
+    L.HelpModeTT = "대상의 대상 모드"
+    L.HelpModeSet = "이름으로 설정"
+    L.HelpModeCustom = "사용자 정의 모드"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Icons & Multimedia ]] ------------------------------
-    -- ========================================================================
-    IndicatorIcon           = "지표 아이콘",
-    IconTexture             = "아이콘 텍스처",
-    Sound                   = "소리",
-    SoundKitId              = "SoundKit ID",
-    TestSound               = "소리 테스트",
+    -- [[ SHARED — HIDDEN STATE ]] --------------------------------------------
+    L.HiddenStateName = "은신 상태"
+    L.EnableOnHiddenState = "은신 상태로 활성화"
+    L.EnableOnHiddenStateDesc = "대부분의 투명화 및 은신 상태에 대한 시각적 경고를 활성화하거나 비활성화합니다."
+    L.HiddenStateActiveText = "은신 중"
+    L.AuraDetections = "오라 감지"
+    L.HiddenStateEnableTextDesc = "은신 상태가 활성화될 때 애니메이션 텝스트 요소를 표시합니다."
+    L.HiddenStateCustomTextDesc = "특정 오라가 대체하지 않을 때 표시되는 기본 텍스트."
+    L.HiddenStateAuraTextDesc = "%s 기능이 활성화되었을 때 표시되는 특정 텍스트입니다.\n\n|cffbe89e9참고:|r 무시하려면 비워두세요."
+    L.HiddenStateAuraTextColorDesc = "%s가 활성화될 때 텍스트 색상."
+    L.HiddenStateAuraIconDesc = "%s가 활성화될 때 표시되는 아이콘의 텍스처 경로 또는 FileID."
+    L.HiddenStateAuraScreenColorDesc = "%s가 활성화될 때 적용되는 화면 색조."
+    L.HiddenStateAuraTrackDesc = "%s 오라를 특정하여 감지하고 추적합니다."
+    L.HiddenStateEnableIconDesc = "플로팅 텍스트 옆에 텍스처 아이콘을 표시합니다."
+    L.HiddenStateIconTextureDesc = "오라별 아이콘이 없을 때 사용할 기본 아이콘 경로.\n\n|cffbe89e9참고:|r 특정 오라 아이콘이 설정되지 않은 경우에 사용됩니다."
+    L.HiddenStateIconAnchorDesc = "플로팅 텍스트 옆에 아이콘을 자동으로 고정합니다."
+    L.HiddenStateIconAnchorPointDesc = "텍스트에 대한 아이콘의 고정 위치 측면."
+    L.HiddenStateTextAlphaDesc = "플로팅 텍스트의 투명도를 제어합니다."
+    L.HiddenStateTextXDesc = "화면에서 플로팅 텍스트의 수평 위치."
+    L.HiddenStateTextYDesc = "화면에서 플로팅 텍스트의 수직 위치."
+    L.HiddenStateTextSizeDesc = "플로팅 텍스트의 글꼴 크기."
+    L.HiddenStateIconXDesc = "표시 아이콘의 수평 간격."
+    L.HiddenStateIconYDesc = "표시 아이콘의 수직 간격."
+    L.HiddenStateIconSizeDesc = "표시 아이콘의 표시 크기."
+    L.HiddenStateIconAlphaDesc = "표시 아이콘의 투명도."
+    L.HiddenStateScreenEnableDesc = "은신 또는 투명 상태가 활성화되면 전체 화면에 색상 투렷한 모니터를 적용합니다."
+    L.HiddenStateScreenAlphaDesc = "화면 색조의 최대 투명도 강도."
+    L.HiddenStateVignetteEnableDesc = "화면 주변에 뫰짐 어두운 테두리 효과를 표시합니다."
+    L.HiddenStateVignetteSizeDesc = "비네트 테두리의 안쪽 범위를 제어합니다."
+    L.HiddenStateVignetteAlphaDesc = "비네트 오버레이의 최대 투명도 강도."
+    L.HiddenStateDisableInDungeonsDesc = "던전 내부에서 시각적 추적을 표시하지 않습니다."
+    L.HiddenStateDisableInRaidsDesc = "공격대 내부에서 시각적 추적을 표시하지 않습니다."
 
-    -- ========================================================================
-    -- [[ INTERFACE — Logic & Filters ]] ---------------------------------
-    -- ========================================================================
-    OnlyInInstances         = "인스턴스 전용",
-    OnlyInCombat            = "전투 시에만",
-    DisableInDungeons       = "던전에서 비활성화",
-    DisableInRaids          = "공격대에서 비활성화",
-    InstanceFilters         = "인스턴스 필터",
+    -- [[ ROGUE — STEALTH & VANISH ]] -----------------------------------------
+    L.StealthActiveText = "잠복 중"
+    L.SkillStealth = "숨기"
+    L.SkillVanish = "소멸"
+    L.SkillShadowDance = "어둠의 추"
+    L.SkillSubterfuge = "기만"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Message Customization ]] ---------------------------
-    -- ========================================================================
-    CustomText              = "사용자 정의 텍스트",
-    Messages                = "메시지",
+    -- [[ ROGUE — POISON TRACKER ]] -------------------------------------------
+    L.PoisonTracker = "독 추적기"
+    L.LethalPoisons = "치명적인 독"
+    L.LethalPoisonsDesc = "치명적인 독이 없을 때 경고를 표시합니다."
+    L.NonLethalPoisons = "비치명적인 독"
+    L.NonLethalPoisonsDesc = "비치명적인 독이 없을 때 경고를 표시합니다."
+    L.LethalPoisonMissing = "치명적인 독 없음"
+    L.NonLethalPoisonMissing = "비치명적인 독 없음"
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Highlights ]] ---------------------------------
-    -- ========================================================================
-    Highlights              = "강조 설정",
-    Highlight               = "강조",
-    HighlightGlobalDesc     = "|cffffa500게임 플레이 이벤트 전반에 걸쳐 캐릭터 강조를 동적으로 설정합니다.|r",
-    HighlightCombat         = "전투 중",
-    HighlightCombatDesc     = "Highlight style when entering combat.",
-    HighlightInstance       = "인스턴스 중",
-    HighlightInstanceDesc   = "Highlight style when inside a dungeon or raid.",
-    HighlightHidden         = "은신 상태 중",
-    HighlightHiddenDesc     = "Highlight style when in a custom stealth state.",
-    HighlightStealth        = "In Stealth",
-    HighlightStealthDesc    = "Highlight style when stealthed.",
-    HighlightShroud         = "In Shroud of Concealment",
-    HighlightShroudDesc     = "Highlight style when inside Shroud of Concealment.",
-    HighlightCamouflage     = "In Camouflage",
-    HighlightCamouflageDesc = "Highlight style when camouflaged.",
-    HighlightProwl          = "In Prowl",
-    HighlightProwlDesc      = "Highlight style when prowling.",
-    HighlightOptNone        = "없음",
-    HighlightOptCircle      = "원",
-    HighlightOptOutline     = "테두리",
-    HighlightOptIcon        = "아이콘",
-    HighlightOptCircleOutline = "원 및 테두리",
-    HighlightOptCircleIcon  = "원 및 아이콘",
-    HighlightOptOutlineIcon = "테두리 및 아이콘",
-    HighlightOptCircleOutlineIcon = "원, 테두리 및 아이콘",
+    -- [[ ROGUE — TRICKS OF THE TRADE ]] --------------------------------------
+    L.TricksOfTheTrade = "교환의 묘수"
+    L.TricksTargetSelectorDesc = "자동 대상 선택의 기본 로직을 정의합니다."
+    L.TricksEnabledDesc = "매크로를 사용하여 교환의 묘수에 대한 자동 타겟팅을 활성화합니다."
+    L.TricksMouseoverDesc = "마우스오버 타겟팅 활성화.\n\n|cffbe89e9참고:|r |cffffcc00탐험 동료|r를 제외한 다른 방법보다 우선순위가 높습니다."
+    L.TricksFocusDesc = "집중 대상을 통한 자동 타겟팅 활성화.\n\n|cffbe89e9참고:|r 대상 선택기보다 우선하지만 마우스오버나 |cffffcc00탐험 동료|r에는 무시됩니다."
+    L.TricksMuteDesc = "매크로가 대상을 변경할 때 채팅 알림을 숨깁니다."
+    L.TricksDelveCompanionDesc = "|cffffcc00탐험|r 내에서 |cffaad372브란 브론즈비어드|r 또는 |cffFFF468Valeera Sanguinar|r 같은 동료를 자동으로 타겟팅합니다.\n\n|cffbe89e9참고:|r |cffffcc00탐험|r 내에서 독점 우선순위를 가집니다."
+    L.TricksTargetLog = "교환의 묘수 대상"
+    L.TricksNormal = "일반"
+    L.TricksCustom = "사용자 정의"
+    L.TricksCustomNameDesc = "타겟팅할 플레이어의 정확한 이름을 입력하세요.\n\n|cffbe89e9참고:|r 게임 내 캐릭터 이름과 정확히 일치해야 합니다."
+    L.TricksMsgEnabled = "교환의 묘수 시스템이 활성화되고 매크로가 동기화되었습니다."
+    L.TricksMsgDisabled = "교환의 묘수 시스템이 비활성화되고 매크로가 제거되었습니다."
+    L.TricksAlreadyEnabled = "교환의 묘수 시스템이 이미 활성화되어 있습니다."
+    L.TricksAlreadyDisabled = "교환의 묘수 시스템이 이미 비활성화되어 있습니다."
+    L.TargetingModeSet = "타겟팅 모드 설정: %s"
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Stealth State ]] ------------------------------
-    -- ========================================================================
-    StealthStateName        = "은신 상태",
-    StealthStateActiveText  = "은신 상태",
-    EnableOnStealthState    = "은신 상태 시 활성화",
+    -- [[ ROGUE — SHROUD OF CONCEALMENT ]] ------------------------------------
+    L.ShroudOfConcealment = "은폐의 장막"
+    L.EnableShroudCountdown = "채팅 카운트다운 활성화"
+    L.EnableShroudCountdownDesc = "채팅에 은폐의 장막 카운트다운 메시지를 전송합니다."
+    L.ShroudOnlyInstancesDesc = "인스턴스 내에서만 장막 메시지를 전송합니다.\n\n|cffbe89e9참고:|r 일부 채널은 Blizzard 스팸 방지로 인스턴스 외부에서 차단됩니다."
+    L.ShroudMuteErrors = "오류 음소거"
+    L.ShroudMuteErrorsDesc = "채팅에서 장막 오류 메시지를 비활성화합니다."
+    L.ChatChannel = "채팅 채널"
+    L.ChatChannelDesc = "장막 메시지에 사용되는 기본 채팅 채널.\n\n|cffbe89e9참고:|r 사용 가능 여부는 그룹 및 인스턴스 유형에 따라 다릅니다."
+    L.ChatChannelFallbackDesc = "기본 채널을 사용할 수 없는 경우의 대체 채널.\n\n|cffbe89e9참고:|r 사용 가능 여부는 그룹 및 인스턴스 유형에 따라 다릅니다."
+    L.ShroudMessage = "카운트다운 메시지"
+    L.ShroudMessageDesc = "카운트다운 중 사용되는 메시지 템플릿.\n\n|cffbe89e9참고:|r |cffffcc00%time|r을 사용해서 남은 시간을 표시하세요."
+    L.ShroudOnStart = "시작 메시지"
+    L.ShroudOnStartDesc = "장막이 시작될 때 전송되는 메시지.\n\n|cffbe89e9참고:|r |cffffcc00%time|r을 사용해서 남은 시간을 표시하세요."
+    L.ShroudOnEnd = "종료 메시지"
+    L.ShroudOnEndDesc = "장막이 종료될 때 전송되는 메시지.\n\n|cffbe89e9참고:|r |cffffcc00%time|r을 사용해서 남은 시간을 표시하세요."
+    L.ShroudInterval = "간격 모드"
+    L.ShroudIntervalDesc = "시작, 중간, 마지막 5초에만 카운트다운 전송."
+    L.TestShroud = "장막 테스트"
+    L.TestShroudDesc = "로컬 5초 카운트다운을 시뮬레이션합니다.\n\n|cffbe89e9참고:|r 메시지는 나에게만 보입니다."
+    L.ChannelSay = "말하기"
+    L.ChannelParty = "파티"
+    L.ChannelRaid = "공격대"
+    L.ChannelInstance = "인스턴스"
+    L.ChannelYell = "외치기"
+    L.ChannelNone = "없음"
+    L.ShroudAlreadyActive = "장막 카운트다운이 이미 활성화되어 있습니다."
+    L.ShroudDisabled = "설정에서 장막 카운트다운이 비활성화되어 있습니다."
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Macro System ]] -------------------------------
-    -- ========================================================================
-    MacroTargetHeader       = "대상",
-    MacroTargetSelector     = "대상 선택기",
-    MacroAutoUpdateWarning  = "|cffffa500Nightveil이 이 매크로를 자동으로 업데이트합니다.|r",
-    MacroDelveCompanion     = "구렁 동료",
-    MacroCustomName         = "사용자 정의 대상",
-    MacroCustomSet          = "사용자 정의 대상 설정됨: %s",
-    MacroGroupMembers       = "파티원:",
-    MacroInvalidIndex       = "잘못된 파티 인덱스입니다.",
-    MacroNoSelf             = "자신을 대상으로 지정할 수 없습니다.",
-    MacroBtnEnable          = "매크로 활성화 및 동기화",
-    MacroBtnDisable         = "매크로 비활성화 및 삭제",
-    Mouseover               = "마우스오버",
-    Focus                   = "주시 대상",
-    Tank                    = "방어 담당",
-    TargetTarget            = "대상의 대상",
-    TargetingModeSet        = "대상 지정 모드 설정됨: %s",
-    Pet                     = "소환수",
-    MuteChanges             = "Mute status changes",
+    -- [[ HUNTER — CAMOUFLAGE ]] ----------------------------------------------
+    L.SkillCamouflage = "위장"
+    L.CamouflageActiveText = "위장 중"
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — ROGUE ]] ---------------------------------------
-    -- ========================================================================
+    -- [[ HUNTER — MISDIRECTION ]] --------------------------------------------
+    L.Misdirection = "잘못된 방향"
+    L.MisdirectionMsgEnabled = "잘못된 방향 시스템이 활성화되고 매크로가 동기화되었습니다."
+    L.MisdirectionMsgDisabled = "잘못된 방향 시스템이 비활성화되고 매크로가 제거되었습니다."
+    L.MisdirectionAlreadyEnabled = "잘못된 방향 시스템이 이미 활성화되어 있습니다."
+    L.MisdirectionAlreadyDisabled = "잘못된 방향 시스템이 이미 비활성화되어 있습니다."
+    L.MisdirTargetLog = "잘못된 방향 대상"
+    L.ErrorMisdirNotLearned = "아직 잘못된 방향을 배우지 않았습니다."
+    L.ErrorNotHunter = "사냥꾼이 아닙니다. 이 명령은 사냥꾼 전용입니다."
 
-    -- [[ Stealth ]] -------------------------------------------
-    Stealth                 = "은신",
-    EnableOnStealth         = "은신 시 활성화",
-    StealthUseState         = "상태 감지 사용",
-    StealthActiveText       = "은신함",
+    -- [[ DRUID — PROWL ]] ----------------------------------------------------
+    L.SkillProwl = "숨기"
+    L.ProwlActiveText = "잠복 중"
 
-    -- [[ Poison Tracker ]] ------------------------------------
-    PoisonTracker           = "독 추적기",
-    LethalPoisons           = "치명적인 독",
-    NonLethalPoisons        = "비치명적인 독",
-    LethalPoisonMissing     = "치명적인 독 없음",
-    NonLethalPoisonMissing  = "비치명적인 독 없음",
+    -- [[ MAGE — INVISIBILITY ]] ----------------------------------------------
+    L.SkillInvisibility = "투명화"
+    L.SkillMassInvis = "대규모 투명화"
+    L.SkillGreaterInvis = "상급 투명화"
+    L.InvisibilityActiveText = "투명 상태"
 
-    -- [[ Tricks of the Trade ]] -------------------------------
-    TricksOfTheTrade        = "속임수 거래",
-    TricksTargetLog         = "속임수 거래 대상",
-    TricksNormal            = "일반",
-    TricksCustom            = "사용자 정의",
-    TricksMsgEnabled        = "속임수 거래 시스템 활성화 및 매크로 동기화 완료.",
-    TricksMsgDisabled       = "속임수 거래 시스템 비활성화 및 매크로 삭제 완료.",
-    TricksAlreadyEnabled    = "속임수 거래 시스템이 이미 활성화되어 있습니다.",
-    TricksAlreadyDisabled   = "속임수 거래 시스템이 이미 비활성화되어 있습니다.",
+    -- [[ NIGHT ELF — SHADOWMELD ]] -------------------------------------------
+    L.SkillShadowmeld = "그림자 숨기"
 
-    -- [[ Shroud of Concealment ]] -----------------------------
-    ShroudOfConcealment     = "은폐의 장막",
-    EnableShroudCountdown   = "대화창 카운트다운 활성화",
-    ShroudMuteErrors        = "오류 숨기기",
-    ChatChannel             = "대화 채널",
-    ShroudMessage           = "카운트다운 메시지",
-    ShroudOnStart           = "시작 메시지",
-    ShroudOnEnd             = "종료 메시지",
-    ShroudInterval          = "간격 모드",
-    TestShroud              = "장막 테스트",
-    ShroudAlreadyActive     = "장막 카운트다운이 이미 활성화되어 있습니다.",
-    ShroudDisabled          = "설정에서 장막 카운트다운이 비활성화되어 있습니다.",
+    -- [[ MACRO / TARGET SYSTEM ]] --------------------------------------------
+    L.Focus = "집중 대상"
+    L.FocusDesc = "집중 대상을 통한 자동 타겟팅을 활성화합니다."
+    L.Mouseover = "마우스오버"
+    L.MouseoverDesc = "마우스 커서 아래의 유닛을 타겟팅하는 기능을 활성화합니다."
+    L.MacroBtnDisable = "비활성화 및 매크로 제거"
+    L.MacroBtnEnable = "활성화 및 매크로 동기화"
+    L.MacroBtnEnableDesc = "자동 타겟팅을 활성화하고 매크로를 생성합니다.\n\n|cffbe89e9참고:|r Nightveil이 이 매크로를 자동으로 업데이트합니다. 수동 편집을 덮어쓸 수 있습니다."
+    L.MacroBtnDisableDesc = "자동 타겟팅을 비활성화하고 매크로를 완전히 제거합니다."
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — HUNTER ]] --------------------------------------
-    -- ========================================================================
+    L.MacroCustomName = "사용자 정의 대상"
+    L.MacroCustomSet = "사용자 정의 대상 설정: %s"
+    L.MacroDelveCompanion = "탐험 동료"
+    L.MacroGroupMembers = "그룹 구성원:"
+    L.MacroInvalidIndex = "유효하지 않은 그룹 인덱스."
+    L.MacroNoSelf = "자신을 대상으로 지정할 수 없습니다."
+    L.MacroTargetHeader = "대상"
+    L.MacroTargetSelector = "대상 선택기"
+    L.Pet = "펫"
+    L.Tank = "탱커"
+    L.TargetTarget = "대상의 대상"
 
-    -- [[ Camouflage ]] ----------------------------------------
-    Camouflage              = "위장",
-    EnableOnCamouflage      = "위장 중 활성화",
-    CamouflageActiveText    = "위장됨",
+    -- [[ HIGHLIGHTS ]] -------------------------------------------------------
+    L.Highlights = "강조 표시"
+    L.HighlightGlobalDesc = "게임 이벤트 중 캐릭터 강조 표시를 동적으로 구성합니다."
+    L.HighlightCombat = "전투 중"
+    L.HighlightCombatDesc = "전투 진입 시 강조 스타일."
+    L.HighlightInstance = "인스턴스 중"
+    L.HighlightInstanceDesc = "던전 또는 공격대 내 강조 스타일."
+    L.HighlightHiddenState = "은신 상태 중"
+    L.HighlightHiddenStateDesc = "일반적인 은신 또는 투명화 상태가 활성화될 때의 강조 스타일."
+    L.HighlightStealth = "숨기 중"
+    L.HighlightStealthDesc = "숨기가 활성화될 때의 강조 스타일.\n\n|cffbe89e9참고:|r |cffFFF468도적|r 능력."
+    L.HighlightShadowDance = "어둠의 춤 중"
+    L.HighlightShadowDanceDesc = "어둠의 춤이 활성화될 때의 강조 스타일.\n\n|cffbe89e9참고:|r |cffFFF468도적|r 능력."
+    L.HighlightSubterfuge = "기만 중"
+    L.HighlightSubterfugeDesc = "기만이 활성화될 때의 강조 스타일.\n\n|cffbe89e9참고:|r |cffFFF468도적|r 능력."
+    L.HighlightProwl = "숨기 중 (드루이드)"
+    L.HighlightProwlDesc = "숨기가 활성화될 때의 강조 스타일.\n\n|cffbe89e9참고:|r |cffFF7C0A드루이드|r 능력."
+    L.HighlightCamouflage = "위장 중"
+    L.HighlightCamouflageDesc = "위장이 활성화될 때의 강조 스타일 (사냥꾼 전용).\n\n|cffbe89e9참고:|r |cffAAD372사냥꾼|r 능력."
+    L.HighlightInvisibility = "투명화 중"
+    L.HighlightInvisibilityDesc = "투명화가 활성화될 때의 강조 스타일.\n\n|cffbe89e9참고:|r |cff3FC7EB마법사|r 능력."
+    L.HighlightShadowmeld = "그림자 숨기 중"
+    L.HighlightShadowmeldDesc = "그림자 숨기가 활성화될 때의 강조 스타일.\n\n|cffbe89e9참고:|r |cffC3A0FF나이트 엘프|r 종족 능력."
+    L.HighlightShroud = "은폐의 장막 중"
+    L.HighlightShroudDesc = "은폐의 장막 내 강조 스타일.\n\n|cffbe89e9참고:|r |cffFFF468도적|r 능력."
+    L.HighlightOptNone = "없음"
+    L.HighlightOptCircle = "원형"
+    L.HighlightOptOutline = "외곽선"
+    L.HighlightOptIcon = "아이콘"
+    L.HighlightOptCircleOutline = "원형 및 외곽선"
+    L.HighlightOptCircleIcon = "원형 및 아이콘"
+    L.HighlightOptOutlineIcon = "외곽선 및 아이콘"
+    L.HighlightOptCircleOutlineIcon = "원형, 외곽선 및 아이콘"
 
-    -- [[ Misdirection ]] --------------------------------------
-    Misdirection            = "눈속임",
-    MisdirTargetLog         = "눈속임 대상",
-    MisdirectionNotLearned  = "아직 눈속임을 배우지 않았습니다.",
-    MisdirectionMsgEnabled  = "눈속임 시스템이 활성화되고 매크로가 동기화되었습니다.",
-    MisdirectionMsgDisabled = "눈속임 시스템이 비활성화되고 매크로가 삭제되었습니다.",
-    MisdirectionAlreadyEnabled = "눈속임 시스템이 이미 활성화되어 있습니다.",
-    MisdirectionAlreadyDisabled = "눈속임 시스템이 이미 비활성화되어 있습니다.",
+    -- [[ PROFILES / MANAGEMENT ]] --------------------------------------------
+    L.Profiles = "프로필"
+    L.ActiveProfile = "활성 프로필"
+    L.ActiveProfileDesc = "이 캐릭터에 사용할 프로필을 선택하세요."
+    L.CreateProfile = "프로필 생성"
+    L.CreateProfileDesc = "기본 설정으로 새 프로필을 만듭니다."
+    L.DuplicateProfile = "프로필 복제"
+    L.DuplicateProfileDesc = "현재 프로필의 복사본을 만듭니다."
+    L.DeleteProfile = "프로필 삭제"
+    L.DeleteProfileDesc = "선택한 프로필을 삭제합니다.\n\n|cffbe89e9참고:|r |cffffcc00기본|r 프로필은 삭제할 수 없습니다."
+    L.ExportProfile = "프로필 내보내기"
+    L.ExportProfileDesc = "이 프로필을 공유할 문자열을 생성합니다."
+    L.ImportProfile = "프로필 가져오기"
+    L.ImportProfileDesc = "공유 문자열에서 프로필을 가져옵니다.\n\n|cffbe89e9참고:|r 이렇게 하면 현재 설정을 덮어씁니다."
+    L.CreateProfilePrompt = "새 프로필 이름을 입력하세요:"
+    L.DuplicateProfilePrompt = "복제할 프로필 이름을 입력하세요:"
+    L.FactoryResetBtn = "기본값 재설정"
+    L.FactoryResetBtnDesc = "모든 애드온 데이터와 매크로를 삭제하여 깨끗한 상태로 복원합니다. UI가 다시 로드됩니다.\n\n|cffbe89e9참고:|r |cffff2020이 작업은 되돌릴 수 없습니다.|r"
+    L.FactoryResetConfirm = "|cffff0000경고:|r 모든 설정과 프로필이 삭제됩니다.\n\n이 작업은 |cffff0000되돌릴 수 없습니다|r. 계속하시겠습니까?"
+    L.DeleteProfileConfirm = "프로필 삭제:\n\n|cffff0000%s|r\n\n되돌릴 수 없습니다."
+    L.ExportProfilePrompt = "이 내보내기 문자열을 복사하세요 (Ctrl+C):\n\n프로필: |cff00ff00%s|r"
+    L.ImportProfilePrompt = "아래에 프로필 내보내기 문자열을 붙여넣으세요:"
+    L.ImportProfileNamePrompt = "가져올 프로필 이름을 입력하세요:"
+    L.ErrorProfileDeleteRestricted = "기본 프로필은 삭제할 수 없습니다."
+    L.DefaultProfileLabel = "기본값"
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — DRUID ]] ---------------------------------------
-    -- ========================================================================
+    -- [[ SYSTEM — MESSAGES & WARNINGS ]] -------------------------------------
+    L.WelcomeMessage = "%s |cffffcc00v%s|r 로드됨. |cffffcc00/veil|r 을 입력하여 설정하세요."
+    L.UpdateMessage = "%s가 |cffffcc00v%s|r로 업데이트되었습니다! |cffffcc00/veil|r을 입력하세요."
+    L.WarningOutdatedConfig = "|cffffcc00최신 구성이 감지되었습니다!|r\n\n애드온을 |cffbe89e9업데이트|r하거나 프로필을 재설정하는 것을 권장합니다."
+    L.ErrorShroudOnlyInstances = "|cffff2020장막 메시지는 인스턴스 내에서만 작동합니다.|r"
+    L.ErrorMacroCombatLock = "이 작업은 전투 중에 사용할 수 없습니다."
+    L.ErrorMacroLimitReached = "매크로 한도에 도달했습니다."
+    L.ErrorUnknownCmd = "알 수 없는 명령: |cffffcc00%s|r. |cffffcc00/veil help|r를 사용하세요."
+    L.ErrorUnknownSubCmd = "알 수 없는 하위 명령: |cffffcc00%s|r. |cffffcc00/veil help|r를 사용하세요."
+    L.ErrorHardReset = "|cffff2020이전 버전 또는 호환되지 않는 버전이 감지되었습니다.|r\n\n안정성을 위해 설정이 |cffffcc00초기화|r됩니다."
+    L.ErrorChannelNoValid = "|cffff2020사용 가능한 채팅 채널이 없습니다.|r"
+    L.ErrorChannelAntiSpam = "|cffff2020Blizzard 스팸 방지로 인해 인스턴스 외부에서 채널|r |cffffcc00%s|r |cffff2020사용이 차단됩니다.|r"
+    L.ErrorChannelNoGroup = "|cffff2020그룹에 속하지 않습니다. 채널|r |cffffcc00%s|r |cffff2020사용 불가.|r"
+    L.ErrorChannelNoRaid = "|cffff2020공격대에 속하지 않습니다. 채널|r |cffffcc00%s|r |cffff2020사용 불가.|r"
+    L.ErrorChannelInstanceOnly = "|cffff2020채널|r |cffffcc00%s|r |cffff2020은 인스턴스 외부에서 사용 불가.|r"
+    L.ErrorChannelInvalidGroup = "|cffff2020유효하지 않은 그룹. 채널|r |cffffcc00%s|r |cffff2020사용 불가.|r"
+    L.ErrorCombatBlocked = "전투 중에는 설정을 열 수 없습니다."
+    L.ErrorTricksNotLearned = "아직 교환의 묘수를 배우지 않았습니다."
+    L.ErrorNotRogue = "도적이 아닙니다. 이 명령은 도적 전용입니다."
 
-    -- [[ Prowl ]] ---------------------------------------------
-    Prowl                   = "숨기",
-    EnableOnProwl           = "숨기 시 활성화",
-    ProwlActiveText         = "숨음",
+    -- [[ SYSTEM — DEBUG INFO ]] ----------------------------------------------
+    L.DebugModeActivated = "디버그 모드 활성화됨"
+    L.DebugModeDeactivated = "디버그 모드 비활성화됨"
+    L.DebugModeRequired = "이 명령에는 디버그 모드가 필요합니다. |cffffcc00/veil debug|r를 입력하세요."
+    L.DebugHeader = "%s 진단:"
+    L.DebugCombat = "- 전투: %s"
+    L.DebugStealth = "- 숨기/소멸: %s"
+    L.DebugInstance = "- 인스턴스: %s (유형: %s)"
+    L.DebugGroup = "- 그룹: %s (공격대: %s, 총: %d)"
+    L.DebugComposition = "- 구성: %d 플레이어, %d 펫, %d 기타"
+    L.DebugInvalidGroup = "- 유효하지 않은 그룹: %s"
+    L.DebugPlayer = "플레이어"
+    L.DebugPet = "펫"
+    L.DebugOther = "기타"
+    L.DebugYes = "예"
+    L.DebugNo = "아니오"
+    L.DebugNone = "없음"
+    L.DebugUnknown = "알 수 없음"
+    L.DebugFallback1 = "- 대안 1: %s (사용 가능: %s)"
+    L.DebugFallback2 = "- 대안 2: %s (사용 가능: %s)"
+    L.DebugShroudUsage = "사용법: |cffffcc00/veil shroud [1-20]|r"
+    L.DebugTricksForcing = "교환의 묘수 업데이트 강제 중..."
+    L.DebugMacroUpdated = "매크로 업데이트됨: %s"
+    L.DebugMacroStatus = "매크로: %s"
+    L.DebugMacroEdited = "매크로 내용이 수정되고 동기화되었습니다."
+    L.DebugCombatLock = "이 작업은 전투 중에 사용할 수 없습니다."
+    L.DebugTricksKnown = "- 교환의 묘수 습득: %s"
+    L.DebugTricksMacro = "- 교환의 묘수 매크로: %s"
+    L.DebugTricksTarget = "- 교환의 묘수 대상: %s (%s)"
+    L.DebugMacroSuccess = "매크로 업데이트 성공."
+    L.DebugMisdirForcing = "잘못된 방향 업데이트 강제 중..."
+    L.DebugCommands = "[디버그 명령]"
 
-    -- ========================================================================
-    -- [[ PROFILE MANAGEMENT ]] ------------------------------------------
-    -- ========================================================================
-    Profiles                = "프로필",
-    ActiveProfile           = "활성 프로필",
-    ActiveProfileDesc       = "Select which profile to use for this character.",
-    CreateProfile           = "프로필 생성",
-    CreateProfileDesc       = "Create a new profile with default settings.",
-    DuplicateProfile        = "프로필 복사",
-    DuplicateProfileDesc    = "Create a copy of the current profile.",
-    DeleteProfile           = "프로필 삭제",
-    DeleteProfileDesc       = "Remove the selected profile (cannot delete Default).",
-    ExportProfile           = "프로필 내보내기",
-    ExportProfileDesc       = "Generate a string to share this profile with others.",
-    ImportProfile           = "프로필 가져오기",
-    ImportProfileDesc       = "Import a profile from a shared string.",
-    DefaultProfileLabel     = "기본값",
-    CreateProfilePrompt     = "새 프로필 이름을 입력하세요:",
-    DuplicateProfilePrompt  = "복사할 프로필 이름을 입력하세요:",
-    ExportProfilePrompt     = "이 내보내기 문자열을 복사하세요 (Ctrl+C):\n\n프로필: |cff00ff00%s|r",
-    ImportProfilePrompt     = "아래에 프로필 내보내기 문자열을 붙여넣으세요:",
-    ImportProfileNamePrompt = "가져온 프로필의 이름을 입력하세요:",
-    DeleteProfileConfirm    = "프로필 삭제:\n\n|cffff0000%s|r\n\n이 작업은 복구할 수 없습니다.",
-    FactoryResetBtn         = "공장 초기화",
-    FactoryResetBtnDesc     = "Deletes all addon data and macros, restoring to a clean installation. UI will reload.",
-    FactoryResetConfirm     = "|cffff0000경고:|r 이 작업은 Nightveil의 |cffff0000모든|r 설정과 프로필을 삭제하며, 애드온으로 생성된 매크로도 제거합니다.\n\n이 작업은 |cffff0000복구할 수 없습니다|r.\n\n정말로 계속하시겠습니까?",
-    ErrorProfileDeleteRestricted = "기본 프로필은 삭제할 수 없습니다.",
-    Import                  = "가져오기",
-    Share                   = "공유",
-    Next                    = "Next",
+    -- [[ NPC / GAME TERMS ]] -------------------------------------------------
+    L.BrannBronzebeard = "브란 브론즈비어드"
+    L.ValeeraSanguinar = "Valeera Sanguinar"
 
-    -- ========================================================================
-    -- [[ CHAT CHANNELS ]] -----------------------------------------------
-    -- ========================================================================
-    ChannelSay              = "일반",
-    ChannelParty            = "파티",
-    ChannelRaid             = "공격대",
-    ChannelInstance         = "인스턴스",
-    ChannelYell             = "외치기",
-
-    -- ========================================================================
-    -- [[ SYSTEM NOTIFICATIONS & ERRORS ]] -------------------------------
-    -- ========================================================================
-    ErrorHardReset          = "|cffff2020오래되거나 호환되지 않는 버전이 감지되었습니다.|r\n\n안정성을 위해 설정이 |cffffcc00초기화|r됩니다.",
-    WarningOutdatedConfig   = "|cffffcc00최신 설정이 감지되었습니다!|r\n\n애드온을 |cffbe89e9업데이트|r하거나 프로필을 초기화하는 것을 권장합니다.",
-    ErrorChannelNoValid     = "|cffff2020유효한 대화 채널이 없습니다.|r",
-    ErrorChannelAntiSpam    = "|cffff2020Blizzard 안티 스팸 제한으로 인해 인스턴스 밖에서 |cffffcc00%s|r 채널을 사용할 수 없습니다.|r",
-    ErrorChannelNoGroup     = "|cffff2020파티에 속해 있지 않습니다. |cffffcc00%s|r 채널을 사용할 수 없습니다.|r",
-    ErrorChannelNoRaid      = "|cffff2020공격대에 속해 있지 않습니다. |cffffcc00%s|r 채널을 사용할 수 없습니다.|r",
-    ErrorChannelInvalidGroup = "|cffff2020혼자 있거나 유효하지 않은 그룹입니다. |cffffcc00%s|r 채널을 사용할 수 없습니다.|r",
-    ErrorChannelInstanceOnly = "|cffff2020Channel|r |cffffcc00%s|r |cffff2020unavailable outside instances.|r",
-    ErrorNotRogue           = "도적 클래스가 아닙니다. 이 명령은 도적 전용입니다.",
-    ErrorNotHunter          = "You are not a Hunter. This command is Hunter-only.",
-    ErrorTricksNotLearned   = "아직 속임수 거래를 배우지 않았습니다.",
-    ErrorMisdirNotLearned   = "You have not learned Misdirection yet.",
-    ErrorShroudOnlyInstances = "|cffff2020장막 메시지는 인스턴스 내에서만 작동합니다.|r",
-    ErrorCombatBlocked      = "전투 중에는 설정을 열 수 없습니다.",
-    ErrorMacroLimitReached  = "매크로 제한에 도달했습니다.",
-    ErrorMacroCombatLock    = "This action cannot be used in combat.",
-    ErrorUnknownCmd         = "알 수 없는 명령: |cffffcc00%s|r. |cffffcc00/veil help|r를 사용하세요.",
-    ErrorUnknownSubCmd      = "알 수 없는 하위 명령: |cffffcc00%s|r. |cffffcc00/veil help|r를 사용하세요.",
-    DebugCombatLock         = "This action cannot be used in combat.",
-
-    -- ========================================================================
-    -- [[ COMMANDS HELP ]] -----------------------------------------------
-    -- ========================================================================
-    HelpSettings            = "설정",
-    HelpTricks              = "속임수 거래 대상",
-    HelpMisdir              = "눈속임 대상",
-    HelpMisdirPet           = "Pet mode",
-    HelpInfo                = "진단 정보",
-    HelpShroudTest          = "장막 카운트다운 테스트",
-    HelpDebugToggle         = "디버그 모드 전환",
-    HelpForceRefresh        = "매크로 강제 새로고침",
-    HelpModeNormal          = "일반 모드",
-    HelpModeTank            = "방어 모드",
-    HelpModeTT              = "대상의 대상 모드",
-    HelpModeCustom          = "사용자 정의 모드",
-    HelpModeList            = "목록 표시 및 인덱스로 설정",
-    HelpModeSet             = "이름으로 설정",
-
-    -- ========================================================================
-    -- [[ DEBUG & DIAGNOSTICS ]] -----------------------------------------
-    -- ========================================================================
-    DebugModeActivated      = "디버그 모드 활성화됨",
-    DebugModeDeactivated    = "디버그 모드 비활성화됨",
-    DebugModeRequired       = "이 명령은 디버그 모드가 필요합니다. 활성화하려면 |cffffcc00/veil debug|r를 입력하세요.",
-    DebugCommands           = "[디버그 명령]",
-    DebugHeader             = "%s 진단 도구:",
-    DebugCombat             = "- 전투: %s",
-    DebugStealth            = "- 은신/소멸: %s",
-    DebugInstance           = "- 인스턴스: %s (유형: %s)",
-    DebugGroup              = "- 그룹: %s (공격대: %s, 총원: %d)",
-    DebugComposition        = "- 구성: 플레이어 %d명, 소환수 %d마리, 기타 %d분",
-    DebugTricksKnown        = "- 속임수 거래 습득 유무: %s",
-    DebugTricksTarget       = "- 속임수 거래 대상: %s (%s)",
-    DebugTricksMacro        = "- 속임수 거래 매크로: %s",
-    DebugInvalidGroup       = "- 유효하지 않은 그룹: %s",
-    DebugPlayer             = "플레이어",
-    DebugPet                = "소환수",
-    DebugOther              = "기타",
-    DebugYes                = "네",
-    DebugNo                 = "아니요",
-    DebugNone               = "없음",
-    DebugUnknown            = "알 수 없음",
-    DebugFallback1          = "- 대체 대상 1: %s (사용 가능: %s)",
-    DebugFallback2          = "- 대체 대상 2: %s (사용 가능: %s)",
-    DebugShroudUsage        = "사용법: |cffffcc00/veil shroud [1-20]|r",
-    DebugTricksForcing      = "속임수 거래 업데이트 강제 중...",
-    DebugMisdirForcing      = "Forcing Misdirection update...",
-    DebugMacroSuccess       = "매크로 새로고침 성공.",
-    DebugMacroUpdated       = "매크로 업데이트됨: %s",
-    DebugMacroStatus        = "매크로: %s",
-    DebugMacroEdited        = "매크로 내용이 수정 및 동기화되었습니다.",
-
-    -- ========================================================================
-    -- [[ NPC / GAME TERMS ]] --------------------------------------------
-    -- ========================================================================
-    BrannBronzebeard        = "브란 브론즈비어드",
-    ValeeraSanguinar        = "발리라 생귀나르",
-
-}

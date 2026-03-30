@@ -1,321 +1,360 @@
+-- ============================================================================
+-- [[ LOCALIZATION: ptBR ]] ---------------------------------------------------
+-- ============================================================================
 local addonName, ns = ...
-local locale = GetLocale()
-if locale ~= "ptBR" then return end
+if GetLocale() ~= "ptBR" then return end
 
-ns.L = {
-    -- ========================================================================
-    -- [[ SYSTEM / GENERAL UI ]] -----------------------------------------
-    -- ========================================================================
-    Enable                  = "Ativar",
-    Management              = "Gerenciamento",
-    ReleaseNotes            = "Notas da Versão",
-    WelcomeMessage          = "%s |cffffcc00v%s|r carregado. Digite |cffffcc00/veil|r para abrir as configurações.",
-    UpdateMessage           = "%s atualizado para |cffffcc00v%s|r! Digite |cffffcc00/veil|r para ver as novidades.",
-    FloatingText            = "Texto Flutuante",
+ns.L = ns.L or {}
+local L = ns.L
 
-    -- ========================================================================
-    -- [[ INTERFACE — Elements & Styles ]] -------------------------------
-    -- ========================================================================
-    Color                   = "Cor",
-    Size                    = "Tamanho",
-    Opacity                 = "Opacidade",
-    Thickness               = "Espessura",
-    Style                   = "Estilo",
-    Layer                   = "Camada",
-    LayerBackground         = "Fundo",
-    LayerLow                = "Baixa",
-    LayerMedium             = "Média",
-    LayerHigh               = "Alta",
-    LayerDialog             = "Diálogo",
-    LayerFullscreen         = "Tela Cheia",
-    ScreenColor             = "Cor da Tela",
-    Vignette                = "Vinheta",
+    -- [[ SYSTEM / GENERAL UI ]] ----------------------------------------------
+    L.Enable = "Ativar"
+    L.EnableDesc = "Ativa ou desativa esta funcionalidade."
+    L.Management = "Gerenciamento"
+    L.ReleaseNotes = "Notas da Versão"
+    L.OnlyInCombat = "Ativar apenas em combate"
+    L.OnlyInCombatDesc = "Apenas mostra avisos enquanto você estiver em combate."
+    L.OnlyInInstances = "Ativar apenas em instâncias"
+    L.OnlyInInstancesDesc = "Apenas mostra avisos dentro de instâncias."
+    L.Color = "Cor"
+    L.ColorOfSkill = "Cor em %s"
+    L.Size = "Tamanho"
+    L.SizeDesc = "Altera o tamanho do elemento."
+    L.Opacity = "Opacidade"
+    L.OpacityDesc = "Altera a transparência do elemento."
+    L.OffsetX = "Deslocamento X"
+    L.OffsetXDesc = "Move o elemento horizontalmente."
+    L.OffsetY = "Deslocamento Y"
+    L.OffsetYDesc = "Move o elemento verticalmente."
+    L.Layer = "Camada"
+    L.LayerDesc = "Camada de desenho.\n\n|cffbe89e9Nota:|r Valores maiores aparecem acima."
+    L.LayerBackground = "Fundo"
+    L.LayerLow = "Baixa"
+    L.LayerMedium = "Média"
+    L.LayerHigh = "Alta"
+    L.LayerDialog = "Diálogo"
+    L.LayerFullscreen = "Tela Cheia"
+    L.CustomText = "Texto"
+    L.CustomTextDesc = "Texto de mensagem personalizado para exibir."
+    L.IconTexture = "Ícone"
+    L.IconTextureDesc = "Caminho de textura personalizado ou FileID do ícone.\n\n|cffbe89e9Nota:|r Aceita caminhos |cffffcc00Interface\\Icons\\...|r ou FileID numérico."
+    L.TextOfSkill = "Texto de %s"
+    L.IconOfSkill = "Ícone de %s"
+    L.IndicatorIcon = "Ícone Indicador"
+    L.EnableIconDesc = "Exibe um ícone indicador ao lado do texto."
+    L.AnchorToText = "Fixar no Texto"
+    L.AnchorToTextDesc = "Fixa o ícone na posição do elemento de texto."
+    L.AnchorPoint = "Ponto de Fixação"
+    L.AnchorPointDesc = "Lado do texto usado como âncora de referência."
+    L.AnchorTopLeft = "Superior Esquerdo"
+    L.AnchorTop = "Superior"
+    L.AnchorTopRight = "Superior Direito"
+    L.AnchorLeft = "Esquerda"
+    L.AnchorCenter = "Centro"
+    L.AnchorRight = "Direita"
+    L.AnchorBottomLeft = "Inferior Esquerdo"
+    L.AnchorBottom = "Inferior"
+    L.AnchorBottomRight = "Inferior Direito"
+    L.Sound = "Som"
+    L.SoundDesc = "Toca um alerta sonoro quando ativado."
+    L.SoundKitId = "ID do SoundKit"
+    L.SoundKitIdDesc = "ID do SoundKit para tocar.\n\n|cffbe89e9Nota:|r Use apenas IDs numéricos."
+    L.TestSound = "Testar Som"
+    L.TestSoundDesc = "Toca o som selecionado imediatamente."
+    L.ScreenColor = "Cor da Tela"
+    L.ScreenColorOfSkill = "Cor em %s"
+    L.Vignette = "Vinheta"
+    L.Thickness = "Espessura"
+    L.ThicknessDesc = "Controla a espessura da borda de vinheta."
+    L.FloatingText = "Texto Flutuante"
+    L.Messages = "Mensagens"
+    L.Share = "Compartilhar"
+    L.MuteChanges = "Silenciar mudanças de status"
+    L.MuteChangesDesc = "Oculta notificações no chat quando o macro altera os alvos."
+    L.Next = "Próximo"
+    L.Import = "Importar"
+    L.InstanceFilters = "Filtros de Instância"
+    L.DisableInDungeons = "Desativar em Masmorras"
+    L.DisableInDungeonsDesc = "Desativa o recurso dentro de masmorras.\n\n|cffbe89e9Nota:|r Substitui as condições de ativação globais."
+    L.DisableInRaids = "Desativar em Raides"
+    L.DisableInRaidsDesc = "Desativa o recurso dentro de raides.\n\n|cffbe89e9Nota:|r Substitui as condições de ativação globais."
 
-    -- ========================================================================
-    -- [[ INTERFACE — Positioning & Anchors ]] ---------------------------
-    -- ========================================================================
-    AnchorPoint             = "Ponto de Fixação",
-    AnchorToText            = "Fixar no Texto",
-    OffsetX                 = "Deslocamento X",
-    OffsetY                 = "Deslocamento Y",
-    AnchorTopLeft           = "Superior Esquerdo",
-    AnchorTop               = "Superior",
-    AnchorTopRight          = "Superior Direito",
-    AnchorLeft              = "Esquerda",
-    AnchorCenter            = "Centro",
-    AnchorRight             = "Direita",
-    AnchorBottomLeft        = "Inferior Esquerdo",
-    AnchorBottom            = "Inferior",
-    AnchorBottomRight       = "Inferior Direito",
+    -- [[ SYSTEM — COMMANDS HELP ]] -------------------------------------------
+    L.HelpSettings = "Configurações"
+    L.HelpTricks = "Alvo de Truques"
+    L.HelpMisdir = "Alvo do Redirecionar"
+    L.HelpMisdirPet = "Modo Pet"
+    L.HelpInfo = "Informações de diagnóstico"
+    L.HelpForceRefresh = "Forçar atualização do macro"
+    L.HelpShroudTest = "Testar contagem da mortalha"
+    L.HelpDebugToggle = "Alternar modo debug"
+    L.HelpModeList = "Listar e definir por índice"
+    L.HelpModeNormal = "Modo Normal"
+    L.HelpModeTank = "Modo Tank"
+    L.HelpModeTT = "Modo Alvo do Alvo"
+    L.HelpModeSet = "Definir por nome"
+    L.HelpModeCustom = "Modo Personalizado"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Icons & Multimedia ]] ------------------------------
-    -- ========================================================================
-    IndicatorIcon           = "Ícone Indicador",
-    IconTexture             = "Textura do Ícone",
-    Sound                   = "Som",
-    SoundKitId              = "ID do SoundKit",
-    TestSound               = "Testar Som",
+    -- [[ SHARED — HIDDEN STATE ]] --------------------------------------------
+    L.HiddenStateName = "Estado Oculto"
+    L.EnableOnHiddenState = "Ativar por Estado Oculto"
+    L.EnableOnHiddenStateDesc = "Ativa ou desativa alertas visuais para a maioria dos estados de invisibilidade e furtividade."
+    L.HiddenStateActiveText = "OCULTO"
+    L.AuraDetections = "Detecções por Aura"
+    L.HiddenStateEnableTextDesc = "Exibe um elemento de texto animado quando um estado oculto é ativado."
+    L.HiddenStateCustomTextDesc = "Texto exibido quando nenhuma aura específica o substitui."
+    L.HiddenStateAuraTextDesc = "Texto específico exibido quando %s está ativo.\n\n|cffbe89e9Nota:|r Deixe em branco para ignorar."
+    L.HiddenStateAuraTextColorDesc = "Cor do texto quando %s está ativo."
+    L.HiddenStateAuraIconDesc = "Caminho ou FileID da textura do ícone exibida quando %s está ativo."
+    L.HiddenStateAuraScreenColorDesc = "Cor de tonalidade da tela aplicada quando %s está ativo."
+    L.HiddenStateAuraTrackDesc = "Detecta e rastreia especificamente a aura de %s."
+    L.HiddenStateEnableIconDesc = "Exibe um ícone de textura ao lado do texto flutuante."
+    L.HiddenStateIconTextureDesc = "Caminho do ícone genérico quando nenhuma aura específica define o ícone.\n\n|cffbe89e9Nota:|r Usado quando nenhum ícone específico da aura está definido."
+    L.HiddenStateIconAnchorDesc = "Fixa automaticamente o ícone ao lado do texto flutuante."
+    L.HiddenStateIconAnchorPointDesc = "Lado de âncora do ícone em relação ao texto."
+    L.HiddenStateTextAlphaDesc = "Controla a transparência do texto flutuante."
+    L.HiddenStateTextXDesc = "Controla a posição horizontal do texto flutuante na tela."
+    L.HiddenStateTextYDesc = "Controla a posição vertical do texto flutuante na tela."
+    L.HiddenStateTextSizeDesc = "Ajusta o tamanho da fonte do texto flutuante."
+    L.HiddenStateIconXDesc = "Deslocamento horizontal do ícone indicador."
+    L.HiddenStateIconYDesc = "Deslocamento vertical do ícone indicador."
+    L.HiddenStateIconSizeDesc = "Define o tamanho de exibição do ícone indicador."
+    L.HiddenStateIconAlphaDesc = "Transparência do ícone indicador."
+    L.HiddenStateScreenEnableDesc = "Aplica uma tonalidade de cor em tela cheia quando um estado de furtividade está ativo."
+    L.HiddenStateScreenAlphaDesc = "Intensidade máxima de transparência da tonalidade de tela."
+    L.HiddenStateVignetteEnableDesc = "Exibe uma sombra de borda escura e imersiva ao redor da tela."
+    L.HiddenStateVignetteSizeDesc = "Controla o alcance interno da borda de vinheta."
+    L.HiddenStateVignetteAlphaDesc = "Intensidade máxima de transparência da sobreposição de vinheta."
+    L.HiddenStateDisableInDungeonsDesc = "Não exibe o rastreamento visual dentro de Masmorras."
+    L.HiddenStateDisableInRaidsDesc = "Não exibe o rastreamento visual dentro de Raides."
 
-    -- ========================================================================
-    -- [[ INTERFACE — Logic & Filters ]] ---------------------------------
-    -- ========================================================================
-    OnlyInInstances         = "Apenas em instâncias",
-    OnlyInCombat            = "Apenas em combate",
-    DisableInDungeons       = "Desativar em Masmorras",
-    DisableInRaids          = "Desativar em Raides",
-    InstanceFilters         = "Filtros de Instância",
+    -- [[ ROGUE — STEALTH & VANISH ]] -----------------------------------------
+    L.StealthActiveText = "FURTIVO"
+    L.SkillStealth = "Furtividade"
+    L.SkillVanish = "Sumir"
+    L.SkillShadowDance = "Dança das Sombras"
+    L.SkillSubterfuge = "Subterfúgio"
 
-    -- ========================================================================
-    -- [[ INTERFACE — Message Customization ]] ---------------------------
-    -- ========================================================================
-    CustomText              = "Texto Personalizado",
-    Messages                = "Mensagens",
+    -- [[ ROGUE — POISON TRACKER ]] -------------------------------------------
+    L.PoisonTracker = "Monitor de Venenos"
+    L.LethalPoisons = "Veneno Letal"
+    L.LethalPoisonsDesc = "Mostra avisos quando seu veneno letal está faltando."
+    L.NonLethalPoisons = "Veneno Não Letal"
+    L.NonLethalPoisonsDesc = "Mostra avisos quando seu veneno não letal está faltando."
+    L.LethalPoisonMissing = "VENENO LETAL FALTANDO"
+    L.NonLethalPoisonMissing = "VENENO NÃO LETAL FALTANDO"
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Highlights ]] ---------------------------------
-    -- ========================================================================
-    Highlights              = "Destaques",
-    Highlight               = "Destaque",
-    HighlightGlobalDesc     = "|cffffa500Configura o destaque do personagem dinamicamente durante os eventos do jogo.|r",
-    HighlightCombat         = "Em Combate",
-    HighlightCombatDesc     = "Highlight style when entering combat.",
-    HighlightInstance       = "Em Instância",
-    HighlightInstanceDesc   = "Highlight style when inside a dungeon or raid.",
-    HighlightHidden         = "Em Estado de Furtividade",
-    HighlightHiddenDesc     = "Highlight style when in a custom stealth state.",
-    HighlightStealth        = "Em Furtividade",
-    HighlightStealthDesc    = "Highlight style when stealthed.",
-    HighlightShroud         = "Em Manto da Ocultação",
-    HighlightShroudDesc     = "Highlight style when inside Shroud of Concealment.",
-    HighlightCamouflage     = "Em Camuflagem",
-    HighlightCamouflageDesc = "Highlight style when camouflaged.",
-    HighlightProwl          = "In Prowl",
-    HighlightProwlDesc      = "Highlight style when prowling.",
-    HighlightOptNone        = "Nenhum",
-    HighlightOptCircle      = "Círculo",
-    HighlightOptOutline     = "Contorno",
-    HighlightOptIcon        = "Ícone",
-    HighlightOptCircleOutline = "Círculo e contorno",
-    HighlightOptCircleIcon  = "Círculo e ícone",
-    HighlightOptOutlineIcon = "Contorno e ícone",
-    HighlightOptCircleOutlineIcon = "Círculo, contorno e ícone",
+    -- [[ ROGUE — TRICKS OF THE TRADE ]] --------------------------------------
+    L.TricksOfTheTrade = "Truques do Ofício"
+    L.TricksTargetSelectorDesc = "Define a lógica primária para seleção automática de alvos."
+    L.TricksEnabledDesc = "Ativa o direcionamento automático para Truques do Ofício usando um macro."
+    L.TricksMouseoverDesc = "Ativar direcionamento por mouseover.\n\n|cffbe89e9Nota:|r Isso tem prioridade sobre outros métodos, exceto o |cffffcc00Companheiro de Imersão|r."
+    L.TricksFocusDesc = "Ativa o direcionamento automatizado via foco.\n\n|cffbe89e9Nota:|r Isso tem prioridade sobre o seletor de alvos, mas é ignorado por mouseover ou |cffffcc00Companheiro de Imersão|r."
+    L.TricksMuteDesc = "Oculta notificações no chat quando o macro altera os alvos."
+    L.TricksDelveCompanionDesc = "Seleciona automaticamente companheiros como |cffaad372Brann Barba-de-Bronze|r ou |cffFFF468Valeera Sanguinar|r dentro de |cffffcc00Explorações|r.\n\n|cffbe89e9Nota:|r Tem prioridade exclusiva dentro das |cffffcc00Explorações|r."
+    L.TricksTargetLog = "Alvo de Truques"
+    L.TricksNormal = "Normal"
+    L.TricksCustom = "Personalizado"
+    L.TricksCustomNameDesc = "Digite o nome exato do jogador para o alvo.\n\n|cffbe89e9Nota:|r Deve corresponder exatamente ao nome do personagem no jogo."
+    L.TricksMsgEnabled = "Sistema de Truques ativado e macro sincronizado."
+    L.TricksMsgDisabled = "Sistema de Truques desativado e macro removido."
+    L.TricksAlreadyEnabled = "O sistema de Truques do Ofício já está ativado."
+    L.TricksAlreadyDisabled = "O sistema de Truques do Ofício já está desativado."
+    L.TargetingModeSet = "Modo de alvo definido: %s"
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Stealth State ]] ------------------------------
-    -- ========================================================================
-    StealthStateName        = "Estado de Furtividade",
-    StealthStateActiveText  = "ESTADO FURTIVO",
-    EnableOnStealthState    = "Ativar no Estado de Furtividade",
+    -- [[ ROGUE — SHROUD OF CONCEALMENT ]] ------------------------------------
+    L.ShroudOfConcealment = "Mortalha da Ocultação"
+    L.EnableShroudCountdown = "Ativar contagem no chat"
+    L.EnableShroudCountdownDesc = "Envia mensagens de contagem regressiva da Mortalha para o chat."
+    L.ShroudOnlyInstancesDesc = "Apenas envia mensagens de Mortalha dentro de instâncias.\n\n|cffbe89e9Nota:|r alguns canais são bloqueados fora de instâncias pelo anti-spam da Blizzard."
+    L.ShroudMuteErrors = "Silenciar erros"
+    L.ShroudMuteErrorsDesc = "Desativa mensagens de erro da Mortalha no chat."
+    L.ChatChannel = "Canal de Chat"
+    L.ChatChannelDesc = "Canal de chat principal usado para mensagens de Mortalha.\n\n|cffbe89e9Nota:|r A disponibilidade depende do grupo e do tipo de instância."
+    L.ChatChannelFallbackDesc = "Canal alternativo usado se o principal estiver indisponível.\n\n|cffbe89e9Nota:|r A disponibilidade depende do grupo e do tipo de instância."
+    L.ShroudMessage = "Mensagem de Contagem"
+    L.ShroudMessageDesc = "Modelo de mensagem usado durante a contagem.\n\n|cffbe89e9Nota:|r Use |cffffcc00%time|r para exibir o tempo restante."
+    L.ShroudOnStart = "Mensagem de Início"
+    L.ShroudOnStartDesc = "Mensagem enviada quando o Manto de Ocultamento começa.\n\n|cffbe89e9Nota:|r Use |cffffcc00%time|r para exibir o tempo restante."
+    L.ShroudOnEnd = "Mensagem de Fim"
+    L.ShroudOnEndDesc = "Mensagem enviada quando o Manto de Ocultamento termina.\n\n|cffbe89e9Nota:|r Use |cffffcc00%time|r para exibir o tempo restante."
+    L.ShroudInterval = "Modo Intervalo"
+    L.ShroudIntervalDesc = "Início, meio e últimos 5s"
+    L.TestShroud = "Testar Mortalha"
+    L.TestShroudDesc = "Simula uma contagem regressiva local de 5 segundos.\n\n|cffbe89e9Nota:|r As mensagens aparecem apenas para você."
+    L.ChannelSay = "Dizer"
+    L.ChannelParty = "Grupo"
+    L.ChannelRaid = "Raid"
+    L.ChannelInstance = "Instância"
+    L.ChannelYell = "Gritar"
+    L.ChannelNone = "Nenhum"
+    L.ShroudAlreadyActive = "A contagem regressiva da Mortalha já está ativa."
+    L.ShroudDisabled = "A contagem da Mortalha está desativada nas configurações."
 
-    -- ========================================================================
-    -- [[ SHARED MODULES — Macro System ]] -------------------------------
-    -- ========================================================================
-    MacroTargetHeader       = "Alvo",
-    MacroTargetSelector     = "Seletor de Alvo",
-    MacroAutoUpdateWarning  = "|cffffa500O Nightveil atualiza este macro automaticamente.|r",
-    MacroDelveCompanion     = "Companheiro de Imersão",
-    MacroCustomName         = "Alvo Personalizado",
-    MacroCustomSet          = "Alvo personalizado definido: %s",
-    MacroGroupMembers       = "Membros do grupo:",
-    MacroInvalidIndex       = "Índice de grupo inválido.",
-    MacroNoSelf             = "Você não pode ser seu próprio alvo.",
-    MacroBtnEnable          = "Ativar e Sincronizar Macro",
-    MacroBtnDisable         = "Desativar e Remover Macro",
-    Mouseover               = "Mouseover",
-    Focus                   = "Foco",
-    Tank                    = "Tank",
-    TargetTarget            = "Alvo do Alvo",
-    TargetingModeSet        = "Modo de alvo definido: %s",
-    Pet                     = "Mascote",
-    MuteChanges             = "Mute status changes",
+    -- [[ HUNTER — CAMOUFLAGE ]] ----------------------------------------------
+    L.SkillCamouflage = "Camuflagem"
+    L.CamouflageActiveText = "CAMUFLADO"
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — ROGUE ]] ---------------------------------------
-    -- ========================================================================
+    -- [[ HUNTER — MISDIRECTION ]] --------------------------------------------
+    L.Misdirection = "Redirecionar"
+    L.MisdirectionMsgEnabled = "Sistema de Redirecionar ativado e macro sincronizado."
+    L.MisdirectionMsgDisabled = "Sistema de Redirecionar desativado e macro removido."
+    L.MisdirectionAlreadyEnabled = "Sistema de Redirecionar já está ativado."
+    L.MisdirectionAlreadyDisabled = "Sistema de Redirecionar já está desativado."
+    L.MisdirTargetLog = "Alvo do Redirecionar"
+    L.ErrorMisdirNotLearned = "Você ainda não aprendeu Redirecionar."
+    L.ErrorNotHunter = "Você não é um Caçador. Este comando é exclusivo de Caçadores."
 
-    -- [[ Stealth ]] -------------------------------------------
-    Stealth                 = "Furtividade",
-    EnableOnStealth         = "Ativar com Furtividade",
-    StealthUseState         = "Usar Detecção de Estado",
-    StealthActiveText       = "FURTIVO",
+    -- [[ DRUID — PROWL ]] ----------------------------------------------------
+    L.SkillProwl = "Espreitar"
+    L.ProwlActiveText = "ESPREITANDO"
 
-    -- [[ Poison Tracker ]] ------------------------------------
-    PoisonTracker           = "Monitor de Venenos",
-    LethalPoisons           = "Veneno Letal",
-    NonLethalPoisons        = "Veneno Não Letal",
-    LethalPoisonMissing     = "VENENO LETAL FALTANDO",
-    NonLethalPoisonMissing  = "VENENO NÃO LETAL FALTANDO",
+    -- [[ MAGE — INVISIBILITY ]] ----------------------------------------------
+    L.SkillInvisibility = "Invisibilidade"
+    L.SkillMassInvis = "Invisibilidade em Massa"
+    L.SkillGreaterInvis = "Invisibilidade Maior"
+    L.InvisibilityActiveText = "INVISÍVEL"
 
-    -- [[ Tricks of the Trade ]] -------------------------------
-    TricksOfTheTrade        = "Truques do Ofício",
-    TricksTargetLog         = "Alvo de Truques",
-    TricksNormal            = "Normal",
-    TricksCustom            = "Personalizado",
-    TricksMsgEnabled        = "Sistema de Truques ativado e macro sincronizado.",
-    TricksMsgDisabled       = "Sistema de Truques desativado e macro removido.",
-    TricksAlreadyEnabled    = "O sistema de Truques do Ofício já está ativado.",
-    TricksAlreadyDisabled   = "O sistema de Truques do Ofício já está desativado.",
+    -- [[ NIGHT ELF — SHADOWMELD ]] -------------------------------------------
+    L.SkillShadowmeld = "Fusão Sombria"
 
-    -- [[ Shroud of Concealment ]] -----------------------------
-    ShroudOfConcealment     = "Mortalha da Ocultação",
-    EnableShroudCountdown   = "Ativar contagem no chat",
-    ShroudMuteErrors        = "Silenciar erros",
-    ChatChannel             = "Canal de Chat",
-    ShroudMessage           = "Mensagem de Contagem",
-    ShroudOnStart           = "Mensagem de Início",
-    ShroudOnEnd             = "Mensagem de Fim",
-    ShroudInterval          = "Modo Intervalo",
-    TestShroud              = "Testar Mortalha",
-    ShroudAlreadyActive     = "A contagem regressiva da Mortalha já está ativa.",
-    ShroudDisabled          = "A contagem da Mortalha está desativada nas configurações.",
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — HUNTER ]] --------------------------------------
-    -- ========================================================================
+    -- [[ MACRO / TARGET SYSTEM ]] --------------------------------------------
+    L.Focus = "Foco"
+    L.FocusDesc = "Ativa o direcionamento automático via foco."
+    L.Mouseover = "Mouseover"
+    L.MouseoverDesc = "Ativa o direcionamento para a unidade sob o cursor do mouse."
+    L.MacroBtnDisable = "Desativar e Remover Macro"
+    L.MacroBtnEnable = "Ativar e Sincronizar Macro"
+    L.MacroBtnEnableDesc = "Ativa o direcionamento automático e cria o macro.\n\n|cffbe89e9Nota:|r O Nightveil atualiza este macro automaticamente. Edições manuais podem ser substituídas."
+    L.MacroBtnDisableDesc = "Desativa o direcionamento automático e remove o macro completamente."
 
-    -- [[ Camouflage ]] ----------------------------------------
-    Camouflage              = "Camuflagem",
-    EnableOnCamouflage      = "Ativar na Camuflagem",
-    CamouflageActiveText    = "CAMUFLADO",
+    L.MacroCustomName = "Alvo Personalizado"
+    L.MacroCustomSet = "Alvo personalizado definido: %s"
+    L.MacroDelveCompanion = "Companheiro de Imersão"
+    L.MacroGroupMembers = "Membros do grupo:"
+    L.MacroInvalidIndex = "Índice de grupo inválido."
+    L.MacroNoSelf = "Você não pode ser seu próprio alvo."
+    L.MacroTargetHeader = "Alvo"
+    L.MacroTargetSelector = "Seletor de Alvo"
+    L.Pet = "Pet"
+    L.Tank = "Tank"
+    L.TargetTarget = "Alvo do Alvo"
 
-    -- [[ Misdirection ]] --------------------------------------
-    Misdirection            = "Redirecionar",
-    MisdirTargetLog         = "Alvo do Redirecionar",
-    MisdirectionNotLearned  = "Você ainda não aprendeu Redirecionar.",
-    MisdirectionMsgEnabled  = "Sistema de Redirecionar ativado e macro sincronizado.",
-    MisdirectionMsgDisabled = "Sistema de Redirecionar desativado e macro removido.",
-    MisdirectionAlreadyEnabled = "Sistema de Redirecionar já está ativado.",
-    MisdirectionAlreadyDisabled = "Sistema de Redirecionar já está desativado.",
+    -- [[ HIGHLIGHTS ]] -------------------------------------------------------
+    L.Highlights = "Destaques"
+    L.HighlightGlobalDesc = "Configura o destaque do personagem dinamicamente durante os eventos do jogo."
+    L.HighlightCombat = "Em Combate"
+    L.HighlightCombatDesc = "Estilo de destaque ao entrar em combate."
+    L.HighlightInstance = "Em Instância"
+    L.HighlightInstanceDesc = "Estilo de destaque dentro de uma masmorra ou raide."
+    L.HighlightHiddenState = "Em Estado Oculto"
+    L.HighlightHiddenStateDesc = "Estilo de destaque quando qualquer furtividade ou invisibilidade genérica está ativa."
+    L.HighlightStealth = "Em Furtividade"
+    L.HighlightStealthDesc = "Estilo de destaque quando Furtividade está ativa.\n\n|cffbe89e9Nota:|r Habilidade de |cffFFF468Ladino|r."
+    L.HighlightShadowDance = "Em Dança das Sombras"
+    L.HighlightShadowDanceDesc = "Estilo de destaque quando Dança das Sombras está ativa.\n\n|cffbe89e9Nota:|r Habilidade de |cffFFF468Ladino|r."
+    L.HighlightSubterfuge = "Em Subterfúgio"
+    L.HighlightSubterfugeDesc = "Estilo de destaque quando Subterfúgio está ativo.\n\n|cffbe89e9Nota:|r Habilidade de |cffFFF468Ladino|r."
+    L.HighlightProwl = "Em Espreitar"
+    L.HighlightProwlDesc = "Estilo de destaque quando Espreita está ativa.\n\n|cffbe89e9Nota:|r Habilidade de |cffFF7C0ADruida|r."
+    L.HighlightCamouflage = "Em Camuflagem"
+    L.HighlightCamouflageDesc = "Estilo de destaque quando Camuflagem está ativa.\n\n|cffbe89e9Nota:|r Habilidade de |cffAAD372Caçador|r."
+    L.HighlightInvisibility = "Em Invisibilidade"
+    L.HighlightInvisibilityDesc = "Estilo de destaque quando Invisibilidade está ativa.\n\n|cffbe89e9Nota:|r Habilidade de |cff3FC7EBMago|r."
+    L.HighlightShadowmeld = "Em Fusão Sombria"
+    L.HighlightShadowmeldDesc = "Estilo de destaque quando Mesclagem com a Sombra está ativa.\n\n|cffbe89e9Nota:|r Habilidade racial do |cffC3A0FFElfo Noturno|r."
+    L.HighlightShroud = "Em Mortalha da Ocultação"
+    L.HighlightShroudDesc = "Estilo de destaque quando dentro do Manto de Ocultamento.\n\n|cffbe89e9Nota:|r Habilidade de |cffFFF468Ladino|r."
+    L.HighlightOptNone = "Nenhum"
+    L.HighlightOptCircle = "Círculo"
+    L.HighlightOptOutline = "Contorno"
+    L.HighlightOptIcon = "Ícone"
+    L.HighlightOptCircleOutline = "Círculo e Contorno"
+    L.HighlightOptCircleIcon = "Círculo e Ícone"
+    L.HighlightOptOutlineIcon = "Contorno e Ícone"
+    L.HighlightOptCircleOutlineIcon = "Círculo, Contorno e Ícone"
 
-    -- ========================================================================
-    -- [[ CLASS MODULES — DRUID ]] ---------------------------------------
-    -- ========================================================================
+    -- [[ PROFILES / MANAGEMENT ]] --------------------------------------------
+    L.Profiles = "Perfis"
+    L.ActiveProfile = "Perfil Ativo"
+    L.ActiveProfileDesc = "Selecione qual perfil usar para este personagem."
+    L.CreateProfile = "Criar Perfil"
+    L.CreateProfileDesc = "Cria um novo perfil com as configurações padrão."
+    L.DuplicateProfile = "Duplicar Perfil"
+    L.DuplicateProfileDesc = "Cria uma cópia do perfil atual."
+    L.DeleteProfile = "Excluir Perfil"
+    L.DeleteProfileDesc = "Remove o perfil selecionado.\n\n|cffbe89e9Nota:|r O perfil |cffffcc00Padrão|r não pode ser removido."
+    L.ExportProfile = "Exportar Perfil"
+    L.ExportProfileDesc = "Gera uma string para compartilhar este perfil com outros."
+    L.ImportProfile = "Importar Perfil"
+    L.ImportProfileDesc = "Importa um perfil de uma string compartilhada.\n\n|cffbe89e9Nota:|r Isso substituirá as configurações atuais."
+    L.CreateProfilePrompt = "Digite um nome para o novo perfil:"
+    L.DuplicateProfilePrompt = "Digite um nome para o perfil duplicado:"
+    L.FactoryResetBtn = "Restaurar Padrões"
+    L.FactoryResetBtnDesc = "Exclui todos os dados e macros do addon, restaurando a instalação limpa. A interface será recarregada.\n\n|cffbe89e9Nota:|r |cffff2020Esta ação é irreversível.|r"
+    L.FactoryResetConfirm = "|cffff0000AVISO:|r Isso deletará |cffff0000TODAS|r as suas configurações e perfis do Nightveil.\n\nEsta ação é |cffff0000IRREVERSÍVEL|r. Tem certeza?"
+    L.DeleteProfileConfirm = "Excluir perfil:\n\n|cffff0000%s|r\n\nIsso não pode ser desfeito."
+    L.ExportProfilePrompt = "Copie esta string de exportação (Ctrl+C):\n\nPerfil: |cff00ff00%s|r"
+    L.ImportProfilePrompt = "Cole a string de exportação do perfil abaixo:"
+    L.ImportProfileNamePrompt = "Digite um nome para o perfil importado:"
+    L.ErrorProfileDeleteRestricted = "Você não pode excluir o perfil Padrão."
+    L.DefaultProfileLabel = "Padrão"
 
-    -- [[ Prowl ]] ---------------------------------------------
-    Prowl                   = "Espreitar",
-    EnableOnProwl           = "Ativar ao Espreitar",
-    ProwlActiveText         = "ESPREITANDO",
+    -- [[ SYSTEM — MESSAGES & WARNINGS ]] -------------------------------------
+    L.WelcomeMessage = "%s |cffffcc00v%s|r carregado. Digite |cffffcc00/veil|r para abrir as configurações."
+    L.UpdateMessage = "%s atualizado para |cffffcc00v%s|r! Digite |cffffcc00/veil|r para ver as novidades."
+    L.WarningOutdatedConfig = "|cffffcc00Configuração mais recente detectada!|r\n\nRecomenda-se |cffbe89e9atualizar|r o addon ou resetar o perfil."
+    L.ErrorShroudOnlyInstances = "|cffff2020Mensagens de Mortalha só funcionam dentro de instâncias.|r"
+    L.ErrorMacroCombatLock = "Esta ação não pode ser usada em combate."
+    L.ErrorMacroLimitReached = "Limite de macros atingido."
+    L.ErrorUnknownCmd = "Comando desconhecido: |cffffcc00%s|r. Use |cffffcc00/veil help|r."
+    L.ErrorUnknownSubCmd = "Sub-comando desconhecido: |cffffcc00%s|r. Use |cffffcc00/veil help|r."
+    L.ErrorHardReset = "|cffff2020Versão antiga ou incompatível detectada.|r\n\nAs configurações serão |cffffcc00reiniciadas|r para garantir a estabilidade."
+    L.ErrorChannelNoValid = "|cffff2020Nenhum canal de chat válido disponível.|r"
+    L.ErrorChannelAntiSpam = "|cffff2020Restrições de anti-spam da Blizzard impedem o uso do canal|r |cffffcc00%s|r |cffff2020fora de instâncias.|r"
+    L.ErrorChannelNoGroup = "|cffff2020Você não está em um grupo. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r"
+    L.ErrorChannelNoRaid = "|cffff2020Você não está em uma raid. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r"
+    L.ErrorChannelInstanceOnly = "|cffff2020Canal|r |cffffcc00%s|r |cffff2020indisponível fora de instâncias.|r"
+    L.ErrorChannelInvalidGroup = "|cffff2020Você está sozinho ou em um grupo inválido. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r"
+    L.ErrorCombatBlocked = "Não é possível abrir as configurações durante o combate."
+    L.ErrorTricksNotLearned = "Você ainda não aprendeu Truques do Ofício."
+    L.ErrorNotRogue = "Você não é um Ladino. Este comando é exclusivo de Ladinos."
 
-    -- ========================================================================
-    -- [[ PROFILE MANAGEMENT ]] ------------------------------------------
-    -- ========================================================================
-    Profiles                = "Perfis",
-    ActiveProfile           = "Perfil Ativo",
-    ActiveProfileDesc       = "Select which profile to use for this character.",
-    CreateProfile           = "Criar Perfil",
-    CreateProfileDesc       = "Create a new profile with default settings.",
-    DuplicateProfile        = "Duplicar Perfil",
-    DuplicateProfileDesc    = "Create a copy of the current profile.",
-    DeleteProfile           = "Excluir Perfil",
-    DeleteProfileDesc       = "Remove the selected profile (cannot delete Default).",
-    ExportProfile           = "Exportar Perfil",
-    ExportProfileDesc       = "Generate a string to share this profile with others.",
-    ImportProfile           = "Importar Perfil",
-    ImportProfileDesc       = "Import a profile from a shared string.",
-    DefaultProfileLabel     = "Padrão",
-    CreateProfilePrompt     = "Digite um nome para o novo perfil:",
-    DuplicateProfilePrompt  = "Digite um nome para o perfil duplicado:",
-    ExportProfilePrompt     = "Copie esta string de exportação (Ctrl+C):\n\nPerfil: |cff00ff00%s|r",
-    ImportProfilePrompt     = "Cole a string de exportação do perfil abaixo:",
-    ImportProfileNamePrompt = "Digite um nome para o perfil importado:",
-    DeleteProfileConfirm    = "Excluir perfil:\n\n|cffff0000%s|r\n\nIsso não pode ser desfeito.",
-    FactoryResetBtn         = "Restaurar Padrões",
-    FactoryResetBtnDesc     = "Deletes all addon data and macros, restoring to a clean installation. UI will reload.",
-    FactoryResetConfirm     = "|cffff0000AVISO:|r Isso deletará |cffff0000TODAS|r as suas configurações e perfis do Nightveil, e removerá os macros aplicados pelo addon.\n\nEsta ação é |cffff0000IRREVERSÍVEL|r.\n\nTem certeza que deseja prosseguir?",
-    ErrorProfileDeleteRestricted = "Você não pode excluir o perfil Padrão.",
-    Import                  = "Importar",
-    Share                   = "Compartilhar",
-    Next                    = "Next",
+    -- [[ SYSTEM — DEBUG INFO ]] ----------------------------------------------
+    L.DebugModeActivated = "Modo Debug ATIVADO"
+    L.DebugModeDeactivated = "Modo Debug DESATIVADO"
+    L.DebugModeRequired = "Este comando requer Modo Debug. Digite |cffffcc00/veil debug|r para ativar."
+    L.DebugHeader = "%s Diagnósticos:"
+    L.DebugCombat = "- Combate: %s"
+    L.DebugStealth = "- Furtividade/Sumir: %s"
+    L.DebugInstance = "- Instância: %s (Tipo: %s)"
+    L.DebugGroup = "- Grupo: %s (Raid: %s, Total: %d)"
+    L.DebugComposition = "- Composição: %d Jogadores, %d Pets, %d Outros"
+    L.DebugInvalidGroup = "- Grupo Inválido: %s"
+    L.DebugPlayer = "JOGADOR"
+    L.DebugPet = "PET"
+    L.DebugOther = "OUTRO"
+    L.DebugYes = "SIM"
+    L.DebugNo = "NÃO"
+    L.DebugNone = "nenhum"
+    L.DebugUnknown = "Desconhecido"
+    L.DebugFallback1 = "- Fallback 1: %s (Usável: %s)"
+    L.DebugFallback2 = "- Fallback 2: %s (Usável: %s)"
+    L.DebugShroudUsage = "Uso: |cffffcc00/veil shroud [1-20]|r"
+    L.DebugTricksForcing = "Forçando atualização do Truques..."
+    L.DebugMacroUpdated = "Macro atualizado: %s"
+    L.DebugMacroStatus = "Macro: %s"
+    L.DebugMacroEdited = "Conteúdo do macro modificado e sincronizado."
+    L.DebugCombatLock = "Esta ação não pode ser usada em combate."
+    L.DebugTricksKnown = "- Truques Conhecidos: %s"
+    L.DebugTricksMacro = "- Truques Macro: %s"
+    L.DebugTricksTarget = "- Truques Alvo: %s (%s)"
+    L.DebugMacroSuccess = "Atualização do macro concluída com SUCESSO."
+    L.DebugMisdirForcing = "Forçando atualização do Redirecionar..."
+    L.DebugCommands = "[Comandos de Debug]"
 
-    -- ========================================================================
-    -- [[ CHAT CHANNELS ]] -----------------------------------------------
-    -- ========================================================================
-    ChannelSay              = "Dizer",
-    ChannelParty            = "Grupo",
-    ChannelRaid             = "Raid",
-    ChannelInstance         = "Instância",
-    ChannelYell             = "Gritar",
+    -- [[ NPC / GAME TERMS ]] -------------------------------------------------
+    L.BrannBronzebeard = "Brann Barbabronze"
+    L.ValeeraSanguinar = "Valeera Sanguinar"
 
-    -- ========================================================================
-    -- [[ SYSTEM NOTIFICATIONS & ERRORS ]] -------------------------------
-    -- ========================================================================
-    ErrorHardReset          = "|cffff2020Versão antiga ou incompatível detectada.|r\n\nAs configurações serão |cffffcc00reiniciadas|r para garantir a estabilidade.",
-    WarningOutdatedConfig   = "|cffffcc00Configuração mais recente detectada!|r\n\nRecomenda-se |cffbe89e9atualizar|r o addon ou resetar o perfil.",
-    ErrorChannelNoValid     = "|cffff2020Nenhum canal de chat válido disponível.|r",
-    ErrorChannelAntiSpam    = "|cffff2020Restrições de anti-spam da Blizzard impedem o uso do canal|r |cffffcc00%s|r |cffff2020fora de instâncias.|r",
-    ErrorChannelNoGroup     = "|cffff2020Você não está em um grupo. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r",
-    ErrorChannelNoRaid      = "|cffff2020Você não está em uma raid. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r",
-    ErrorChannelInvalidGroup = "|cffff2020Você está sozinho ou em um grupo inválido. Canal|r |cffffcc00%s|r |cffff2020indisponível.|r",
-    ErrorChannelInstanceOnly = "|cffff2020Canal|r |cffffcc00%s|r |cffff2020indisponível fora de instâncias.|r",
-    ErrorNotRogue           = "Você não é um Ladino. Este comando é exclusivo de Ladinos.",
-    ErrorNotHunter          = "Você não é um Caçador. Este comando é exclusivo de Caçadores.",
-    ErrorTricksNotLearned   = "Você ainda não aprendeu Truques do Ofício.",
-    ErrorMisdirNotLearned   = "Você ainda não aprendeu Redirecionar.",
-    ErrorShroudOnlyInstances = "|cffff2020Mensagens de Mortalha só funcionam dentro de instâncias.|r",
-    ErrorCombatBlocked      = "Não é possível abrir as configurações durante o combate.",
-    ErrorMacroLimitReached  = "Limite de macros atingido.",
-    ErrorMacroCombatLock    = "Esta ação não pode ser usada em combate.",
-    ErrorUnknownCmd         = "Comando desconhecido: |cffffcc00%s|r. Use |cffffcc00/veil help|r.",
-    ErrorUnknownSubCmd      = "Sub-comando desconhecido: |cffffcc00%s|r. Use |cffffcc00/veil help|r.",
-    DebugCombatLock         = "This action cannot be used in combat.",
-
-    -- ========================================================================
-    -- [[ COMMANDS HELP ]] -----------------------------------------------
-    -- ========================================================================
-    HelpSettings            = "Configurações",
-    HelpTricks              = "Alvo de Truques",
-    HelpMisdir              = "Alvo do Redirecionar",
-    HelpMisdirPet           = "Pet mode",
-    HelpInfo                = "Informações de diagnóstico",
-    HelpShroudTest          = "Testar contagem da mortalha",
-    HelpDebugToggle         = "Alternar modo debug",
-    HelpForceRefresh        = "Forçar atualização do macro",
-    HelpModeNormal          = "Modo Normal",
-    HelpModeTank            = "Modo Tank",
-    HelpModeTT              = "Modo Alvo do Alvo",
-    HelpModeCustom          = "Modo Personalizado",
-    HelpModeList            = "Listar e definir por índice",
-    HelpModeSet             = "Definir por nome",
-
-    -- ========================================================================
-    -- [[ DEBUG & DIAGNOSTICS ]] -----------------------------------------
-    -- ========================================================================
-    DebugModeActivated      = "Modo Debug ATIVADO",
-    DebugModeDeactivated    = "Modo Debug DESATIVADO",
-    DebugModeRequired       = "Este comando requer Modo Debug. Digite |cffffcc00/veil debug|r para ativar.",
-    DebugCommands           = "[Comandos de Debug]",
-    DebugHeader             = "%s Diagnósticos:",
-    DebugCombat             = "- Combate: %s",
-    DebugStealth            = "- Furtividade/Sumir: %s",
-    DebugInstance           = "- Instância: %s (Tipo: %s)",
-    DebugGroup              = "- Grupo: %s (Raid: %s, Total: %d)",
-    DebugComposition        = "- Composição: %d Jogadores, %d Pets, %d Outros",
-    DebugTricksKnown        = "- Truques Conhecidos: %s",
-    DebugTricksTarget       = "- Truques Alvo: %s (%s)",
-    DebugTricksMacro        = "- Truques Macro: %s",
-    DebugInvalidGroup       = "- Grupo Inválido: %s",
-    DebugPlayer             = "JOGADOR",
-    DebugPet                = "PET",
-    DebugOther              = "OUTRO",
-    DebugYes                = "SIM",
-    DebugNo                 = "NÃO",
-    DebugNone               = "nenhum",
-    DebugUnknown            = "Desconhecido",
-    DebugFallback1          = "- Fallback 1: %s (Usável: %s)",
-    DebugFallback2          = "- Fallback 2: %s (Usable: %s)",
-    DebugShroudUsage        = "Uso: |cffffcc00/veil shroud [1-20]|r",
-    DebugTricksForcing      = "Forçando atualização do Truques...",
-    DebugMisdirForcing      = "Forcing Misdirection update...",
-    DebugMacroSuccess       = "Atualização do macro concluída com SUCESSO.",
-    DebugMacroUpdated       = "Macro atualizado: %s",
-    DebugMacroStatus        = "Macro: %s",
-    DebugMacroEdited        = "Conteúdo do macro modificado e sincronizado.",
-
-    -- ========================================================================
-    -- [[ NPC / GAME TERMS ]] --------------------------------------------
-    -- ========================================================================
-    BrannBronzebeard        = "Brann Barbabronze",
-    ValeeraSanguinar        = "Valeera Sanguinar",
-
-}

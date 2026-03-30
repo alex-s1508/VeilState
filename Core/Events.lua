@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — EVENT SYSTEM ]] --------------------------------------------
+-- [[ EVENT SYSTEM ]] ---------------------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 
@@ -28,22 +28,27 @@ ns.frame:SetScript("OnEvent", function(self, event, arg1, ...)
         end
 
         local _, _, classId = UnitClass("player")
-        ns.IsRogue  = (classId == 4)
         ns.IsHunter = (classId == 3)
+        ns.IsRogue  = (classId == 4)
+        ns.IsMage   = (classId == 8)
         ns.IsDruid  = (classId == 11)
+        
+        local _, raceFile = UnitRace("player")
+        ns.HasShadowmeld = (raceFile == "NightElf")
 
         if ns.Shared.MigrateLegacyMacros then ns.Shared.MigrateLegacyMacros() end
 
-        ns.KnowsTricks = IsPlayerSpell and IsPlayerSpell(57934) or (GetSpellInfo and GetSpellInfo(57934) ~= nil)
-        ns.KnowsMisdir = IsPlayerSpell and IsPlayerSpell(34477) or (GetSpellInfo and GetSpellInfo(34477) ~= nil)
+        local LegacyGetSpellInfo = GetSpellInfo or (C_Spell and C_Spell.GetSpellInfo)
+        ns.KnowsTricks = IsPlayerSpell and IsPlayerSpell(57934) or (LegacyGetSpellInfo and LegacyGetSpellInfo(57934) ~= nil)
+        ns.KnowsMisdir = IsPlayerSpell and IsPlayerSpell(34477) or (LegacyGetSpellInfo and LegacyGetSpellInfo(34477) ~= nil)
 
         if ns.Modules.Settings and ns.Modules.Settings.Init then
             ns.Modules.Settings.Init()
         end
         if verResult == "FRESH" then
-            print(string.format(ns.L and ns.L.WelcomeMessage or "Welcome to %s v%s", ns.Shared.GetAddonName(), ns.Version))
+            print(string.format(ns.L and ns.L.WelcomeMessage or "Welcome to %s v%s", ns.GetAddonName(), ns.Version))
         elseif verResult == "UPDATED" then
-            print(string.format(ns.L and ns.L.UpdateMessage or "%s updated to v%s", ns.Shared.GetAddonName(), ns.Version))
+            print(string.format(ns.L and ns.L.UpdateMessage or "%s updated to v%s", ns.GetAddonName(), ns.Version))
         end
 
         if ns.Shared.RecoverState then ns.Shared.RecoverState() end
@@ -66,14 +71,8 @@ ns.frame:SetScript("OnEvent", function(self, event, arg1, ...)
         if ns.Shared.RestoreOriginalHighlight then
             ns.Shared.RestoreOriginalHighlight()
         end
-        if ns.IsRogue then
-            if ns.Modules.Stealth and ns.Modules.Stealth.RefreshVisuals then ns.Modules.Stealth.RefreshVisuals(true) end
-        elseif ns.IsHunter then
-            if ns.Modules.Camouflage and ns.Modules.Camouflage.RefreshVisuals then ns.Modules.Camouflage.RefreshVisuals(true) end
-        elseif ns.IsDruid then
-            if ns.Modules.Prowl and ns.Modules.Prowl.RefreshVisuals then ns.Modules.Prowl.RefreshVisuals(true) end
-        else
-            if ns.Modules.StealthState and ns.Modules.StealthState.RefreshVisuals then ns.Modules.StealthState.RefreshVisuals(true) end
+        if ns.Modules.HiddenState and ns.Modules.HiddenState.RefreshVisuals then
+            ns.Modules.HiddenState.RefreshVisuals(true)
         end
     elseif event == "PLAYER_ENTERING_WORLD" or event == "ZONE_CHANGED_NEW_AREA" or event == "PLAYER_REGEN_DISABLED" or event == "PLAYER_REGEN_ENABLED" then
         ns.UpdateState()
@@ -113,13 +112,14 @@ ns.frame:SetScript("OnEvent", function(self, event, arg1, ...)
             end
         end
     elseif event == "UPDATE_STEALTH" or event == "SPELLS_CHANGED" then
+        local LegacyGetSpellInfo = GetSpellInfo or (C_Spell and C_Spell.GetSpellInfo)
         if ns.IsRogue then
-            ns.KnowsTricks = IsPlayerSpell and IsPlayerSpell(57934) or (GetSpellInfo and GetSpellInfo(57934) ~= nil)
+            ns.KnowsTricks = IsPlayerSpell and IsPlayerSpell(57934) or (LegacyGetSpellInfo and LegacyGetSpellInfo(57934) ~= nil)
             if ns.KnowsTricks and ns.Modules.Tricks and ns.Modules.Tricks.UpdateMacro then
                 ns.Modules.Tricks.UpdateMacro(true)
             end
         elseif ns.IsHunter then
-            ns.KnowsMisdir = IsPlayerSpell and IsPlayerSpell(34477) or (GetSpellInfo and GetSpellInfo(34477) ~= nil)
+            ns.KnowsMisdir = IsPlayerSpell and IsPlayerSpell(34477) or (LegacyGetSpellInfo and LegacyGetSpellInfo(34477) ~= nil)
             if ns.KnowsMisdir and ns.Modules.Misdirection and ns.Modules.Misdirection.UpdateMacro then
                 ns.Modules.Misdirection.UpdateMacro(true)
             end

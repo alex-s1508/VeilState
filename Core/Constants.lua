@@ -39,7 +39,7 @@ ns.Shared.CLASS_COLORS = {
 
 -- [[ UI & LAYOUT CONSTANTS ]] ------------------------------------------------
 
--- Frame Strata
+-- UI LAYERS
 ns.UI_LAYERS = {
     { value = "BACKGROUND", label = (ns.L and ns.L.LayerBackground) or "Background" },
     { value = "LOW",        label = (ns.L and ns.L.LayerLow) or "Low" },
@@ -51,6 +51,7 @@ ns.UI_LAYERS = {
 ns.UI_LAYER_ORDER = { "BACKGROUND", "LOW", "MEDIUM", "HIGH", "DIALOG", "FULLSCREEN" }
 ns.UI_LAYER_MAP = {}
 for _, e in ipairs(ns.UI_LAYERS) do ns.UI_LAYER_MAP[e.value] = e.label end
+
 
 -- Anchor Points
 ns.UI_ANCHOR_ORDER = { "TOPLEFT","TOP","TOPRIGHT","LEFT","CENTER","RIGHT","BOTTOMLEFT","BOTTOM","BOTTOMRIGHT" }
@@ -70,14 +71,14 @@ ns.UI_ANCHOR_MAP = {
 
 -- Chat Channels
 ns.UI_CHANNELS = {
-    ["NONE"]          = (ns.L and ns.L.DebugNone) or "none",
     ["SAY"]           = (ns.L and ns.L.ChannelSay) or "Say",
     ["YELL"]          = (ns.L and ns.L.ChannelYell) or "Yell",
     ["PARTY"]         = (ns.L and ns.L.ChannelParty) or "Party",
     ["RAID"]          = (ns.L and ns.L.ChannelRaid) or "Raid",
     ["INSTANCE_CHAT"] = (ns.L and ns.L.ChannelInstance) or "Instance",
+    ["NONE"]          = (ns.L and ns.L.ChannelNone) or "None",
 }
-ns.UI_CHANNEL_ORDER = { "NONE", "SAY", "YELL", "PARTY", "RAID", "INSTANCE_CHAT" }
+ns.UI_CHANNEL_ORDER = { "SAY", "YELL", "PARTY", "RAID", "INSTANCE_CHAT", "NONE" }
 
 -- Tricks of the Trade Target Logic (Rogue)
 ns.UI_TRICKS_LOGIC_OPTIONS = {

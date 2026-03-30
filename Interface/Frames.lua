@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — INTERFACE & FRAMES CORE ]] ---------------------------------
+-- [[ INTERFACE & FRAMES CORE ]] ----------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 ns.UI = ns.UI or {}
@@ -28,8 +28,7 @@ end
 -- ============================================================================
 -- [[ STATIC FRAME REGISTRATION ]] -------------------------------------------
 -- ============================================================================
-ns.UI.StealthFrame = ns.UI.CreateTrackerFrame("NV_StealthFrame", ns.L and ns.L.Stealth or "Stealth")
-ns.UI.StealthStateFrame = ns.UI.CreateTrackerFrame("NV_StealthStateFrame", ns.L and ns.L.StealthStateName or "Stealth State")
+ns.UI.HiddenStateFrame = ns.UI.CreateTrackerFrame("NV_HiddenStateFrame", ns.L and ns.L.HiddenStateActiveText or "HIDDEN")
 
 ns.UI.ScreenFrame = CreateFrame("Frame", "VS_ScreenFrame", UIParent)
 ns.UI.ScreenFrame:SetAllPoints(UIParent)

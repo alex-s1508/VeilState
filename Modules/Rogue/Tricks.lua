@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — ROGUE: TRICKS OF THE TRADE ]] -----------------------------
+-- [[ ROGUE: TRICKS OF THE TRADE ]] -------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 ns.Modules = ns.Modules or {}
@@ -113,7 +113,7 @@ function ns.Modules.Tricks.DisableAndRemoveMacro()
         ns.tricksLastTargetID = nil
         ns.tricksLastMacroBody = nil
     else
-        print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroCombatLock or "This action cannot be used in combat."))
+        print(ns.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroCombatLock or "This action cannot be used in combat."))
         ns.tricksUpdateQueued = true
     end
 end
@@ -143,7 +143,7 @@ function ns.Modules.Tricks.UpdateMacro(force)
 
     if not ns.IsRogue or not learned then
         local warningMsg = not ns.IsRogue and (ns.L and ns.L.ErrorNotRogue or "You are not a Rogue.") or (ns.L and ns.L.ErrorTricksNotLearned or "You have not learned Tricks of the Trade yet.")
-        local addonPrefix = ns.Shared.GetAddonName()
+        local addonPrefix = ns.GetAddonName()
         local printLine = "/run print(\"" .. addonPrefix .. ": |cffff9933" .. warningMsg .. "|r\")"
         table.insert(lines, printLine)
         body = table.concat(lines, "\n")
@@ -197,13 +197,13 @@ function ns.Modules.Tricks.UpdateMacro(force)
         elseif numChar < 18 then
             index = CreateMacro(macroName, icon, body, 1)
         else
-            if ns.debugMode then print(ns.Shared.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroLimitReached or "Macro limit reached.")) end
+            if ns.debugMode then print(ns.GetAddonName() .. ": " .. (ns.L and ns.L.ErrorMacroLimitReached or "Macro limit reached.")) end
             return
         end
     else
         EditMacro(index, macroName, icon, body)
         if ns.debugMode then
-            print(ns.Shared.GetAddonName() .. ": |cffce9cff[Debug]|r " .. (ns.L and ns.L.DebugMacroEdited or "Macro content modified and synchronized."))
+            print(ns.GetAddonName() .. ": |cffce9cff[Debug]|r " .. (ns.L and ns.L.DebugMacroEdited or "Macro content modified and synchronized."))
         end
     end
 
@@ -222,7 +222,7 @@ function ns.Modules.Tricks.UpdateMacro(force)
     end
 
     if force and ns.debugMode then
-        print(string.format(ns.Shared.GetAddonName() .. ": |cffbe89e9[Debug]|r " .. (ns.L and ns.L.DebugMacroUpdated or "Macro updated: %s"), targetName or "nil"))
+        print(string.format(ns.GetAddonName() .. ": |cffbe89e9[Debug]|r " .. (ns.L and ns.L.DebugMacroUpdated or "Macro updated: %s"), targetName or "nil"))
     end
 
     if ns.IsRogue and learned and ns.db.tricksEnabled and not ns.db.tricksMute then
@@ -231,7 +231,7 @@ function ns.Modules.Tricks.UpdateMacro(force)
         local exists = tankUnit and (tankUnit == "targettarget" or UnitExists(tankUnit))
         
         if changed and exists then
-            print(string.format(ns.Shared.GetAddonName() .. ": |cffbe89e9%s|r → %s", ns.L and ns.L.TricksTargetLog or "Tricks Target", targetName or "unknown"))
+            print(string.format(ns.GetAddonName() .. ": |cffbe89e9%s|r → %s", ns.L and ns.L.TricksTargetLog or "Tricks Target", targetName or "unknown"))
         end
     end
     return true

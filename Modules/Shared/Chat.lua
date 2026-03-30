@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — CHAT & ANNOUNCEMENT ENGINE ]] ------------------------------
+-- [[ CHAT & ANNOUNCEMENT ENGINE ]] -------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 ns.Shared = ns.Shared or {}
@@ -105,7 +105,7 @@ function ns.Shared.SendChat(channel, msg, silent)
     local ok, reason, text = ns.Shared.GetChannelStatus(channel)
     if not ok then
         if not silent and text then
-            local prefix = ns.Shared.GetAddonName() .. ": "
+            local prefix = ns.GetAddonName() .. ": "
             if not text:find(prefix) then text = prefix .. text end
             
             if reason == "ANTISPAM" then
@@ -136,7 +136,7 @@ function ns.Shared.SendChatOrPrint(msg, isSynthetic)
     if not msg or msg == "" then return end
     
     if isSynthetic then
-        print(ns.Shared.GetAddonName() .. ": " .. msg)
+        print(ns.GetAddonName() .. ": " .. msg)
         return
     end
 
@@ -147,7 +147,7 @@ function ns.Shared.SendChatOrPrint(msg, isSynthetic)
         if not ns.shroudErrorsDisplayed["INSTANCE_ONLY"] then
             ns.shroudErrorsDisplayed["INSTANCE_ONLY"] = true
             local errorMsg = ns.L and ns.L.ErrorShroudOnlyInstances or "|cffff2020Shroud messages only work inside instances.|r"
-            local prefix = ns.Shared.GetAddonName() .. ": "
+            local prefix = ns.GetAddonName() .. ": "
             if not errorMsg:find(prefix) then errorMsg = prefix .. errorMsg end
             print(errorMsg)
         end
@@ -164,7 +164,7 @@ function ns.Shared.SendChatOrPrint(msg, isSynthetic)
         if not ns.shroudErrorsDisplayed["NO_CHANNEL"] then
             ns.shroudErrorsDisplayed["NO_CHANNEL"] = true
             local errorMsg = ns.L and ns.L.ErrorChannelNoValid or "|cffff2020No valid chat channel available.|r"
-            local prefix = ns.Shared.GetAddonName() .. ": "
+            local prefix = ns.GetAddonName() .. ": "
             if not errorMsg:find(prefix) then errorMsg = prefix .. errorMsg end
             print(errorMsg)
         end

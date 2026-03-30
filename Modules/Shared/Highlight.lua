@@ -1,5 +1,5 @@
 -- ============================================================================
--- [[ NIGHTVEIL — CHARACTER HIGHLIGHT ENGINE ]] -----------------------------
+-- [[ CHARACTER HIGHLIGHT ENGINE ]] -------------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 ns.Modules = ns.Modules or {}
@@ -85,28 +85,61 @@ function ns.Modules.Highlight.UpdateState()
         targetHighlight = db.highlightShroud
         shouldOverride  = (targetHighlight ~= -1)
     
-    -- Priority 2: Stealth (Rogue)
-    elseif ns.IsRogue and ns.UI.StealthFrame and ns.UI.StealthFrame._lastState then
-        targetHighlight = db.highlightStealth
-        shouldOverride  = (targetHighlight ~= -1)
+    -- Priority 2: Specific Class/Race Auras
+    else
+                local hasClassAura = false
+        local classPrefix = (ns.IsRogue and "Rogue") or (ns.IsHunter and "Hunter") or (ns.IsDruid and "Druid") or (ns.IsMage and "Mage")
+        if classPrefix and ns.HiddenStateMeta[classPrefix] then
+            for _, auraDef in ipairs(ns.HiddenStateMeta[classPrefix]) do
+                if ns.Shared.HasAura(auraDef.ids) then
+                    hasClassAura = true
+                    break
+                end
+            end
+        end
 
-    -- Priority 3: Camouflage (Hunter)
-    elseif ns.IsHunter and ns.UI.StealthFrame and ns.UI.StealthFrame._lastState then
-        targetHighlight = db.highlightCamouflage
-        shouldOverride  = (targetHighlight ~= -1)
+        if hasClassAura then
+            if ns.IsRogue then 
+                -- Sub-priority for Rogue-specific states
+                if ns.Shared.HasAura({185422, 185313, 212283}) then -- Shadow Dance
+                    targetHighlight = db.highlightShadowDance
+                elseif ns.Shared.HasAura({115192, 115191, 108208}) then -- Subterfuge
+                    targetHighlight = db.highlightSubterfuge
+                else
+                    targetHighlight = db.highlightStealth
+                end
+            elseif ns.IsHunter then targetHighlight = db.highlightCamouflage
+            elseif ns.IsDruid then targetHighlight = db.highlightProwl
+            elseif ns.IsMage then targetHighlight = db.highlightInvisibility
+            end
+            shouldOverride = (targetHighlight ~= -1)
+        end
+        
+        if not shouldOverride and ns.HasShadowmeld and ns.HiddenStateMeta.Shadowmeld then
+            for _, auraDef in ipairs(ns.HiddenStateMeta.Shadowmeld) do
+                if ns.Shared.HasAura(auraDef.ids) then
+                    targetHighlight = db.highlightShadowmeld
+                    shouldOverride = (targetHighlight ~= -1)
+                    break
+                end
+            end
+        end
 
-    -- Priority 4: Stealth State (Other Classes)
-    elseif not ns.IsRogue and not ns.IsHunter and ns.UI.StealthFrame and ns.UI.StealthFrame._lastState then
-        targetHighlight = db.highlightStealthState
-        shouldOverride  = (targetHighlight ~= -1)
+        -- Priority 3: Generic Hidden State (IsStealthed fallback)
+        if not shouldOverride and IsStealthed() then
+            targetHighlight = db.highlightHiddenState
+            shouldOverride = (targetHighlight ~= -1)
+        end
+    end
 
-    -- Priority 5: Combat
-    elseif inCombat then
+    -- Priority 4: Combat
+    if not shouldOverride and inCombat then
         targetHighlight = db.highlightCombat
         shouldOverride  = (targetHighlight ~= -1)
+    end
 
-    -- Priority 6: Instance
-    elseif inInstance then
+    -- Priority 5: Instance
+    if not shouldOverride and inInstance then
         targetHighlight = db.highlightInstance
         shouldOverride  = (targetHighlight ~= -1)
     end

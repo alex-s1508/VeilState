@@ -1,12 +1,12 @@
 -- ============================================================================
--- [[ NIGHTVEIL — LEGACY MIGRATION & VERSION ENGINE ]] ------------------------
+-- [[ LEGACY MIGRATION & VERSION ENGINE ]] ------------------------------------
 -- ============================================================================
 local addonName, ns = ...
 ns.Shared = ns.Shared or {}
 
 -- [[ LEGACY IMPORT KEY MAPPING ]] -------------------------------------------
 local LEGACY_IMPORT_KEY_MAP = {
-    -- [[ Stealth / Generic Visuals ]]
+    -- [[ Hidden State Visuals ]] ----------------------------------------------
     enableText              = "stealthEnableText",
     customText              = "stealthEnableText",
     textColor               = "stealthTextColor",
@@ -24,11 +24,11 @@ local LEGACY_IMPORT_KEY_MAP = {
     enableScreenColor       = "stealthEnableScreenColor",
     screenColor             = "stealthScreenColor",
     screenAlpha             = "stealthScreenAlpha",
-    screenStrata            = "stealthScreenStrata",
+    screenStrata            = "hiddenStateScreenStrata", -- Drawing Layer
     enableVignette          = "stealthEnableVignette",
     vignetteSize            = "stealthVignetteSize",
     vignetteAlpha           = "stealthVignetteAlpha",
-    vignetteStrata          = "stealthVignetteStrata",
+    vignetteStrata          = "hiddenStateVignetteStrata", -- Drawing Layer
     enableHighlight         = "stealthEnableHighlight",
     highlightType           = "stealthHighlightType",
 
@@ -49,7 +49,7 @@ local LEGACY_IMPORT_KEY_MAP = {
 
 -- [[ STATIC POPUP DIALOGS ]] ------------------------------------------------
 StaticPopupDialogs["NIGHTVEIL_HARD_RESET"] = {
-    text = (ns.GetAddonName and ns.GetAddonName() or "Nightveil") .. "\n\n" .. (ns.L and ns.L.ErrorHardReset or "|cffff2020Old or incompatible version detected.|r\n\nSettings will be |cffffcc00reset|r to ensure stability."),
+    text = ns.GetAddonName() .. "\n\n" .. (ns.L and ns.L.ErrorHardReset or "|cffff2020Old or incompatible version detected.|r\n\nSettings will be |cffffcc00reset|r to ensure stability."),
     button1 = "OK",
     OnAccept = function()
         ReloadUI()
@@ -61,7 +61,7 @@ StaticPopupDialogs["NIGHTVEIL_HARD_RESET"] = {
 }
 
 StaticPopupDialogs["NIGHTVEIL_OUTDATED_CONFIG"] = {
-    text = (ns.GetAddonName and ns.GetAddonName() or "Nightveil") .. "\n\n" .. (ns.L and ns.L.WarningOutdatedConfig or "|cffffcc00Newer configuration detected!|r\n\nIt is recommended to |cffbe89e9update|r the addon or reset the profile."),
+    text = ns.GetAddonName() .. "\n\n" .. (ns.L and ns.L.WarningOutdatedConfig or "|cffffcc00Newer configuration detected!|r\n\nIt is recommended to |cffbe89e9update|r the addon or reset the profile."),
     button1 = "OK",
     timeout = 0,
     whileDead = true,
@@ -69,7 +69,6 @@ StaticPopupDialogs["NIGHTVEIL_OUTDATED_CONFIG"] = {
     preferredIndex = 3,
 }
 
--- [[ VERSION HELPERS ]] ------------------------------------------------------
 -- [[ VERSION HELPERS ]] ------------------------------------------------------
 local function GetVerScore(v)
     if not v or v == "" then return -1 end
@@ -112,6 +111,55 @@ function ns.Shared.NormalizeProfileMigrated(profile)
         end
     end
 
+    -- Hidden State Unified Migration
+    local hiddenStateMigrationMap = {
+        stealthStateEnabled = "hiddenStateEnabled",
+        stealthOnlyInstances = "hiddenStateOnlyInstances",
+        stealthDisableInDungeons = "hiddenStateDisableInDungeons",
+        stealthDisableInRaids = "hiddenStateDisableInRaids",
+        stealthStateEnableText = "hiddenStateEnableText",
+        stealthStateCustomText = "hiddenStateCustomText",
+        stealthStateTextColor = "hiddenStateTextColor",
+        stealthStateTextAlpha = "hiddenStateTextAlpha",
+        stealthStateTextX = "hiddenStateTextX",
+        stealthStateTextY = "hiddenStateTextY",
+        stealthStateTextSize = "hiddenStateTextSize",
+        stealthStateEnableIcon = "hiddenStateEnableIcon",
+        stealthStateIconTexture = "hiddenStateIconTexture",
+        stealthStateIconSize = "hiddenStateIconSize",
+        stealthStateIconAlpha = "hiddenStateIconAlpha",
+        stealthStateIconAnchorToText = "hiddenStateIconAnchorToText",
+        stealthStateIconAnchorPoint = "hiddenStateIconAnchorPoint",
+        stealthStateIconX = "hiddenStateIconX",
+        stealthStateIconY = "hiddenStateIconY",
+        stealthStateEnableScreenColor = "hiddenStateEnableScreenColor",
+        stealthStateScreenColor = "hiddenStateScreenColor",
+        stealthStateScreenAlpha = "hiddenStateScreenAlpha",
+        stealthStateScreenStrata = "hiddenStateScreenStrata", -- Drawing Layer
+        stealthStateEnableVignette = "hiddenStateEnableVignette",
+        stealthStateVignetteSize = "hiddenStateVignetteSize",
+        stealthStateVignetteAlpha = "hiddenStateVignetteAlpha",
+        stealthStateVignetteStrata = "hiddenStateVignetteStrata", -- Drawing Layer
+        
+        highlightStealthState = "highlightHiddenState",
+        
+        stealthCustomText = "hiddenStateRogueCustomText",
+        stealthEnableIcon = "hiddenStateRogueEnableIconStealth",
+        camouflageCustomText = "hiddenStateHunterCustomText",
+        camouflageEnableIcon = "hiddenStateHunterEnableIconCamouflage",
+        prowlCustomText = "hiddenStateDruidCustomText",
+        prowlEnableIcon = "hiddenStateDruidEnableIconProwl",
+    }
+    
+    for oldKey, newKey in pairs(hiddenStateMigrationMap) do
+        if profile[oldKey] ~= nil then
+            if profile[newKey] == nil then
+                profile[newKey] = type(profile[oldKey]) == "table" and ns.Shared.DeepCopy(profile[oldKey]) or profile[oldKey]
+            end
+            profile[oldKey] = nil
+        end
+    end
+
     -- Recover settings from legacy uppercase keys
     for key, def in pairs(defaults) do
         if type(key) == "string" then
@@ -148,7 +196,7 @@ function ns.Shared.NormalizeProfileMigrated(profile)
 
     -- Clean up orphaned settings
     for k in pairs(profile) do
-        if k ~= "version" and defaults[k] == nil then
+        if k ~= "version" and defaults[k] == nil and k:sub(1, 15) ~= "hiddenStateAura" then
             profile[k] = nil
         end
     end
@@ -222,7 +270,7 @@ function ns.Shared.MigrateLegacyMacros()
             local icon = 236283 -- Ability_Rogue_TricksOftheTrade
             EditMacro(oldIdx, macroName, icon, body)
             if ns.debugMode then
-                print(string.format(ns.L and ns.L.DebugMacroStatus or "%s: Legacy macro migrated: %s", ns.Shared.GetAddonName(), macroName))
+                print(string.format(ns.L and ns.L.DebugMacroStatus or "%s: Legacy macro migrated: %s", ns.GetAddonName(), macroName))
             end
         else
             -- If new macro exists, just delete the old one
